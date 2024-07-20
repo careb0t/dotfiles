@@ -151,7 +151,7 @@
 		"class<konsole>": " ",
 		"class<thunar>": "󰝰 ",
 		"class<discord>": " ",
-		"class<WebCord>": " ",
+		"class<vesktop>": " ",
 		"class<subl>": "󰅳 ",
 		"class<celluloid>": " ",
 		"class<Cider>": "󰎆 ",
@@ -163,7 +163,11 @@
 		"class<libreoffice-startcenter>": "󰏆 ",
 		"class<com.obsproject.Studio>": " ",
 		"class<steam>":"",
-		"class<spotify>":""
+		"class<spotify>":"",
+		"class<.*steam_app.*|xcom2.exe>":"󰊴",
+		"class<lutris>":"",
+		"class<Logseq>":"󱉟",
+		"class<org.kde.dolphin>":"󰝰"
 	}   
 },
 // for Camilla or Spanish
