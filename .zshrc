@@ -24,14 +24,6 @@ source $ZSH/oh-my-zsh.sh
 # check the dnf plugins commands here
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dnf
 
-
-# Display Pokemon-colorscripts
-# Project page: https://gitlab.com/phoneybadger/pokemon-colorscripts#on-other-distros-and-macos
-#pokemon-colorscripts --no-title -s -r
-
-# Set-up FZF key bindings (CTRL R for fuzzy history finder)
-source <(fzf --zsh)
-
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
@@ -41,7 +33,7 @@ setopt appendhistory
 alias ls='eza -a --icons'
 alias ll='eza -alh --icons'
 alias lt='eza -a --tree --level=1 --icons'
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+# source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -92,3 +84,7 @@ ex ()
     echo "'$1' is not a valid file"
   fi
 }
+
+# Homebrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
