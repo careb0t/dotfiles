@@ -167,7 +167,8 @@
 		"class<.*steam_app.*|xcom2.exe>":"󰊴",
 		"class<lutris>":"",
 		"class<Logseq>":"󱉟",
-		"class<org.kde.dolphin>":"󰝰"
+		"class<org.kde.dolphin>":"󰝰",
+		"class<dev.zed.Zed>":"󰅩",
 	}   
 },
 // for Camilla or Spanish
