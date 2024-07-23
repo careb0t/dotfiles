@@ -166,7 +166,7 @@
 		"class<spotify>":"",
 		"class<.*steam_app.*|xcom2.exe>":"󰊴",
 		"class<lutris>":"",
-		"class<Logseq>":"󱉟",
+		"class<obsidian>":"",
 		"class<org.kde.dolphin>":"󰝰",
 		"class<dev.zed.Zed>":"󰅩",
 	}   
