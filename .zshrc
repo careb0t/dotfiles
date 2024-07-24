@@ -33,7 +33,12 @@ setopt appendhistory
 alias ls='eza -a --icons'
 alias ll='eza -alh --icons'
 alias lt='eza -a --tree --level=1 --icons'
-# source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# Copy contents of file to clipboard
+wcopy() {
+	bat $1 | wl-copy
+}
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -55,8 +60,6 @@ eval "$(zoxide init zsh)"
 source <(fzf --zsh)
 
 # thefuck
-eval $(thefuck --alias)
-# You can use whatever you want as an alias, like for Mondays:
 eval $(thefuck --alias fk)
 
 

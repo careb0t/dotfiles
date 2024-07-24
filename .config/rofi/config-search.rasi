@@ -6,8 +6,6 @@
 /* ---- Window ---- */
 window {
 	width: 40%;
-    y-offset: 6px;
-    location: north;
 }
 
 /* ---- Inputbar ---- */
@@ -17,12 +15,13 @@ inputbar {
 
 /* ---- Mainbox ---- */
 mainbox {
-	padding: 0px;
+	padding: 20px;
     children: [ "entry"];
 }
 
 /* ---- Entry ---- */ 
 entry {
 	placeholder: "🔎 Google Search";
+	text-color: White;
 }
 

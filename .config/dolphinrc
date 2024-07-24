@@ -1,0 +1,36 @@
+MenuBar=Disabled
+
+[ContextMenu]
+ShowAddToPlaces=false
+ShowCopyToOtherSplitView=false
+ShowDuplicateHere=false
+ShowMoveToOtherSplitView=false
+ShowViewMode=false
+
+[FoldersPanel]
+HiddenFilesShown=true
+LimitFoldersPanelToHome=false
+
+[General]
+GlobalViewProps=false
+LockPanels=false
+Version=202
+ViewPropsTimestamp=2024,7,21,11,40,6.505
+
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=22
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
+
+[MainWindow][Toolbar mainToolBar]
+ToolButtonStyle=IconOnly
+
+[PreviewSettings]
+Plugins=audiothumbnail,blenderthumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,mobithumbnail,opendocumentthumbnail,gsthumbnail,rawthumbnail,svgthumbnail,ffmpegthumbs
+
+[Search]
+Location=Everywhere
+What=Content

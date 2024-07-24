@@ -9,6 +9,11 @@ entry {
   placeholder: "📋 Search Clipboard **note** 👀 CTRL Del - Cliphist del or Alt Del - cliphist wipe";
 }
 
+/* ---- Prompt ---- */                                                                                        
+prompt {                                                                                                      
+  enabled: false;                                                                                           
+} 
+
 /* ---- Listview ---- */
 listview {
   columns: 1;
