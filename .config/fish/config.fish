@@ -6,6 +6,9 @@ if status is-interactive
     end
 end
 
+# Starship theme
+starship init fish | source
+
 # Zoxide + FZF
 zoxide init fish | source
 fzf --fish | source
