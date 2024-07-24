@@ -20,6 +20,11 @@ function fcopy
     bat $argv[1] | wl-copy
 end
 
+# Command typo helper
+function fk
+    thefuck $history[1] | source
+end
+
 # Global extraction command
 function ex
     if test -f $argv[1]

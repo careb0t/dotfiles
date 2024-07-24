@@ -1,7 +1,6 @@
 MenuBar=Disabled
 
 [ContextMenu]
-ShowAddToPlaces=false
 ShowCopyToOtherSplitView=false
 ShowDuplicateHere=false
 ShowMoveToOtherSplitView=false
