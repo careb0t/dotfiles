@@ -1,3 +1,5 @@
+#Hyprland install guide: https://github.com/hyprwm/Hyprland/discussions/284
+
 -Firefox
 --Sidebery
 ---import settings
