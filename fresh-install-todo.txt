@@ -1,0 +1,36 @@
+-Firefox
+--Sidebery
+---import settings
+--userChrome Toggle Extended by Naezr
+--import profile
+---make CSS change from GitHub issue
+
+-wezterm
+--fish
+---fisher
+----jhillyerd/plugin-git
+---starship
+--CLI tools
+---zoxide, fzf, thefuck, rm-improved, ripgrep, micro, eza, fastfetch, fcopy
+---btop, tty-clock, cmatrix, yazi
+
+-dolphin
+
+-Vesktop
+
+-Spotify
+--negativo17 repo
+--SpotX Linux
+--Spicetify
+
+-VS Code
+
+-Obsidian
+--Catppuccin Mocha
+
+-Steam
+-Lutris
+
+-Qbittorrent
+
+-OBS Studio

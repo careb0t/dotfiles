@@ -16,7 +16,7 @@
 "margin-right": 8,
 
 "modules-left": [
-	"hyprland/workspaces#rw"
+	"hyprland/workspaces#rw",
 	],
 
 "modules-center": [
@@ -37,6 +37,7 @@
 	"group/mobo_drawer",
 	"custom/separator#dot-line",
 	"tray",
+	"custom/separator#dot-line",
 	"custom/swaync",
 	"custom/separator#dot-line",
 	"idle_inhibitor",

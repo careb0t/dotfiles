@@ -1,8 +1,5 @@
 if status is-interactive
-    # Commands to run in interactive sessions can go here
     function fish_greeting
-        wezterm imgcat --max-pixels 80000 --resample-filter nearest /home/careb0t/Pictures/yuri_smile.png
-        echo "Мы ведем борьбу не на жизнь, а на смерть с силами капитализма. Только полная вера в Юрия может защитить вас. Только полное подчинение спасет жизни вам и вашей семье. Освободите свой разум и подчинитесь моей воле.Чем меньше вы знаете, тем лучше для вас. Я Юрий. Повинуйся мне."
     end
 end
 
