@@ -39,5 +39,6 @@
 
 #random notes
 -if YouTube is freezing but audio keeps playing, switch from pulseaudio to pipewire, mess with ffmpeg settings in about:config
+--https://rpmfusion.org/Howto/Multimedia || install compat-ffmpeg
 -if waybar systray stops working, its likely because hyprland was locked, figure out how to restart it without reboot
 -/etc/xdg-desktop-portal for portal settings like default file picker
