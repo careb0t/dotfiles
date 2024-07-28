@@ -147,9 +147,7 @@
 		"title<.*reddit.*>": " ",
 		"title<.*Picture-in-Picture.*>": " ",
 		"class<org.mozilla.firefox>": " ",
-		"class<kitty>": "",
-		"class<konsole>": "",
-		"class<org.wezfurlong.wezterm>":"",
+		"class<kitty|foot|org.wezfurlong.wezterm|konsole>": " ",
 		"class<thunar>": "󰝰 ",
 		"class<discord>": " ",
 		"class<vesktop>": " ",
@@ -163,14 +161,14 @@
 		"class<libreoffice-writer>": " ",
 		"class<libreoffice-startcenter>": "󰏆 ",
 		"class<com.obsproject.Studio>": " ",
-		"class<steam>":"",
-		"class<spotify>":"",
-		"class<.*steam_app.*|xcom2.exe>":"󰊴",
-		"class<lutris>":"",
-		"class<obsidian>":"",
-		"class<org.kde.dolphin>":"󰝰",
-		"class<dev.zed.Zed>":"󰅩",
-	}   
+		"class<steam>":" ",
+		"class<spotify>":" ",
+		"class<.*steam_app.*|xcom2.exe>":"󰊴 ",
+		"class<lutris>":"󰨈 ",
+		"class<obsidian>":" ",
+		"class<org.kde.dolphin>":"󰝰 ",
+		"class<dev.zed.Zed>":"󰅩 "
+	}    
 },
 // for Camilla or Spanish
 "hyprland/workspaces#cam": {
@@ -403,7 +401,7 @@
 	"on-click": "hyprctl switchxkblayout $SET_KB next"
 },
 "hyprland/submap": {
-	"format": "<span style=\"italic\">  {}</span>", // Icon: expand-arrows-alt
+	"format": "<span style=\"italic\"></span>", // Icon: expand-arrows-alt
 	"tooltip": false,
 },
 "hyprland/window": {
@@ -543,7 +541,6 @@
 	"on-click-right": "pavucontrol -t 3",
 	"on-scroll-up": "~/.config/hypr/scripts/Volume.sh --inc",
 	"on-scroll-down": "~/.config/hypr/scripts/Volume.sh --dec",
-	"tooltip": true,
 	"tooltip-format": "{icon} {desc} | {volume}%",
 	"smooth-scrolling-threshold": 1,
 },
@@ -553,9 +550,9 @@
   "format-bluetooth-muted": " {icon}",
   "format-muted": "󰸈",
   "format-icons": {
-      "headphone": "",
+      "headphone": "",
       "hands-free": "",
-      "headset": "",
+      "headset": "",
       "phone": "",
       "portable": "",
       "car": "",
@@ -581,7 +578,7 @@
 	"interval": 10,
 	"tooltip": true,
 	"hwmon-path": [
-		"/sys/class/hwmon/hwmon0/temp1_input",
+		"/sys/class/hwmon/hwmon1/temp1_input",
 		"/sys/class/thermal/thermal_zone0/temp"
 	],
 	//"thermal-zone": 0,
@@ -672,7 +669,7 @@
 "custom/playerctl": {
 	"format": "<span>{}</span>",
 	"return-type": "json",
-	"max-length": 55,
+	"max-length": 35,
 	"exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} ~ {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
 	"on-click-middle": "playerctl play-pause",
 	"on-click": "playerctl previous",
@@ -726,10 +723,10 @@
 	"format-alt-click": "click",
 	"interval": 3600,
 	"return-type": "json",
-	//"exec": "~/.config/hypr/UserScripts/Weather.sh",
-	"exec": "~/.config/hypr/UserScripts/Weather.py",
+	"exec": "~/.config/hypr/UserScripts/Weather.sh",
+	//"exec": "~/.config/hypr/UserScripts/Weather.py",
 	"exec-if": "ping wttr.in -c1",
-	"tooltip": true
+	"tooltip": true,
 },
 // Separators
 "custom/separator#dot": {

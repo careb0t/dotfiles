@@ -31,7 +31,7 @@ configuration {
 
     text-selected:               @background;
     text-color:                  @foreground;
-    border-color:                @selected;
+    border-color:                @active-background;
 }
 
 /* ---- Window ---- */

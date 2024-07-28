@@ -9,11 +9,6 @@ entry {
   placeholder: "💫 Search Emoji's  **note** 👀 Click or Return to choose | Ctrl V to Paste";
 }
 
-/* ---- Prompt ---- */
-prompt {
-	enabled: false;
-}
-
 /* ---- Listview ---- */
 listview {
   columns: 1;

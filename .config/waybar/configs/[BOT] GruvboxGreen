@@ -1,0 +1,35 @@
+{
+"include": "~/.config/waybar/modules",
+"layer": "top",
+//"mode": "dock",
+"exclusive": true,
+"passthrough": false,
+"position": "top",
+"spacing": 3,
+"fixed-center": true,
+"ipc": true,
+//"margin-top": 6,
+"margin-left": 8,
+"margin-right": 8,
+
+"modules-left": [
+	"hyprland/workspaces#rw",
+	],
+    
+"modules-center": [
+	"clock#4",
+	],
+    
+"modules-right": [
+    "tray",
+    "custom/separator#dot",
+    "custom/swaync",
+    "custom/separator#dot",
+ 	"group/audio",
+    "bluetooth",
+    "network",
+    "custom/separator#dot",
+    "custom/lock", 
+	"custom/power"
+	]
+}

@@ -1,4 +1,4 @@
-/* ---- 💫 https://github.com/careb0t 💫 ---- */
+/* ---- 💫 https://github.com/JaKooLit 💫 ---- */
 /* Main Config (compact) */
 
 @import "~/.config/rofi/config.rasi" 
@@ -14,14 +14,9 @@ window {
   border-radius: 15px;
 }
 
-/* ---- Prompt ---- */
-prompt {
-	enabled: false;
-}
-
 /* ---- Inputbar ---- */
 inputbar {
-  
+  background-image: url("~/.config/rofi/.current_wallpaper", width);
 }
 
 /* ---- Imagebox ---- */

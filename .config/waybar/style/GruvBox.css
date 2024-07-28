@@ -1,0 +1,214 @@
+/* ----------- 💫 https://github.com/JaKooLit 💫 -------- */
+/* Wallust - Simple */
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: bold;
+	min-height: 0;
+	/* set font-size to 100% if font scaling is set to 1.00 using nwg-look */
+	font-size: 97%;
+	font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
+}
+
+@import "../../.config/waybar/wallust/colors-waybar.css";
+
+window#waybar {
+	background: @background;
+	border-radius: 30px;
+	color: @foreground;
+	border: 2px solid @color1;
+}
+
+#waybar.empty,
+#waybar.tiled,
+#waybar.floating {
+	background: @background;
+	border: 2px solid @color1;
+}
+
+window#waybar,
+window#waybar.empty,
+window#waybar.empty #window {
+	background: @background;
+	padding: 0px;
+	border: 0px;
+	border: 2px solid @color1;
+}
+
+tooltip {
+	color: @color15;
+	background: @color0;
+	opacity: 0.8;
+	border-radius: 10px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: @color15;
+}
+
+/*-----module groups----*/
+.modules-right {
+	background-color: transparent;
+
+	padding-right: 10px;
+	padding-left: 0px;
+}
+.modules-center {
+	background-color: transparent;
+
+	padding-right: 4px;
+	padding-left: 4px;
+}
+.modules-left {
+	background-color: transparent;
+
+	padding-right: 0px;
+	padding-left: 10px;
+}
+/*-----modules indv----*/
+
+#workspaces button {
+	color: @color2;
+	padding-left: 8px;
+	padding-right: 8px;
+	margin-left: 8px;
+	margin-right: 8px;
+	font-size: 16px;
+}
+
+#workspaces button.active {
+	color: @foreground;
+}
+
+#workspaces button.focused {
+	color: @color2;
+}
+
+#workspaces button.urgent {
+	color: @color3;
+}
+
+#workspaces button:hover {
+	color: @foreground;
+	background-color: @background;
+}
+
+#backlight,
+#backlight-slider,
+#battery,
+#bluetooth,
+#cpu,
+#disk,
+#idle_inhibitor,
+#keyboard-state,
+#memory,
+#mode,
+#mpris,
+#network,
+#power-profiles-daemon,
+#pulseaudio,
+#pulseaudio-slider,
+#taskbar button,
+#taskbar,
+#temperature,
+#tray,
+#window,
+#wireplumber,
+#workspaces,
+#custom-backlight,
+#custom-cava_mviz,
+#custom-cycle_wall,
+#custom-hint,
+#custom-keyboard,
+#custom-light_dark,
+#custom-lock,
+#custom-menu,
+#custom-power_vertical,
+#custom-power,
+#custom-swaync,
+#custom-updater,
+#custom-weather,
+#custom-weather.clearNight,
+#custom-weather.cloudyFoggyDay,
+#custom-weather.cloudyFoggyNight,
+#custom-weather.default,
+#custom-weather.rainyDay,
+#custom-weather.rainyNight,
+#custom-weather.severe,
+#custom-weather.showyIcyDay,
+#custom-weather.snowyIcyNight,
+#custom-weather.sunnyDay {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 6px;
+	padding-left: 6px;
+}
+
+#clock {
+	color: @foreground;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	font-size: 16px;
+}
+
+#mode {
+	color: #cc3436;
+	font-weight: bold;
+}
+#custom-power {
+	color: @color6;
+	background: transparent;
+	/*border-radius: 50px;*/
+	font-size: 16px;
+	margin-left: 4px;
+}
+
+#custom-lock {
+	color: @foreground;
+	background: transparent;
+	/*border-radius: 50px;*/
+	font-size: 16px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+#custom-separator {
+	color: #3d443e;
+	font-size: 12px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+#network {
+	color: @foreground;
+	font-size: 16px;
+	margin-left: 2px;
+	margin-right: 4px;
+}
+
+#bluetooth {
+	color: @color3;
+	font-size: 16px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+#audio {
+	color: @foreground;
+	font-size: 14px;
+	margin-left: 4px;
+	margin-right: 2px;
+}
+
+#custom-swaync {
+	color: @foreground;
+	font-size: 16px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+#tray {
+	color: @foreground;
+	font-size: 16px;
+	margin-left: 4px;
+	margin-right: 4px;
+}

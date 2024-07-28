@@ -20,6 +20,11 @@ function fcopy
     bat $argv[1] | wl-copy
 end
 
+# cp rm mv abbr
+abbr cp "cp -vi"
+abbr mv "mv -vi"
+abbr rm "rm -vi"
+
 # Command typo helper
 function fk
     thefuck $history[1] | source

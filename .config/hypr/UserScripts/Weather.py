@@ -24,12 +24,12 @@ weather_icons = {
 # to get your own location_id, go to https://weather.com & search your location.
 # once you choose your location, you can see the location_id in the URL(64 chars long hex string)
 # like this: https://weather.com/en-PH/weather/today/l/bca47d1099e762a012b9a139c36f30a0b1e647f69c0c4ac28b537e7ae9c1c200
-location_id = "c10be7695a1723b4d861a806ccf05d1c149630080e81d306aeb4be928c1c1c99"  # TODO
+location_id = "bca47d1099e762a012b9a139c36f30a0b1e647f69c0c4ac28b537e7ae9c1c200"  # TODO
 
 # NOTE to change to deg F, change the URL to your preffered location after weather.com
 # Default is English-Philippines with Busan, South Korea as location_id
 # get html page
-url = "https://weather.com/weather/today/l/" + location_id
+url = "https://weather.com/en-PH/weather/today/l/" + location_id
 html_data = PyQuery(url=url)
 
 # current temperature
@@ -57,7 +57,7 @@ icon = (
 temp_feel = html_data(
     "div[data-testid='FeelsLikeSection'] > span > span[data-testid='TemperatureValue']"
 ).text()
-temp_feel_text = f"Feels like {temp_feel}F"
+temp_feel_text = f"Feels like {temp_feel}c"
 # print(temp_feel_text)
 
 # min-max temperature
@@ -116,7 +116,7 @@ tooltip_text = str.format(
 
 # print waybar module data
 out_data = {
-    "text": f"{icon}  {temp}F",
+    "text": f"{icon}  {temp}",
     "alt": status,
     "tooltip": tooltip_text,
     "class": status_code,
@@ -124,7 +124,7 @@ out_data = {
 print(json.dumps(out_data))
 
 simple_weather =f"{icon}  {status}\n" + \
-                f"  {temp}F ({temp_feel_text})F\n" + \
+                f"  {temp} ({temp_feel_text})\n" + \
                 f"{wind_text} \n" + \
                 f"{humidity_text} \n" + \
                 f"{visbility_text} AQI{air_quality_index}\n"

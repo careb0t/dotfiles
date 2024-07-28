@@ -10,11 +10,6 @@ entry {
   placeholder: "🧮 Calculate";
 }
 
-/* ---- Prompt ---- */                                                                                        
-prompt {                                                                                                      
-  enabled: false;                                                                                           
-} 
-
 /* ---- Window ---- */
 window {
     width:	30%;

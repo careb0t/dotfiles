@@ -1,8 +1,6 @@
 #!/bin/bash
 
-exec 1> >(tee -a "/tmp/weather.log")
-
-city="Phoenix"
+city=
 cachedir=~/.cache/rbn
 cachefile=${0##*/}-$1
 
@@ -34,7 +32,7 @@ IFS=$SAVEIFS
 
 temperature=$(echo ${weather[2]} | sed -E 's/([[:digit:]]+)\.\./\1 to /g')
 
-echo ${weather[1]##*,}
+#echo ${weather[1]##*,}
 
 # https://fontawesome.com/icons?s=solid&c=weather
 case $(echo ${weather[1]##*,} | tr '[:upper:]' '[:lower:]') in

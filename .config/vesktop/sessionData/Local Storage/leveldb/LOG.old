@@ -1,0 +1,6 @@
+2024/07/28-13:41:08.541 a37 Reusing MANIFEST /home/careb0t/.config/vesktop/sessionData/Local Storage/leveldb/MANIFEST-000001
+2024/07/28-13:41:08.547 a37 Recovering log #71
+2024/07/28-13:41:08.547 a37 Reusing old log /home/careb0t/.config/vesktop/sessionData/Local Storage/leveldb/000071.log 
+2024/07/28-13:42:09.211 a39 Level-0 table #76: started
+2024/07/28-13:42:09.216 a39 Level-0 table #76: 45263 bytes OK
+2024/07/28-13:42:09.220 a39 Delete type=0 #71

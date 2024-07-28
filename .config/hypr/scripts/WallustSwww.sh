@@ -4,6 +4,7 @@
 
 # Define the path to the swww cache directory
 cache_dir="$HOME/.cache/swww/"
+theme_path="$HOME/.config/colors.json"
 
 # Get a list of monitor outputs
 monitor_outputs=($(ls "$cache_dir"))
@@ -35,5 +36,5 @@ if [ "$ln_success" = true ]; then
     # execute wallust
 	echo 'about to execute wallust'
     # execute wallust skipping tty and terminal changes
-    wallust run "$wallpaper_path" -s &
+    wallust cs "$theme_path" -s &
 fi

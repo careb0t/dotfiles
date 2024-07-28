@@ -3,7 +3,7 @@
 
 # define your preferred text editor and terminal to use
 editor=micro
-tty=kitty
+tty=foot
 
 configs="$HOME/.config/hypr/configs"
 UserConfigs="$HOME/.config/hypr/UserConfigs"
