@@ -1,7 +1,0 @@
-2024/07/28-00:44:26.494 178e Reusing MANIFEST /home/careb0t/.config/vesktop/sessionData/WebStorage/1/IndexedDB/indexeddb.leveldb/MANIFEST-000001
-2024/07/28-00:44:26.494 178e Recovering log #3
-2024/07/28-00:44:26.495 178e Reusing old log /home/careb0t/.config/vesktop/sessionData/WebStorage/1/IndexedDB/indexeddb.leveldb/000003.log 
-2024/07/28-00:44:26.619 178d Level-0 table #5: started
-2024/07/28-00:44:26.622 178d Level-0 table #5: 22044 bytes OK
-2024/07/28-00:44:26.626 178d Delete type=0 #3
-2024/07/28-00:44:26.626 1776 Manual compaction at level-0 from '\x00\x02\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x03\x00\x00\x00' @ 0 : 0; will stop at (end)
