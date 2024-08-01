@@ -67,3 +67,15 @@ function ex
         echo "'$argv[1]' is not a valid file"
     end
 end
+
+# yazi shell wrapper
+function yy
+	set tmp (mktemp -t "yazi-cwd.XXXXXX")
+	yazi $argv --cwd-file="$tmp"
+	if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+		cd -- "$cwd"
+	end
+	rm -f -- "$tmp"
+end
+
+set -gx EDITOR micro

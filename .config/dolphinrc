@@ -32,3 +32,6 @@ Plugins=audiothumbnail,blenderthumbnail,comicbookthumbnail,cursorthumbnail,djvut
 
 [Search]
 Location=Everywhere
+
+[Toolbar mainToolBar]
+ToolButtonStyle=IconOnly

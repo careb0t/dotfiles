@@ -7,6 +7,12 @@ plugins = [
 
 [scratchpads.term]
 animation = "fromTop"
-command = "foot --class foot-dropterm"
+command = "foot -a foot-dropterm"
 class = "foot-dropterm"
+size = "75% 60%"
+
+[scratchpads.yazi]
+animation = "fromTop"
+command = "foot -a foot-dropyazi yazi"
+class = "foot-dropyazi"
 size = "75% 60%"
