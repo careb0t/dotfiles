@@ -1,0 +1,5 @@
+.config/vesktop/SingletonCookie
+.config/vesktop/SingletonLock
+.config/vesktop/SingletonSocket
+.config/vesktop/sessionData/
+.config/vesktop/Crashpad/
