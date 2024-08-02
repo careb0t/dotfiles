@@ -26,6 +26,7 @@
 
 -Obsidian
 --GruvBox theme one of them
+--Everforest
 
 -Steam
 -Lutris
