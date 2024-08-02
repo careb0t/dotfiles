@@ -3,3 +3,5 @@
 .config/vesktop/SingletonSocket
 .config/vesktop/sessionData/
 .config/vesktop/Crashpad/
+.config/micro/buffers/
+.config/micro/backups/

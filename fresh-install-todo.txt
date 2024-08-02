@@ -1,13 +1,9 @@
 #Hyprland install guide: https://github.com/hyprwm/Hyprland/discussions/284
 
--Firefox
---Sidebery
----import settings
---userChrome Toggle Extended by Naezr
---import profile
----make CSS change from GitHub issue
+-Vivaldi
+--Gruvbox Hard
 
--wezterm
+-foot
 --fish
 ---fisher
 ----jhillyerd/plugin-git
@@ -26,12 +22,14 @@
 --Spicetify
 
 -VS Code
+-Zed pre-released form GitHub
 
 -Obsidian
---Catppuccin Mocha
+--GruvBox theme one of them
 
 -Steam
 -Lutris
+--Path of Building
 
 -Qbittorrent
 
