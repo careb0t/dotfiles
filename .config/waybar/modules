@@ -167,7 +167,7 @@
 		"class<lutris>":"󰨈 ",
 		"class<obsidian>":" ",
 		"class<org.kde.dolphin>":"󰝰 ",
-		"class<dev.zed.Zed>":"󰅩 ",
+		"class<dev.zed.Zed|dev.zed.Zed-Preview>":"󱐌 ",
 		"class<Vivaldi-stable>":" "
 	}    
 },

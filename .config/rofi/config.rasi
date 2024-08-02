@@ -5,7 +5,7 @@
 
 /* ---- Configuration ---- */
 configuration {
-	font:	"Fira Code SemiBold 13";
+	font:	"0xProto Nerd Font 11";
 }
 /* ---- Window ---- */
 window {
@@ -28,6 +28,6 @@ button {
 }
 
 element-text {
-    font:	"Fira Code SemiBold 16";
+    font:	"0xProto Nerd Font 14";
 }
 

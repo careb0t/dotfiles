@@ -5,7 +5,7 @@ plugins = [
   "magnify",
 ]
 
-[scratchpads.term]
+[scratchpads.foot]
 animation = "fromTop"
 command = "foot -a foot-dropterm"
 class = "foot-dropterm"
