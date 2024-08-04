@@ -81,3 +81,4 @@ end
 set -gx EDITOR micro
 
 fish_add_path /home/careb0t/.spicetify
+
