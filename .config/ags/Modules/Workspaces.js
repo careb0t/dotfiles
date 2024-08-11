@@ -66,7 +66,6 @@ export const Workspaces = () => {
                         })
                     ],
                     setup: self => self.hook(Hyprland, () => {
-                        console.log(Hyprland.getWorkspace(i))
                         // The "?" is used here to return "undefined" if the workspace doesn't exist
                         self.toggleClassName('ws-inactive', (Hyprland.getWorkspace(i)?.windows || 0) === 0);
                         self.toggleClassName('ws-occupied', (Hyprland.getWorkspace(i)?.windows || 0) > 0);

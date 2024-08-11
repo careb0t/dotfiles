@@ -167,7 +167,8 @@
 		"class<obsidian>":" ",
 		"class<org.kde.dolphin>":"󰝰 ",
 		"class<dev.zed.Zed|dev.zed.Zed-Preview>":"󱐌 ",
-		"class<Vivaldi-stable>":" "
+		"class<Vivaldi-stable>":" ",
+		"class<pobfrontend>":"󰴠 "
 	}    
 },
 // for Camilla or Spanish
@@ -363,7 +364,7 @@
 },
 "clock#4": {
 	"interval": 60,
-    "format": "{:%B | %a %d, %Y | %I:%M %p}", // AM PM format
+    "format": "{:%b %d, %Y | %I:%M %p}", // AM PM format
     //"format": "{:%B | %a %d, %Y | %H:%M}", // 24H
 	"format-alt": "{:%a %b %d, %G}",
 	"tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
@@ -713,7 +714,7 @@
 	"exec": "checkupdates | wc -l",
 	"exec-if": "[[ $(checkupdates | wc -l) ]]",
 	"interval": 15,
-	"on-click": "kitty -T update paru -Syu || yay -Syu && notify-send 'The system has been updated'",
+	"on-click": "foot -T update paru -Syu || yay -Syu && notify-send 'The system has been updated'",
 	"tooltip": true,
 	"tooltip-format": "Left Click: Update System\nArch Linux Only",
 },

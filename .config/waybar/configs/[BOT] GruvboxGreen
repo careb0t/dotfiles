@@ -27,8 +27,7 @@
     "custom/separator#dot",
  	"group/audio",
     "bluetooth",
-    "custom/separator#dot",
-    "custom/lock", 
+    "custom/separator#dot", 
 	"custom/power"
 	]
 }
