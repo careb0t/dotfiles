@@ -153,6 +153,7 @@
 		"class<subl>": "󰅳 ",
 		"class<celluloid>": " ",
 		"class<Cider>": "󰎆 ",
+		"class<code-insiders-url-handler|code-insiders": "󰨞 ",
 		"class<code-url-handler>": "󰨞 ",
 		"class<codium|codium-url-handler|VSCodium>": "󰨞 ",
 		"class<codeblocks>": "󰅩 ",

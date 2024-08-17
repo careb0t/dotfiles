@@ -82,3 +82,7 @@ set -gx EDITOR micro
 
 fish_add_path /home/careb0t/.spicetify
 
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
