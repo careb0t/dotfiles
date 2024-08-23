@@ -16,3 +16,9 @@ animation = "fromTop"
 command = "wezterm start --always-new-process --class wezterm-dropyazi yazi"
 class = "wezterm-dropyazi"
 size = "75% 60%"
+
+[scratchpad.nvtop]
+animation = "fromTop"
+command = "wezterm start --always-new-process --class wezterm-dropnvtop nvtop"
+class = "wezterm-dropnvtop"
+size = "85% 70%"
