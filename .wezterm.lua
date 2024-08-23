@@ -8,13 +8,13 @@ local config = {}
 -- config.color_scheme = 'Everforest Dark Medium (Gogh)'
 
 config.colors = {
-		background = "#2d353b",
+		background = "#333c43",
 		cursor_bg = "#d3c6aa",
 		cursor_border = "#d3c6aa",
-		cursor_fg = "#2d353b",
+		cursor_fg = "#333c43",
 		foreground = "#d3c6aa",
 		ansi = {
-		    "#343f44",
+		    "#3a464c",
 		    "#e67e80",
 		    "#a7c080",
 		    "#dbbc7f",
@@ -34,26 +34,26 @@ config.colors = {
 	        "#dfddc8",
 	    },
 	    tab_bar = {
-	    	background = "#2D353B",
+	    	background = "#333c43",
 	    	active_tab = {
-	    		bg_color = "#343F44",
+	    		bg_color = "#3a464c",
 	    		fg_color = "#A7C080",
 	    	},
 	    	inactive_tab = {
-	    		bg_color = "#2D353B",
+	    		bg_color = "#333c43",
 	    		fg_color = "#3A515D",
 	    	},
 	    	inactive_tab_hover = {
-	    		bg_color = "#2D353B",
+	    		bg_color = "#333c43",
 	    		fg_color = "#7FBBB3",
 	    		italic = true,
 	    	},
 	    	new_tab = {
-	    		bg_color = "#2D353B",
+	    		bg_color = "#333c43",
 	    		fg_color = "#3A515D",
 	    	},
 	    	new_tab_hover = {
-	    		bg_color = "#2D353B",
+	    		bg_color = "#333c43",
 	    		fg_color = "#7FBBB3",
 	     	},
 	    },

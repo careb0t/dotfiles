@@ -5,14 +5,14 @@ plugins = [
   "magnify",
 ]
 
-[scratchpads.foot]
+[scratchpads.wezterm]
 animation = "fromTop"
-command = "foot -a foot-dropterm"
-class = "foot-dropterm"
+command = "wezterm start --always-new-process --class wezterm-dropterm"
+class = "wezterm-dropterm"
 size = "75% 60%"
 
 [scratchpads.yazi]
 animation = "fromTop"
-command = "foot -a foot-dropyazi yazi"
-class = "foot-dropyazi"
+command = "wezterm start --always-new-process --class wezterm-dropyazi yazi"
+class = "wezterm-dropyazi"
 size = "75% 60%"
