@@ -38,7 +38,7 @@ from libqtile import hook
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser("~")
-    subprocess.Popen([home + "/dotfiles/autostart"])
+    subprocess.Popen([home + "/dotfiles/qtile/autostart"])
 
 # Dunst notifications
 notify_cmd = "dunstify -u low -h string:x-dunst-stack-tag:qtileconfig"
@@ -51,14 +51,13 @@ mod = "mod4"
 
 # Scripts/Apps Variables
 home = os.path.expanduser("~")
+volume = home + "/dotfiles/qtile/volume"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # Terminal --
-    Key(
-        [mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"
-    ),
+    Key([mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"),
     # Key(
     #     [mod, "shift"],
     #     "Return",
@@ -72,7 +71,7 @@ keys = [
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
     Key([mod, "shift"], "l", lazy.spawn("lutris"), desc="Launch Lutris"),
     Key([mod, "shift"], "s", lazy.spawn("steam"), desc="Launch Steam"),
-    Key([mod, "shift"], "s", lazy.spawn("wezterm --start yazi"), desc="Launch Yazi"),
+    Key([mod, "shift"], "y", lazy.spawn("wezterm --start yazi"), desc="Launch Yazi"),
 
     # Screenshot
     Key([mod], "s", lazy.spawn("flameshot gui"), desc="Take screenshot with Flameshot"),
@@ -110,29 +109,29 @@ keys = [
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left",),
-    Key([mod, "shift"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right", ),
+    Key([mod, "shift"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([mod, "shift"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([mod, "shift"], "Up", lazy.layout.shuffle_up(), desc="Move window up"),
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left",),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right", ),
+    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
     Key([mod, "control"], "Left", lazy.layout.grow_left(), desc="Grow window to the left",),
-    Key([mod, "control"], "Right", lazy.layout.grow_right(), desc="Grow window to the right",),
+    Key([mod, "control"], "Right", lazy.layout.grow_right(), desc="Grow window to the right"),
     Key([mod, "control"], "Down", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "Up", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left",),
-    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right",),
+    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
+    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key [mod, "control"], "Return", lazy.layout.normalize(), desc="Reset all window sizes"),
+    Key([mod, "control"], "Return", lazy.layout.normalize(), desc="Reset all window sizes"),
 
     # Toggle floating and fullscreen
-    Key [mod], "space", lazy.window.toggle_floating(), desc="Put the focused window to/from floating mode"),
+    Key([mod], "space", lazy.window.toggle_floating(), desc="Put the focused window to/from floating mode"),
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Put the focused window to/from fullscreen mode"),
 
     # Go to next/prev group
@@ -148,9 +147,9 @@ keys = [
     Key([mod, "shift"], "space", lazy.next_layout(), desc="Toggle between layouts"),
 
     # Increase the space for master window at the expense of slave windows
-    Key([mod], "equal", lazy.layout.increase_ratio(), desc="Increase the space for master window",),
+    Key([mod], "equal", lazy.layout.increase_ratio(), desc="Increase the space for master window"),
     # Decrease the space for master window in the advantage of slave windows
-    Key([mod], "minus", lazy.layout.decrease_ratio(), desc="Decrease the space for master window",),
+    Key([mod], "minus", lazy.layout.decrease_ratio(), desc="Decrease the space for master window"),
 
     # Toggle between split and unsplit sides of stack.
     Key([mod, "shift"], "s", lazy.layout.toggle_split(), desc="Toggle between split and unsplit sides of stack"),
@@ -298,8 +297,6 @@ screens = [
                     padding_x=10
                 ),
                 widget.Spacer(),
-                extraWidget.Mpris2(popup_layout=DEFAULT_LAYOUT),
-                widget.Spacer(),
                 extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
                 widget.Clock(format="%I:%M %p"),
@@ -332,8 +329,6 @@ screens = [
                     fontsize=18,
                     padding_x=10
                 ),
-                widget.Spacer(),
-                extraWidget.Mpris2(popup_layout=DEFAULT_LAYOUT),
                 widget.Spacer(),
                 extraWidget.StatusNotifier(),
                 extraWidget.Systray(),

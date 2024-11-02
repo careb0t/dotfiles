@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
-## Copyright (C) 2020-2024 Aditya Shakya <adi1090x@gmail.com>
-##
 ## Autostart Programs
-
-# qtile dir
-qdir="$HOME/.config/qtile"
-
 # Export desktop session
 export XDG_CURRENT_DESKTOP='qtile'
 
@@ -19,8 +13,8 @@ for _prs in "${_ps[@]}"; do
 done
 
 # polkit agent
-if [[ ! `pidof xfce-polkit` ]]; then
-	/usr/lib/xfce-polkit/xfce-polkit &
+if [[ ! `pidof polkit` ]]; then
+	polkit &
 fi
 
 # Enable Super Keys For Menu
@@ -31,20 +25,24 @@ ksuperkey -e 'Super_R=Alt_L|F1' &
 xsetroot -cursor_name left_ptr
 
 # Restore wallpaper
-hsetroot -fill "$qdir"/theme/wallpaper
 xwallpaper --output all --maximize cosmic_red.jpg
 
-# Lauch notification daemon
-"$qdir"/scripts/qtile_dunst
+# Launch dunst daemon
+if [[ `pidof dunst` ]]; then
+	pkill dunst
+fi
 
-# Lauch polybar
-#"$qdir"/scripts/qtile_bar
+dunst -config ./dunstrc &
 
 # Lauch compositor
-"$qdir"/scripts/qtile_comp
+# Terminate if picom is already running
+killall -q picom
 
-# Start mpd
-# exec mpd &
+# Wait until the processes have been shut down
+while pgrep -u $UID -x picom >/dev/null; do sleep 1; done
+
+# Launch picom
+picom --config ./picom.conf &
 
 # Start Flameshot
 if [[ ! `pidof flameshot` ]]; then
