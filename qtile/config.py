@@ -240,7 +240,7 @@ var_font_name = "JetBrainsMono Nerd Font"
 layouts = [
     # Extension of the Stack layout
     layout.Columns(
-        border_focus="#9F6666",
+        border_focus="#DD9998",
         border_normal="#00000000",
         border_on_single=False,
         border_width=var_border_width,
@@ -258,11 +258,11 @@ layouts = [
 ]
 
 group_rules = [ 
-    GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=True),
-    GroupBoxRule(text_colour="#9F6666").when(focused=True, occupied=True),
-    GroupBoxRule(text_colour="#C1C1C1").when(focused=False, occupied=False),
+    GroupBoxRule(text_colour="#9F6666").when(focused=False, occupied=True),
+    GroupBoxRule(text_colour="#DD9998").when(focused=True, occupied=True),
+    GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=False),
     GroupBoxRule(line_position=GroupBoxRule.LINE_TOP).when(focused=True, occupied=True),
-    GroupBoxRule(line_colour="#9F6666").when(focused=True, occupied=True),
+    GroupBoxRule(line_colour="#DD9998").when(focused=True, occupied=True),
     GroupBoxRule(line_width=3).when(focused=True, occupied=True)
 ]
 
@@ -283,12 +283,13 @@ screens = [
                     padding_x=10
                 ),
                 widget.Spacer(),
+                extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
                 widget.Clock(
                     format="%I:%M %p",
                     foreground="#DD9998"
                 ),
-                widget.QuickExit(foreground="#DD99986"),
+                widget.QuickExit(foreground="#DD9998"),
                 extraWidget.CurrentLayoutIcon(
                     use_mask=True,
                     foreground="#DD9998",
@@ -318,6 +319,7 @@ screens = [
                     padding_x=10
                 ),
                 widget.Spacer(),
+                extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
                 widget.Clock(
                     format="%I:%M %p",

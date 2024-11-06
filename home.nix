@@ -44,6 +44,7 @@
             fastfetch
             p7zip
             xcolor
+            killall
             dunst
             ksuperkey
             xorg.xsetroot

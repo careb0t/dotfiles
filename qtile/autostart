@@ -13,9 +13,9 @@ for _prs in "${_ps[@]}"; do
 done
 
 # polkit agent
-if [[ ! `pidof polkit` ]]; then
-	polkit &
-fi
+# if [[ ! `pidof polkit` ]]; then
+# 	polkit &
+# fi
 
 # Enable Super Keys For Menu
 ksuperkey -e 'Super_L=Alt_L|F1' &
@@ -25,7 +25,7 @@ ksuperkey -e 'Super_R=Alt_L|F1' &
 xsetroot -cursor_name left_ptr
 
 # Restore wallpaper
-xwallpaper --output all --zoom $HOME/dotfiles/qtile/wallpaperdark.jpg
+xwallpaper --output all --zoom $HOME/dotfiles/qtile/wallpaperdark.png
 
 # Launch dunst daemon
 if [[ `pidof dunst` ]]; then
@@ -39,9 +39,9 @@ dunst -config ./dunstrc &
 killall -q picom
 
 # Wait until the processes have been shut down
-while pgrep -u $UID -x picom >/dev/null; do sleep 1; done
+while pgrep -x picom >/dev/null; do sleep 1; done
 
-picom --config ./picom.conf &
+picom --daemon --config ./picom.conf &
 
 # Start Flameshot
 if [[ ! `pidof flameshot` ]]; then
