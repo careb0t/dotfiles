@@ -68,7 +68,6 @@
             nerdfonts
             gimp
             zafiro-icons
-            spotify
         ];
     };
 
