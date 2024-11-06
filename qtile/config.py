@@ -258,9 +258,9 @@ layouts = [
 ]
 
 group_rules = [ 
-    GroupBoxRule(text_colour="#9F6666").when(focused=False, occupied=True),
-    GroupBoxRule(text_colour="#DD9998").when(focused=True, occupied=True),
-    GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=False),
+    GroupBoxRule(text_colour="#FFFFFF").when(focused=False, occupied=True),
+    GroupBoxRule(text_colour="#FFFFFF").when(focused=True, occupied=True),
+    GroupBoxRule(text_colour="#FFFFFF").when(focused=False, occupied=False),
     GroupBoxRule(line_position=GroupBoxRule.LINE_TOP).when(focused=True, occupied=True),
     GroupBoxRule(line_colour="#DD9998").when(focused=True, occupied=True),
     GroupBoxRule(line_width=3).when(focused=True, occupied=True)
