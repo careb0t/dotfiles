@@ -1,8 +1,10 @@
 { lib, pkgs, inputs, ... }:
+
 {
     # Import inputs from flake
     imports = [
         inputs.nix-colors.homeManagerModules.default
+        inputs.spicetify-nix.homeManagerModules.default
     ];
 
     # Allow unfree packages
@@ -20,6 +22,7 @@
 
         # Installed packages
         packages = with pkgs; [
+            picom-pijulius
             vivaldi
             vivaldi-ffmpeg-codecs
             firefox
@@ -40,6 +43,7 @@
             btop
             fastfetch
             p7zip
+            xcolor
             dunst
             ksuperkey
             xorg.xsetroot
@@ -58,10 +62,13 @@
             steam
             lutris
             qbittorrent
-            discord
-            spotify
+            (discord.override {
+                withVencord = true;
+            })
             nerdfonts
+            gimp
             zafiro-icons
+            spotify
         ];
     };
 
@@ -74,6 +81,7 @@
     # Starship configuration file
     xdg.configFile."starship.toml".source = ./wezterm/starship.toml;
 
+
     # Zsh configuration
     programs.zsh = {
         enable = true;
@@ -83,7 +91,9 @@
         shellAliases = {
             ls = "eza -a";
             ll = "eza -l";
-            nix-update = "sudo nixos-rebuild switch";
+            nix-rebuild = "sudo nixos-rebuild switch";
+            hm-rebuild = "cd /home/careb0t/dotfiles && make";
+            hm-clean = "cd /home/careb0t/dotfiles && make clean";
         };
         history.size = 10000;
         history.ignoreAllDups = true;
@@ -91,13 +101,15 @@
         history.ignorePatterns = ["rm *" "pkill *" "cp *"];
     };
 
+    # Zsh tools
+    programs.starship.enable = true;
+    programs.zoxide.enable = true;
+
     # Zsh integration
     programs.wezterm.enableZshIntegration = true;
     programs.zoxide.enableZshIntegration = true;
     programs.thefuck.enableZshIntegration = true;
     programs.starship.enableZshIntegration = true;
-
-
 
     # Nix-colors colorscheme
     colorScheme = inputs.nix-colors.colorSchemes.black-metal;
@@ -107,4 +119,23 @@
         package = pkgs.zafiro-icons;
         name = "zafiro-icons";
     };
+
+    # Spicetify configuration
+    programs.spicetify =
+        let
+            spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+        in
+        {
+            enable = true;
+            enabledExtensions = with spicePkgs.extensions; [
+            adblock
+            shuffle
+            addToQueueTop
+            history
+            volumePercentage
+            ];
+            theme = spicePkgs.themes.sleek;
+            colorScheme = "coral";
+        };
+
 }

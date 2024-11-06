@@ -52,6 +52,7 @@ mod = "mod4"
 # Scripts/Apps Variables
 home = os.path.expanduser("~")
 volume = home + "/dotfiles/qtile/volume"
+rofi_launcher = home + "/dotfiles/rofi/rofi_launcher"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -65,13 +66,16 @@ keys = [
     #     desc="Launch floating wezterm",
     # ),
 
+    # Rofi Applets --
+    Key(["mod1"], "F1", lazy.spawn(rofi_launcher), desc="Run application launcher"),
+
     # GUI Apps --
     Key([mod, "shift"], "f", lazy.spawn("thunar"), desc="Launch Thunar file manager"),
     Key([mod, "shift"], "w", lazy.spawn("vivaldi"), desc="Launch Vivaldi web browser"),
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
     Key([mod, "shift"], "l", lazy.spawn("lutris"), desc="Launch Lutris"),
     Key([mod, "shift"], "s", lazy.spawn("steam"), desc="Launch Steam"),
-    Key([mod, "shift"], "y", lazy.spawn("wezterm --start yazi"), desc="Launch Yazi"),
+    Key([mod, "shift"], "y", lazy.spawn("wezterm start --always-new-process yazi"), desc="Launch Yazi"),
 
     # Screenshot
     Key([mod], "s", lazy.spawn("flameshot gui"), desc="Take screenshot with Flameshot"),
@@ -168,14 +172,14 @@ mouse = [
 groups = [
     # Screen affinity here is used to make
     # sure the groups startup on the right screens
-    Group(name="1", screen_affinity=0),
-    Group(name="2", screen_affinity=1),
-    Group(name="3", screen_affinity=0),
-    Group(name="4", screen_affinity=1),
-    Group(name="5", screen_affinity=0),
-    Group(name="6", screen_affinity=1),
-    Group(name="7", screen_affinity=0),
-    Group(name="8", screen_affinity=1),
+    Group(name="1", screen_affinity=1),
+    Group(name="2", screen_affinity=0),
+    Group(name="3", screen_affinity=1),
+    Group(name="4", screen_affinity=0),
+    Group(name="5", screen_affinity=1),
+    Group(name="6", screen_affinity=0),
+    Group(name="7", screen_affinity=1),
+    Group(name="8", screen_affinity=0),
 ]
 
 
@@ -187,10 +191,10 @@ def go_to_group(name: str):
             return
 
         if name in "1357":
-            qtile.focus_screen(0)
+            qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
         else:
-            qtile.focus_screen(1)
+            qtile.focus_screen(0)
             qtile.groups_map[name].toscreen()
 
     return _inner
@@ -209,11 +213,11 @@ def go_to_group_and_move_window(name: str):
 
         if name in "1357":
             qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(0)
+            qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
         else:
             qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(1)
+            qtile.focus_screen(0)
             qtile.groups_map[name].toscreen()
 
     return _inner
@@ -225,17 +229,7 @@ for i in groups:
     )
 
 ## Layouts ------------------------------
-var_bg_color = "#2e3440"
-var_active_bg_color = "#81A1C1"
-var_active_fg_color = "#2e3440"
-var_inactive_bg_color = "#3d4555"
-var_inactive_fg_color = "#D8DEE9"
-var_urgent_bg_color = "#BF616A"
-var_urgent_fg_color = "#D8DEE9"
-var_section_fg_color = "#EBCB8B"
-var_active_color = "#81A1C1"
-var_normal_color = "#3d4555"
-var_border_width = 2
+var_border_width = 3
 var_margin = [5, 5, 5, 5]
 var_gap_top = 45
 var_gap_bottom = 5
@@ -246,8 +240,8 @@ var_font_name = "JetBrainsMono Nerd Font"
 layouts = [
     # Extension of the Stack layout
     layout.Columns(
-        border_focus=var_active_color,
-        border_normal=var_normal_color,
+        border_focus="#9F6666",
+        border_normal="#00000000",
         border_on_single=False,
         border_width=var_border_width,
         fair=False,
@@ -261,22 +255,14 @@ layouts = [
         wrap_focus_rows=True,
         wrap_focus_stacks=True
 	),
-    # Floating layout, which does nothing with windows but handles focus order
-    layout.Floating(
-        border_focus=var_active_color,
-        border_normal=var_normal_color,
-        border_width=var_border_width,
-        fullscreen_border_width=0,
-        max_border_width=0,
-    ),
 ]
 
 group_rules = [ 
-    GroupBoxRule(text_colour=var_active_bg_color).when(focused=False, occupied=True),
-    GroupBoxRule(text_colour="#A3BE8C").when(focused=True, occupied=True),
-    GroupBoxRule(text_colour=var_inactive_bg_color).when(focused=False, occupied=False),
+    GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=True),
+    GroupBoxRule(text_colour="#9F6666").when(focused=True, occupied=True),
+    GroupBoxRule(text_colour="#C1C1C1").when(focused=False, occupied=False),
     GroupBoxRule(line_position=GroupBoxRule.LINE_TOP).when(focused=True, occupied=True),
-    GroupBoxRule(line_colour="#A3BE8C").when(focused=True, occupied=True),
+    GroupBoxRule(line_colour="#9F6666").when(focused=True, occupied=True),
     GroupBoxRule(line_width=3).when(focused=True, occupied=True)
 ]
 
@@ -285,88 +271,74 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                # widget.LaunchBar(
-                #     progs=[('/home/careb0t/.config/qtile/artix.png', 'rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/.config/qtile/theme/rofi/launcher.rasi', "Rofi Launcher")],
-                #     padding_y=-1,
-                #     padding=20,
-                #     icon_size=25
-                # ),
+                widget.LaunchBar(
+                    progs=[('/home/careb0t/dotfiles/qtile/nixos.png', 'rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi', "Rofi Launcher")],
+                    padding_y=-1,
+                    padding=20,
+                    icon_size=25
+                ),
                 extraWidget.GroupBox2(
                     rules=group_rules,
                     fontsize=18,
                     padding_x=10
                 ),
                 widget.Spacer(),
-                extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
-                widget.Clock(format="%I:%M %p"),
-                widget.QuickExit(),
+                widget.Clock(
+                    format="%I:%M %p",
+                    foreground="#DD9998"
+                ),
+                widget.QuickExit(foreground="#DD99986"),
                 extraWidget.CurrentLayoutIcon(
                     use_mask=True,
-                    foreground=var_active_bg_color,
+                    foreground="#DD9998",
                     scale=0.75
                 )
             ],
             34,
-            background=var_bg_color,
+            background="#00000000",
             margin=[0, 0, 0, 0],
             opacity=1.0,
             border_width=[0, 0, 0, 0],
-            border_color=["303030", "000000", "000000", "000000"],
+            border_color=["000000", "000000", "000000", "000000"],
         ),
     ),
     Screen(
         top=bar.Bar(
             [
-                # widget.LaunchBar(
-                #     progs=[('/home/careb0t/.config/qtile/artix.png', 'rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/.config/qtile/theme/rofi/launcher.rasi', "Rofi Launcher")],
-                #     padding_y=-1,
-                #     padding=20,
-                #     icon_size=25
-                # ),
+                widget.LaunchBar(
+                    progs=[('/home/careb0t/dotfiles/qtile/nixos.png', 'rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi', "Rofi Launcher")],
+                    padding_y=-1,
+                    padding=20,
+                    icon_size=25
+                ),
                 extraWidget.GroupBox2(
                     rules=group_rules,
                     fontsize=18,
                     padding_x=10
                 ),
                 widget.Spacer(),
-                extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
-                widget.Clock(format="%I:%M %p"),
-                widget.QuickExit(),
+                widget.Clock(
+                    format="%I:%M %p",
+                    foreground="#DD9998"
+                ),
+                widget.QuickExit(foreground="#DD9998"),
                 extraWidget.CurrentLayoutIcon(
                     use_mask=True,
-                    foreground=var_active_bg_color,
+                    foreground="#DD9998",
                     scale=0.75
                 )
             ],
             34,
-            background=var_bg_color,
+            background="#00000000",
             margin=[0, 0, 0, 0],
             opacity=1.0,
             border_width=[0, 0, 0, 0],
-            border_color=["303030", "000000", "000000", "000000"],
+            border_color=["000000", "000000", "000000", "000000"],
         ),
     ),
 ]
-
-# Any third-party statusbar (polybar) with Gaps
-"""
-screens = [
-    Screen(
-        right=bar.Gap(var_gap_right),
-        left=bar.Gap(var_gap_left),
-        bottom=bar.Gap(var_gap_bottom),
-        top=bar.Gap(var_gap_top),
-    ),
-    Screen(
-        right=bar.Gap(var_gap_right),
-        left=bar.Gap(var_gap_left),
-        bottom=bar.Gap(var_gap_bottom),
-        top=bar.Gap(var_gap_top),
-    ),
-]
-"""
 
 ## General Configuration Variables ------------------------------
 
@@ -391,8 +363,8 @@ dgroups_app_rules = []  # type: list
 
 # The default floating layout to use. This allows you to set custom floating rules among other things if you wish.
 floating_layout = layout.Floating(
-    border_focus=var_active_color,
-    border_normal=var_normal_color,
+    border_focus="#DD9998",
+    border_normal="#00000000",
     border_width=var_border_width,
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
