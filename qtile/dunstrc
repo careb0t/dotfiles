@@ -53,19 +53,19 @@ title = Dunst
 class = Dunst
 
 [urgency_low]
-timeout = 2
-background = "#2e3440"
-foreground = "#D8DEE9"
-frame_color = "#81A1C1"
+timeout = 5
+background = "#00000099"
+foreground = "#FFFFFFFF"
+frame_color = "#DD9998FF"
 
 [urgency_normal]
 timeout = 5
-background = "#2e3440"
-foreground = "#D8DEE9"
-frame_color = "#81A1C1"
+background = "#00000099"
+foreground = "#FFFFFFFF"
+frame_color = "#DD9998FF"
 
 [urgency_critical]
-timeout = 0
-background = "#2e3440"
-foreground = "#BF616A"
-frame_color = "#BF616A"
+timeout = 5
+background = "#00000099"
+foreground = "#FFFFFFFF"
+frame_color = "#DD9998FF"
