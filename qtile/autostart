@@ -32,7 +32,7 @@ if [[ `pidof dunst` ]]; then
 	pkill dunst
 fi
 
-dunst -config ./dunstrc &
+dunst -config $HOME/dotfiles/qtile/dunstrc &
 
 # Lauch compositor
 # Terminate if picom is already running
@@ -41,7 +41,7 @@ killall -q picom
 # Wait until the processes have been shut down
 while pgrep -x picom >/dev/null; do sleep 1; done
 
-picom --daemon --config ./picom.conf &
+picom --config $HOME/dotfiles/qtile/picom.conf &
 
 # Start Flameshot
 if [[ ! `pidof flameshot` ]]; then

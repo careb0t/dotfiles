@@ -69,6 +69,7 @@
             nerdfonts
             gimp
             zafiro-icons
+            networkmanager
         ];
     };
 
@@ -95,6 +96,18 @@
             hm-rebuild = "cd /home/careb0t/dotfiles && make";
             hm-clean = "cd /home/careb0t/dotfiles && make clean";
         };
+        initExtra = ''
+            pushdots() {
+                git add -A
+                if [ "$1" != "" ]
+                then
+                    git commit -m "$*"
+                else
+                    git commit -m update
+                fi
+                git push
+            }
+        '';
         history.size = 10000;
         history.ignoreAllDups = true;
         history.path = "$HOME/.zsh_history";
