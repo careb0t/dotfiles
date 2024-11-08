@@ -5,7 +5,7 @@
     imports = [
         inputs.nix-colors.homeManagerModules.default
         inputs.spicetify-nix.homeManagerModules.default
-        inputs.nixcord.homeManagerModules.nixcord
+        #inputs.nixcord.homeManagerModules.nixcord # Enable when nixcord updates to support new Discord/Vencord version
     ];
 
     home = {
@@ -67,6 +67,11 @@
                 withOpenASAR = true;
                 withVencord = true;
             })
+            pkgs.dconf
+            pkgs.lxappearance
+            pkgs.libsForQt5.qt5ct
+            pkgs.libsForQt5.qtstyleplugin-kvantum
+            pkgs.gparted
         ];
     };
 
@@ -125,13 +130,41 @@
     colorScheme = inputs.nix-colors.colorSchemes.black-metal;
 
     # GUI theme configuration
-    gtk.iconTheme = {
-        package = pkgs.zafiro-icons;
-        name = "zafiro-icons";
-    };
-    gtk.cursorTheme = {
+    home.pointerCursor = {
         package = pkgs.numix-cursor-theme;
-        name = "numix-cursor-theme";
+        name = "Numix-Cursor";
+        gtk.enable = true;
+    };
+    gtk = {
+        enable = true;
+        theme = {
+            name = "Graphite-pink-Dark";
+            package = pkgs.graphite-gtk-theme.override {
+                tweaks = ["darker"];
+                themeVariants = ["pink"];
+                colorVariants = ["dark"];
+            };
+        };
+        iconTheme = {
+            name = "Zafiro-icons-Dark";
+            package = pkgs.zafiro-icons;
+        };
+        cursorTheme = {
+            name = "Numix-Cursor";
+            package = pkgs.numix-cursor-theme;
+        };
+    };
+    qt = {
+        enable = true;
+        platformTheme.name = "qtct";
+        style.name = "kvantum";
+    };
+    xdg.configFile = {
+        "Kvantum/kvantum.kvconfig".text = ''
+            [General]
+            theme=GraphiteDark
+        '';
+        "Kvantum/Graphite".source = "${pkgs.graphite-kde-theme}/share/Kvantum/Graphite";
     };
 
     # Spicetify configuration
@@ -192,4 +225,15 @@
 #         };
 #       };
 #     };
+
+    # Flameshot configuration
+    services.flameshot = {
+        enable = true;
+        settings = {
+            General = {
+                uiColor = "#DD9998";
+                contrastUiColor = "#A06666";
+            };
+        };
+    };
 }

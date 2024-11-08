@@ -17,7 +17,7 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
-        nixcord.url = "github:kaylorben/nixcord";
+        #nixcord.url = "github:kaylorben/nixcord"; # Enable this when nixcord is updated to work with new Vencord version to actually show settings.
     };
 
     outputs = { nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
