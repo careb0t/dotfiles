@@ -1,5 +1,7 @@
-{ lib, pkgs, pkgs-unstable, inputs, ... }:
-
+{ lib, stdenv, pkgs, pkgs-unstable, inputs, ... }:
+let
+    ad-strawberry-numix = pkgs.callPackage ./icons.nix {};
+in
 {
     # Import inputs from flake
     imports = [
@@ -60,9 +62,10 @@
             pkgs.deluge
             pkgs.nerdfonts
             pkgs.gimp
-            pkgs.zafiro-icons
+            #pkgs.zafiro-icons
             pkgs.networkmanager
             pkgs.numix-cursor-theme
+            (pkgs.callPackage ./icons.nix {})
             (pkgs-unstable.discord.override {
                 withOpenASAR = true;
                 withVencord = true;
@@ -146,8 +149,8 @@
             };
         };
         iconTheme = {
-            name = "Zafiro-icons-Dark";
-            package = pkgs.zafiro-icons;
+            name = "AD-Strawberry-Numix";
+            package = (pkgs.callPackage ./icons.nix {});
         };
         cursorTheme = {
             name = "Numix-Cursor";
