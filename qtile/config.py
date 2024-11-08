@@ -180,6 +180,8 @@ groups = [
     Group(name="6", screen_affinity=0),
     Group(name="7", screen_affinity=1),
     Group(name="8", screen_affinity=0),
+    Group(name="9", screen_affinity=1),
+    Group(name="0", screen_affinity=0),
 ]
 
 
@@ -190,7 +192,7 @@ def go_to_group(name: str):
             qtile.groups_map[name].toscreen()
             return
 
-        if name in "1357":
+        if name in "13579":
             qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
         else:
@@ -211,7 +213,7 @@ def go_to_group_and_move_window(name: str):
             qtile.current_window.togroup(name, switch_group=True)
             return
 
-        if name in "1357":
+        if name in "13579":
             qtile.current_window.togroup(name, switch_group=False)
             qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
@@ -268,6 +270,7 @@ group_rules = [
 
 ## Screens ------------------------------
 screens = [
+    # HDMI monitor
     Screen(
         top=bar.Bar(
             [
@@ -275,12 +278,17 @@ screens = [
                     progs=[('/home/careb0t/dotfiles/qtile/nixos.png', 'rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi', "Rofi Launcher")],
                     padding_y=-1,
                     padding=20,
-                    icon_size=25
+                    icon_size=32
                 ),
                 extraWidget.GroupBox2(
                     rules=group_rules,
-                    fontsize=18,
+                    fontsize=22,
                     padding_x=10
+                ),
+                widget.Spacer(),
+                widget.WindowName(
+                    foreground="DD9998",
+                    fontsize=18
                 ),
                 widget.Spacer(),
                 extraWidget.StatusNotifier(),
@@ -296,7 +304,7 @@ screens = [
                     scale=0.75
                 )
             ],
-            34,
+            48,
             background="#00000000",
             margin=[0, 0, 0, 0],
             opacity=1.0,
@@ -304,6 +312,7 @@ screens = [
             border_color=["000000", "000000", "000000", "000000"],
         ),
     ),
+    # DPI monitor
     Screen(
         top=bar.Bar(
             [
@@ -317,6 +326,10 @@ screens = [
                     rules=group_rules,
                     fontsize=18,
                     padding_x=10
+                ),
+                widget.Spacer(),
+                widget.WindowName(
+                    foreground="DD9998",
                 ),
                 widget.Spacer(),
                 extraWidget.StatusNotifier(),
