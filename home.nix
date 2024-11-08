@@ -65,7 +65,6 @@ in
             #pkgs.zafiro-icons
             pkgs.networkmanager
             pkgs.numix-cursor-theme
-            (pkgs.callPackage ./icons.nix {})
             (pkgs-unstable.discord.override {
                 withOpenASAR = true;
                 withVencord = true;
@@ -75,6 +74,9 @@ in
             pkgs.libsForQt5.qt5ct
             pkgs.libsForQt5.qtstyleplugin-kvantum
             pkgs.gparted
+            ] ++ let
+                ad-strawberry-numix-icons = pkgs.callPackage ./icons.nix { };
+            in [ ad-strawberry-numix-icons ];
         ];
     };
 
@@ -150,7 +152,7 @@ in
         };
         iconTheme = {
             name = "AD-Strawberry-Numix";
-            package = (pkgs.callPackage ./icons.nix {});
+            package = ad-strawberry-numix-icons;
         };
         cursorTheme = {
             name = "Numix-Cursor";
