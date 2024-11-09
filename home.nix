@@ -46,7 +46,7 @@
             pkgs.dunst
             pkgs.ksuperkey
             pkgs.xorg.xsetroot
-            pkgs.polkit
+            pkgs.kdePackages.polkit-kde-agent-1
             pkgs.rofi
             pkgs.pulsemixer
             pkgs.zellij

@@ -12,10 +12,9 @@ for _prs in "${_ps[@]}"; do
 	fi
 done
 
-# polkit agent
-# if [[ ! `pidof polkit` ]]; then
-# 	polkit &
-# fi
+# Start Polkit KDE agent
+/nix/store/$(ls -la /nix/store | grep polkit-kde-agent | grep '^d' | awk '{print $9}')/libexec/polkit-kde-authentication-agent-1 &
+
 
 # Enable Super Keys For Menu
 ksuperkey -e 'Super_L=Alt_L|F1' &
