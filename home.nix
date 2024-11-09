@@ -183,12 +183,13 @@
         };
 
     # Discord + Vencord configuration
-    xdg.configFile."Vencord/themes/careb0t.theme.css".source = ./Vencord/careb0t.theme.css;
+    xdg.configFile."Vencord/themes".source = ./Vencord/themes;
     programs.nixcord = {
       enable = true;
       discord.vencord.package = pkgs.vencord;
       config = {
-        themeLinks = [ "./discord/nocturnal.theme.css" ];
+        transparent = true;
+        themeLinks = [ ];
         frameless = true;
         plugins = {
             alwaysTrust = {
