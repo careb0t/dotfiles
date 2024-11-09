@@ -294,7 +294,7 @@ screens = [
                 extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
                 widget.Clock(
-                    format="%d/%m/%y% | I:%M %p",
+                    format="%m/%d/%y | I:%M %p",
                     foreground="#DD9998"
                 ),
                 widget.QuickExit(foreground="#DD9998"),
@@ -335,7 +335,7 @@ screens = [
                 extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
                 widget.Clock(
-                    format="%d/%m/%y% | I:%M %p",
+                    format="%m/%d/%y | I:%M %p",
                     foreground="#DD9998"
                 ),
                 widget.QuickExit(foreground="#DD9998"),
