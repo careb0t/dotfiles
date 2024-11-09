@@ -1,13 +1,10 @@
-{ lib, stdenv, pkgs, pkgs-unstable, inputs, ... }:
-let
-    ad-strawberry-numix = pkgs.callPackage ./icons.nix {};
-in
+{ lib, stdenv, pkgs, inputs, ... }:
 {
     # Import inputs from flake
     imports = [
         inputs.nix-colors.homeManagerModules.default
         inputs.spicetify-nix.homeManagerModules.default
-        #inputs.nixcord.homeManagerModules.nixcord # Enable when nixcord updates to support new Discord/Vencord version
+        inputs.nixcord.homeManagerModules.nixcord
     ];
 
     home = {
@@ -19,8 +16,11 @@ in
         stateVersion = "24.05";
 
         # Installed packages
-        packages = [
-            pkgs.picom-pijulius
+        packages = let
+            ad-strawberry-numix-icons = pkgs.callPackage ./icons.nix { };
+        in [
+            ad-strawberry-numix-icons
+            pkgs.picom
             pkgs.vivaldi
             pkgs.vivaldi-ffmpeg-codecs
             pkgs.firefox
@@ -62,21 +62,13 @@ in
             pkgs.deluge
             pkgs.nerdfonts
             pkgs.gimp
-            #pkgs.zafiro-icons
             pkgs.networkmanager
             pkgs.numix-cursor-theme
-            (pkgs-unstable.discord.override {
-                withOpenASAR = true;
-                withVencord = true;
-            })
             pkgs.dconf
             pkgs.lxappearance
             pkgs.libsForQt5.qt5ct
             pkgs.libsForQt5.qtstyleplugin-kvantum
             pkgs.gparted
-            ] ++ let
-                ad-strawberry-numix-icons = pkgs.callPackage ./icons.nix { };
-            in [ ad-strawberry-numix-icons ];
         ];
     };
 
@@ -152,7 +144,7 @@ in
         };
         iconTheme = {
             name = "AD-Strawberry-Numix";
-            package = ad-strawberry-numix-icons;
+            package = pkgs.callPackage ./icons.nix { };
         };
         cursorTheme = {
             name = "Numix-Cursor";
@@ -191,45 +183,47 @@ in
         };
 
     # Discord + Vencord configuration
-#     programs.nixcord = {
-#       enable = true;
-#       config = {
-#         themeLinks = [];
-#         frameless = true;
-#         plugins = {
-#             alwaysTrust = {
-#                 enable = true;
-#                 domain = true;
-#                 file = true;
-#             };
-#             biggerStreamPreview.enable = true;
-#             clearURLs.enable = true;
-#             fakeNitro.enable = true;
-#             favoriteEmojiFirst.enable = true;
-#             favoriteGifSearch.enable = true;
-#             fixCodeblockGap.enable = true;
-#             fixImagesQuality.enable = true;
-#             fixSpotifyEmbeds.enable = true;
-#             fixYoutubeEmbeds.enable = true;
-#             gameActivityToggle.enable = true;
-#             keepCurrentChannel.enable = true;
-#             messageClickActions.enable = true;
-#             messageLinkEmbeds.enable = true;
-#             noF1.enable = true;
-#             noTypingAnimation.enable = true;
-#             noUnblockToJump.enable = true;
-#             nsfwGateBypass.enable = true;
-#             onePingPerDM.enable = true;
-#             reverseImageSearch.enable = true;
-#             shikiCodeblocks.enable = true;
-#             showAllMessageButtons.enable = true;
-#             spotifyCrack.enable = true;
-#             unlockedAvatarZoom.enable = true;
-#             viewIcons.enable = true;
-#             youtubeAdblock.enable = true;
-#         };
-#       };
-#     };
+    xdg.configFile."Vencord/themes/careb0t.theme.css".source = ./Vencord/careb0t.theme.css;
+    programs.nixcord = {
+      enable = true;
+      discord.vencord.package = pkgs.vencord;
+      config = {
+        themeLinks = [ "./discord/nocturnal.theme.css" ];
+        frameless = true;
+        plugins = {
+            alwaysTrust = {
+                enable = true;
+                domain = true;
+                file = true;
+            };
+            biggerStreamPreview.enable = true;
+            clearURLs.enable = true;
+            fakeNitro.enable = true;
+            favoriteEmojiFirst.enable = true;
+            favoriteGifSearch.enable = true;
+            fixCodeblockGap.enable = true;
+            fixImagesQuality.enable = true;
+            fixSpotifyEmbeds.enable = true;
+            fixYoutubeEmbeds.enable = true;
+            gameActivityToggle.enable = true;
+            keepCurrentChannel.enable = true;
+            messageClickActions.enable = true;
+            messageLinkEmbeds.enable = true;
+            noF1.enable = true;
+            noTypingAnimation.enable = true;
+            noUnblockToJump.enable = true;
+            nsfwGateBypass.enable = true;
+            onePingPerDM.enable = true;
+            reverseImageSearch.enable = true;
+            shikiCodeblocks.enable = true;
+            showAllMessageButtons.enable = true;
+            spotifyCrack.enable = true;
+            unlockedAvatarZoom.enable = true;
+            viewIcons.enable = true;
+            youtubeAdblock.enable = true;
+        };
+      };
+    };
 
     # Flameshot configuration
     services.flameshot = {

@@ -10,7 +10,6 @@ stdenvNoCC.mkDerivation {
     };
 
     nativeBuildInputs = [
-        autoreconfHook
         gtk3
     ];
 

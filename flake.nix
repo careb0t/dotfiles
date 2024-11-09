@@ -3,7 +3,6 @@
 
     inputs = {
         nixpkgs.url = "nixpkgs/nixos-24.05";
-        nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
         home-manager = {
             url = "github:nix-community/home-manager/release-24.05";
@@ -17,20 +16,19 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
-        #nixcord.url = "github:kaylorben/nixcord"; # Enable this when nixcord is updated to work with new Vencord version to actually show settings.
+        nixcord.url = "github:kaylorben/nixcord";
     };
 
-    outputs = { nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
+    outputs = { nixpkgs, home-manager, ... }@inputs:
         let
             lib = nixpkgs.lib;
             system = "x86_64-linux";
             pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-            pkgs-unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
         in {
             homeConfigurations = {
                 careb0t = home-manager.lib.homeManagerConfiguration {
                     inherit pkgs;
-                    extraSpecialArgs = { inherit inputs; inherit pkgs-unstable; };
+                    extraSpecialArgs = { inherit inputs; };
                     modules = [ ./home.nix ];
                 };
             };
