@@ -1,10 +1,13 @@
-{ lib, stdenv, pkgs, inputs, ... }:
+{ lib, config, pkgs, inputs, ... }:
+let
+  inherit (config.nixvim) helpers;
+in
 {
     # Import inputs from flake
     imports = [
-        inputs.nix-colors.homeManagerModules.default
         inputs.spicetify-nix.homeManagerModules.default
         inputs.nixcord.homeManagerModules.nixcord
+        inputs.nixvim.homeManagerModules.nixvim
     ];
 
     home = {
@@ -46,6 +49,7 @@
             pkgs.dunst
             pkgs.ksuperkey
             pkgs.xorg.xsetroot
+            pkgs.polkit
             pkgs.kdePackages.polkit-kde-agent-1
             pkgs.rofi
             pkgs.pulsemixer
@@ -53,7 +57,6 @@
             pkgs.flameshot
             pkgs.xfce.thunar
             pkgs.kate
-            pkgs.neovim
             pkgs.vscode
             pkgs.xwallpaper
             pkgs.stremio
@@ -69,6 +72,7 @@
             pkgs.libsForQt5.qt5ct
             pkgs.libsForQt5.qtstyleplugin-kvantum
             pkgs.gparted
+            pkgs.catnip
         ];
     };
 
@@ -122,9 +126,6 @@
     programs.zoxide.enableZshIntegration = true;
     programs.thefuck.enableZshIntegration = true;
     programs.starship.enableZshIntegration = true;
-
-    # Nix-colors colorscheme
-    colorScheme = inputs.nix-colors.colorSchemes.black-metal;
 
     # GUI theme configuration
     home.pointerCursor = {
@@ -234,6 +235,53 @@
                 uiColor = "#DD9998";
                 contrastUiColor = "#A06666";
             };
+        };
+    };
+
+    # Nixvim configuration
+    programs.neovim = {
+        defaultEditor = true;
+    };
+    programs.nixvim = {
+        enable = true;
+        defaultEditor = true;
+        vimdiffAlias = true;
+        clipboard.register = "xclip";
+        colorschemes.base16 = {
+            enable = true;
+            colorscheme = "black-metal";
+        };
+        opts = {
+            number = true;
+            relativenumber = true;
+            undodir = "./undo";
+            undofile = true;
+            fillchars = {eob = " ";};
+            tabstop = 4;
+            shiftwidth = 4;
+            expandtab = false;
+            wrap=false;
+            laststatus = 3;
+        };
+        globals = {
+            mapleader = " ";
+            maplocalleader = "\\";
+        };
+        keymaps = [
+            {
+                mode = "n";
+                key = "<leader>t";
+                action = ":Neotree filesystem reveal left toggle<CR>";
+                options = {
+                    silent = true;
+                };
+            }
+        ];
+        plugins = {
+#             alpha = {
+#                 enable = true;
+#                 layout = [];
+#             };
         };
     };
 }

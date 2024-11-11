@@ -9,14 +9,17 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
-        nix-colors.url = "github:misterio77/nix-colors";
-
         spicetify-nix = {
             url = "github:Gerg-L/spicetify-nix";
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
         nixcord.url = "github:kaylorben/nixcord";
+
+        nixvim = {
+            url = "github:nix-community/nixvim/nixos-24.05";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
     };
 
     outputs = { nixpkgs, home-manager, ... }@inputs:

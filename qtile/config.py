@@ -243,7 +243,7 @@ layouts = [
     # Extension of the Stack layout
     layout.Columns(
         border_focus="#DD9998",
-        border_normal="#00000000",
+        border_normal="##A06666",
         border_on_single=False,
         border_width=var_border_width,
         fair=False,
@@ -294,7 +294,7 @@ screens = [
                 extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
                 widget.Clock(
-                    format="%m/%d/%y | I:%M %p",
+                    format="%m/%d/%y | %I:%M %p",
                     foreground="#DD9998"
                 ),
                 widget.QuickExit(foreground="#DD9998"),
@@ -335,7 +335,7 @@ screens = [
                 extraWidget.StatusNotifier(),
                 extraWidget.Systray(),
                 widget.Clock(
-                    format="%m/%d/%y | I:%M %p",
+                    format="%m/%d/%y | %I:%M %p",
                     foreground="#DD9998"
                 ),
                 widget.QuickExit(foreground="#DD9998"),
@@ -379,7 +379,7 @@ dgroups_app_rules = []  # type: list
 # The default floating layout to use. This allows you to set custom floating rules among other things if you wish.
 floating_layout = layout.Floating(
     border_focus="#DD9998",
-    border_normal="#00000000",
+    border_normal="#A06666",
     border_width=var_border_width,
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
