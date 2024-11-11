@@ -243,7 +243,7 @@ layouts = [
     # Extension of the Stack layout
     layout.Columns(
         border_focus="#DD9998",
-        border_normal="##A06666",
+        border_normal="#A06666",
         border_on_single=False,
         border_width=var_border_width,
         fair=False,
