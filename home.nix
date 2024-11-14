@@ -1,4 +1,4 @@
-{ lib, pkgs, inputs, ... }:
+{ lib, pkgs, unstable, inputs, ... }:
 
 {
     # Import inputs from flake
@@ -71,7 +71,7 @@
             pkgs.libsForQt5.qtstyleplugin-kvantum
             pkgs.gparted
             pkgs.catnip
-            pkgs.nodejs_22
+            unstable.deno
         ];
     };
 

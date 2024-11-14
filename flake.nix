@@ -3,6 +3,7 @@
 
     inputs = {
         nixpkgs.url = "nixpkgs/nixos-24.05";
+        nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
         home-manager = {
             url = "github:nix-community/home-manager/release-24.05";
@@ -17,16 +18,17 @@
         nixcord.url = "github:kaylorben/nixcord";
     };
 
-    outputs = { nixpkgs, home-manager, ... }@inputs:
+    outputs = { nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
         let
             lib = nixpkgs.lib;
             system = "x86_64-linux";
             pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
+            unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
         in {
             homeConfigurations = {
                 careb0t = home-manager.lib.homeManagerConfiguration {
                     inherit pkgs;
-                    extraSpecialArgs = { inherit inputs; };
+                    extraSpecialArgs = { inherit inputs; inherit unstable; };
                     modules = [ ./home.nix ];
                 };
             };
