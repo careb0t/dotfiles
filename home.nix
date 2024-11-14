@@ -1,13 +1,10 @@
-{ lib, config, pkgs, inputs, ... }:
-let
-  inherit (config.nixvim) helpers;
-in
+{ lib, pkgs, inputs, ... }:
+
 {
     # Import inputs from flake
     imports = [
         inputs.spicetify-nix.homeManagerModules.default
         inputs.nixcord.homeManagerModules.nixcord
-        inputs.nixvim.homeManagerModules.nixvim
     ];
 
     home = {
@@ -28,6 +25,7 @@ in
             pkgs.vivaldi-ffmpeg-codecs
             pkgs.firefox
             pkgs.wezterm
+            pkgs.neovim
             pkgs.zsh
             pkgs.starship
             pkgs.fzf
@@ -60,7 +58,7 @@ in
             pkgs.vscode
             pkgs.xwallpaper
             pkgs.stremio
-            pkgs.steam
+            # pkgs.steam # Steam must me installed at system level and enabled
             pkgs.lutris
             pkgs.deluge
             pkgs.nerdfonts
@@ -73,6 +71,7 @@ in
             pkgs.libsForQt5.qtstyleplugin-kvantum
             pkgs.gparted
             pkgs.catnip
+            pkgs.nodejs_22
         ];
     };
 
@@ -238,50 +237,8 @@ in
         };
     };
 
-    # Nixvim configuration
+    # Neovim configuration
     programs.neovim = {
         defaultEditor = true;
-    };
-    programs.nixvim = {
-        enable = true;
-        defaultEditor = true;
-        vimdiffAlias = true;
-        clipboard.register = "xclip";
-        colorschemes.base16 = {
-            enable = true;
-            colorscheme = "black-metal";
-        };
-        opts = {
-            number = true;
-            relativenumber = true;
-            undodir = "./undo";
-            undofile = true;
-            fillchars = {eob = " ";};
-            tabstop = 4;
-            shiftwidth = 4;
-            expandtab = false;
-            wrap=false;
-            laststatus = 3;
-        };
-        globals = {
-            mapleader = " ";
-            maplocalleader = "\\";
-        };
-        keymaps = [
-            {
-                mode = "n";
-                key = "<leader>t";
-                action = ":Neotree filesystem reveal left toggle<CR>";
-                options = {
-                    silent = true;
-                };
-            }
-        ];
-        plugins = {
-#             alpha = {
-#                 enable = true;
-#                 layout = [];
-#             };
-        };
     };
 }
