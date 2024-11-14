@@ -100,6 +100,7 @@
         };
         initExtra = ''
             pushdots() {
+                cd /home/careb0t/dotfiles
                 git add -A
                 if [ "$1" != "" ]
                 then
