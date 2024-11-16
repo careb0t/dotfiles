@@ -245,9 +245,6 @@ in
     };
 
     # Nixvim configuration
-    programs.neovim = {
-        defaultEditor = true;
-    };
     programs.nixvim = {
         enable = true;
         defaultEditor = true;
@@ -255,7 +252,7 @@ in
         clipboard.register = "xclip";
         colorschemes.base16 = {
             enable = true;
-            colorscheme = "black-metal";
+            colorscheme = "dracula";
         };
         opts = {
             number = true;
@@ -266,7 +263,7 @@ in
             tabstop = 4;
             shiftwidth = 4;
             expandtab = false;
-            wrap=false;
+            wrap = false;
             laststatus = 3;
         };
         globals = {
@@ -280,6 +277,168 @@ in
                 action = ":Neotree filesystem reveal left toggle<CR>";
                 options = {
                     silent = true;
+                    desc = "toggle neotree";
+                };
+            }
+            {
+                mode = [ "n" "v" ];
+                key = "<leader>gf";
+                action = {
+                    __raw = ''
+                        function()
+                            conform.format({
+                                lsp_fallback = true,
+                                async = false,
+                                timeout_ms = 500,
+                            })
+                        end
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "format file or range";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>gl";
+                action = {
+                    __raw = ''
+                        function()
+                            lint.try_lint()
+                        end
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "lint current file";
+                };
+            }
+            {
+                mode = [ "n" "x" "o" ];
+                key = "s";
+                action = {
+                    __raw = ''
+                        function()
+                            require('flash').jump()
+                        end
+                    '';
+                };
+                options = {
+                    silent = true;
+                    desc = "flash";
+                };
+            }
+            {
+                mode = [ "n" "x" "o" ];
+                key = "S";
+                action = {
+                    __raw = ''
+                        function()
+                            require('flash').treesitter()
+                        end
+                    '';
+                };
+                options = {
+                    silent = true;
+                    desc = "flash - treesitter";
+                };
+            }
+            {
+                mode = [ "o" ];
+                key = "r";
+                action = {
+                    __raw = ''
+                        function()
+                            require('flash').remote()
+                        end
+                    '';
+                };
+                options = {
+                    silent = true;
+                    desc = "flash - remote";
+                };
+            }
+            {
+                mode = [ "x" "o" ];
+                key = "R";
+                action = {
+                    __raw = ''
+                        function()
+                            require('flash').treesitter_search()
+                        end
+                    '';
+                };
+                options = {
+                    silent = true;
+                    desc = "flash - treesitter search";
+                };
+            }
+            {
+                mode = [ "c" ];
+                key = "<c-s>";
+                action = {
+                    __raw = ''
+                        function()
+                            require('flash').toggle()
+                        end
+                    '';
+                };
+                options = {
+                    silent = true;
+                    desc = "flash - toggle";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "K";
+                action = {
+                    __raw = ''
+                        vim.lsp.buf.hover
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "lsp - hover";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>gd";
+                action = {
+                    __raw = ''
+                        vim.lsp.buf.definition
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "lsp - definition";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>gr";
+                action = {
+                    __raw = ''
+                        vim.lsp.buf.references
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "lsp - references";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>ca";
+                action = {
+                    __raw = ''
+                        vim.lsp.buf.code_action
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "lsp - code action";
                 };
             }
         ];
