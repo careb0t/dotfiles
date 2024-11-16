@@ -74,7 +74,8 @@ in
             pkgs.libsForQt5.qtstyleplugin-kvantum
             pkgs.gparted
             pkgs.catnip
-            unstable.deno
+            pkgs.deno
+            pkgs.xorg.xkill
         ];
     };
 
@@ -287,6 +288,381 @@ in
 #                 enable = true;
 #                 layout = [];
 #             };
+            nvim-autopairs = {
+                enable = true;
+            };
+            neoscroll = {
+                enable = true;
+            };
+            cmp = {
+                enable = true;
+                autoEnableSources = true;
+                settings.sources = [
+                    { name = "nvim_lsp"; }
+                    { name = "path"; }
+                    { name = "buffer"; }
+                    { name = "ultisnips"; }
+                ];
+                settings = {
+                    mapping = {
+                        __raw = ''
+                            cmp.mapping.preset.insert({
+                                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                                ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                                ['<C-Space>'] = cmp.mapping.complete(),
+                                ['<C-e>'] = cmp.mapping.abort(),
+                                ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                                ['<S-Tab>'] = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+                                ['<Tab>'] = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+                            })
+                        '';
+                    };
+                    snippet = {
+                        expand = "function(args) vim.fn['UltiSnips#Anon'](args.body) end";
+                    };
+                    window = {
+#                         __raw = ''
+#                             completion = cmp.config.window.bordered(),
+#                             documentation = cmp.config.window.bordered(),
+#                         '';
+                    };
+                };
+            };
+            lspkind = {
+                enable = true;
+                cmp = {
+                    enable = true;
+                    maxWidth = 50;
+                    ellipsisChar = "...";
+                };
+                symbolMap = {
+                    #Copilot = " ";
+                };
+                extraOptions = {
+                    maxWidth = 50;
+                    ellipsisChar = "...";
+                };
+            };
+            conform-nvim = {
+                enable = true;
+                settings = {
+                    formatters_by_ft = {
+                        bash = [
+                            "shellcheck"
+                            "shellharden"
+                            "shfmt"
+                        ];
+                        cpp = [ "clang_format" ];
+                        javascript = {
+                            __unkeyed-1 = "prettierd";
+                            __unkeyed-2 = "prettier";
+                            timeout_ms = 2000;
+                            stop_after_first = true;
+                        };
+
+                        "_" = [
+                            "squeeze_blanks"
+                            "trim_whitespace"
+                            "trim_newlines"
+                        ];
+                    };
+                    format_on_save = # Lua
+                    ''
+                        function(bufnr)
+                        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+                            return
+                        end
+
+                        if slow_format_filetypes[vim.bo[bufnr].filetype] then
+                            return
+                        end
+
+                        local function on_format(err)
+                            if err and err:match("timeout$") then
+                            slow_format_filetypes[vim.bo[bufnr].filetype] = true
+                            end
+                        end
+
+                        return { timeout_ms = 200, lsp_fallback = true }, on_format
+                        end
+                    '';
+                    format_after_save = # Lua
+                    ''
+                        function(bufnr)
+                        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+                            return
+                        end
+
+                        if not slow_format_filetypes[vim.bo[bufnr].filetype] then
+                            return
+                        end
+
+                        return { lsp_fallback = true }
+                        end
+                    '';
+                    log_level = "warn";
+                    notify_on_error = false;
+                    notify_no_formatters = false;
+                    formatters = {
+                        shellcheck = {
+                            command = lib.getExe pkgs.shellcheck;
+                        };
+                        shfmt = {
+                            command = lib.getExe pkgs.shfmt;
+                        };
+                        shellharden = {
+                            command = lib.getExe pkgs.shellharden;
+                        };
+                        squeeze_blanks = {
+                            command = lib.getExe' pkgs.coreutils "cat";
+                        };
+                    };
+                };
+
+            };
+            lint = {
+                enable = true;
+                lintersByFt = {
+                    javascript = [ "eslint_d" ];
+                    typescript = [ "eslint_d" ];
+                    javascriptreact = [ "eslint_d" ];
+                    typescriptreact = [ "eslint_d" ];
+                    svelte = [ "eslint_d" ];
+                    python = [ "ruff" ];
+                    go = [ "golint" ];
+                };
+                autoCmd = {
+                    callback = {
+                        __raw = ''
+                        function()
+                            require('lint').try_lint()
+                        end
+                        '';
+                    };
+                    event = ["BufWritePost" "InsertLeave" "BufEnter" ];
+                };
+                linters = {
+                    eslint_d = {
+                        args = [
+                            "--no-warn-ignored"
+                            "--format json"
+                        ];
+                    };
+                };
+            };
+            flash = {
+                enable = true;
+            };
+            image = {
+                enable = true;
+            };
+            lsp = {
+                enable = true;
+                servers = {
+                    ts_ls.enable = true;
+                    vuels = {
+                        enable = true;
+                        package = pkgs.vue-language-server;
+                    };
+                    yamlls.enable = true;
+                    bashls.enable = true;
+                    jsonls.enable = true;
+                    sqls.enable = true;
+                    pyright.enable = true;
+                    ruff.enable = true;
+                    svelte.enable = true;
+                    eslint.enable = true;
+                    cssls.enable = true;
+                    nixd.enable = true;
+                    nil_ls.enable = true;
+                };
+            };
+            lualine = {
+                enable = true;
+                settings = {
+                    options = {
+                        theme = "base16";
+                        disabled_filetypes = {
+                            __unkeyed-1 = "startify";
+                            __unkeyed-2 = "neo-tree";
+                            statusline = [
+                                "dap-repl"
+                            ];
+                            winbar = [
+                                "aerial"
+                                "dap-repl"
+                                "neotest-summary"
+                            ];
+                        };
+                        globalstatus = true;
+                    };
+                    sections = {
+                        lualine_a = [
+                        "mode"
+                        ];
+                        lualine_b = [
+                        "branch"
+                        ];
+                        lualine_c = [
+                        "filename"
+                        "diff"
+                        ];
+                        lualine_x = [
+                        "diagnostics"
+                        {
+                            __unkeyed-1 = {
+                            __raw = ''
+                                function()
+                                    local msg = ""
+                                    local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+                                    local clients = vim.lsp.get_active_clients()
+                                    if next(clients) == nil then
+                                        return msg
+                                    end
+                                    for _, client in ipairs(clients) do
+                                        local filetypes = client.config.filetypes
+                                        if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+                                            return client.name
+                                        end
+                                    end
+                                    return msg
+                                end
+                            '';
+                            };
+                            color = {
+                            fg = "#ffffff";
+                            };
+                            icon = "";
+                        }
+                        "encoding"
+                        "fileformat"
+                        "filetype"
+                        ];
+                        lualine_y = [
+                        {
+                            __unkeyed-1 = "aerial";
+                            colored = true;
+                            cond = {
+                            __raw = ''
+                                function()
+                                local buf_size_limit = 1024 * 1024
+                                if vim.api.nvim_buf_get_offset(0, vim.api.nvim_buf_line_count(0)) > buf_size_limit then
+                                    return false
+                                end
+
+                                return true
+                                end
+                            '';
+                            };
+                            dense = false;
+                            dense_sep = ".";
+                            depth = {
+                            __raw = "nil";
+                            };
+                            sep = " ) ";
+                        }
+                        ];
+                        lualine_z = [
+                        {
+                            __unkeyed-1 = "location";
+                        }
+                        ];
+                    };
+                    tabline = {
+                        lualine_a = [
+                        {
+                            __unkeyed-1 = "buffers";
+                            symbols = {
+                            alternate_file = "";
+                            };
+                        }
+                        ];
+                        lualine_z = [
+                        "tabs"
+                        ];
+                    };
+                    winbar = {
+                        lualine_c = [
+                        {
+                            __unkeyed-1 = "navic";
+                        }
+                        ];
+                        lualine_x = [
+                        {
+                            __unkeyed-1 = "filename";
+                            newfile_status = true;
+                            path = 3;
+                            shorting_target = 150;
+                        }
+                        ];
+                    };
+                };
+            };
+            neo-tree = {
+                enable = true;
+                window.width = 40;
+                filesystem = {
+                    filteredItems = {
+                        hideGitignored = true;
+                        hideDotfiles = false;
+                        hideByName = [
+                            ".github"
+                            ".gitignore"
+                            "package-lock.json"
+                        ];
+                        neverShow = [
+                            ".git"
+                        ];
+                    };
+                };
+            };
+            nvim-surround = {
+                enable = true;
+            };
+            telescope = {
+                enable = true;
+                extensions = {
+                    ui-select.enable = true;
+                    undo = {
+                        enable = true;
+                    };
+                };
+            };
+            treesitter = {
+                enable = true;
+                settings = {
+                    auto_install = true;
+                    sync_install = false;
+                    highlight.enable = true;
+                    indent.enable = true;
+                };
+            };
+            web-devicons.enable = true;
+            which-key = {
+                enable = true;
+            };
+
+            #nvim-ts-autotag
+            #set manual format key for conform
+            #set manual lint key for lint
+            #set flash keys
+            #set lsp keys
+            #set telescope + undo key
         };
+        extraPackages = with pkgs; [
+            # linters
+            eslint_d
+            golint
+            ruff
+            # formatters
+            prettierd
+            stylua
+            gosimports
+            gofumpt
+            nixfmt-rfc-style
+            shellcheck
+            shellharden
+            shfmt
+        ];
     };
 }

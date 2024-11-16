@@ -2,11 +2,10 @@
     description = "careb0t's Home Manager configuration";
 
     inputs = {
-        nixpkgs.url = "nixpkgs/nixos-24.05";
-        nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+        nixpkgs.url = "nixpkgs/nixos-unstable";
 
         home-manager = {
-            url = "github:nix-community/home-manager/release-24.05";
+            url = "github:nix-community/home-manager/master";
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
@@ -19,21 +18,20 @@
 
         nixvim = {
             url = "github:nix-community/nixvim";
-            inputs.nixpkgs.follows = "nixpkgs-unstable";
+            inputs.nixpkgs.follows = "nixpkgs";
         };
     };
 
-    outputs = { nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
+    outputs = { nixpkgs, home-manager, ... }@inputs:
         let
             lib = nixpkgs.lib;
             system = "x86_64-linux";
             pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-            unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
         in {
             homeConfigurations = {
                 careb0t = home-manager.lib.homeManagerConfiguration {
                     inherit pkgs;
-                    extraSpecialArgs = { inherit inputs; inherit unstable; };
+                    extraSpecialArgs = { inherit inputs; };
                     modules = [ ./home.nix ];
                 };
             };
