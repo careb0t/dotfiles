@@ -1,10 +1,13 @@
-{ lib, pkgs, unstable, inputs, ... }:
-
+{ config, lib, pkgs, unstable, inputs, ... }:
+let
+  helpers = config.lib.nixvim;
+in
 {
     # Import inputs from flake
     imports = [
         inputs.spicetify-nix.homeManagerModules.default
         inputs.nixcord.homeManagerModules.nixcord
+        inputs.nixvim.homeManagerModules.nixvim
     ];
 
     home = {
@@ -19,13 +22,13 @@
         packages = let
             ad-strawberry-numix-icons = pkgs.callPackage ./icons.nix { };
         in [
-            ad-strawberry-numix-icons
+            ad-strawberry-numix-icons # derivation for red icon pack
             pkgs.picom
             pkgs.vivaldi
             pkgs.vivaldi-ffmpeg-codecs
             pkgs.firefox
             pkgs.wezterm
-            pkgs.neovim
+            #pkgs.neovim
             pkgs.zsh
             pkgs.starship
             pkgs.fzf
@@ -240,13 +243,50 @@
         };
     };
 
-    # Neovim configuration
-    xdg.configFile."nvim".source = ./nvim;
+    # Nixvim configuration
     programs.neovim = {
+        defaultEditor = true;
+    };
+    programs.nixvim = {
         enable = true;
         defaultEditor = true;
-        viAlias = true;
-        vimAlias = true;
         vimdiffAlias = true;
+        clipboard.register = "xclip";
+        colorschemes.base16 = {
+            enable = true;
+            colorscheme = "black-metal";
+        };
+        opts = {
+            number = true;
+            relativenumber = true;
+            undodir = "./undo";
+            undofile = true;
+            fillchars = {eob = " ";};
+            tabstop = 4;
+            shiftwidth = 4;
+            expandtab = false;
+            wrap=false;
+            laststatus = 3;
+        };
+        globals = {
+            mapleader = " ";
+            maplocalleader = "\\";
+        };
+        keymaps = [
+            {
+                mode = "n";
+                key = "<leader>t";
+                action = ":Neotree filesystem reveal left toggle<CR>";
+                options = {
+                    silent = true;
+                };
+            }
+        ];
+        plugins = {
+#             alpha = {
+#                 enable = true;
+#                 layout = [];
+#             };
+        };
     };
 }
