@@ -75,15 +75,17 @@
         ];
     };
 
-    # Qtile configuration file
+    # Qtile configuration
     xdg.configFile."qtile/config.py".source = ./qtile/config.py;
 
-    # wezterm configuration file
+    # wezterm configuration
     xdg.configFile."wezterm/wezterm.lua".source = ./wezterm/wezterm.lua;
 
-    # Starship configuration file
+    # Starship configuration
     xdg.configFile."starship.toml".source = ./wezterm/starship.toml;
 
+    # Zellij configuration
+    xdg.configFile."zellij".source = ./zellij;
 
     # Zsh configuration
     programs.zsh = {
@@ -239,7 +241,12 @@
     };
 
     # Neovim configuration
+    xdg.configFile."nvim".source = ./nvim;
     programs.neovim = {
+        enable = true;
         defaultEditor = true;
+        viAlias = true;
+        vimAlias = true;
+        vimdiffAlias = true;
     };
 }
