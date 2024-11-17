@@ -1,9 +1,3 @@
-## Copyright (C) 2020-2024 Aditya Shakya <adi1090x@gmail.com>
-##
-## `qtile` configuration for Archcraft
-
-## Import Libraries ------------------------
-
 ## Keys
 from libqtile.config import Key, KeyChord
 from libqtile.lazy import lazy
@@ -59,12 +53,7 @@ keys = [
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # Terminal --
     Key([mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"),
-    # Key(
-    #     [mod, "shift"],
-    #     "Return",
-    #     lazy.spawn("wezterm --float"),
-    #     desc="Launch floating wezterm",
-    # ),
+    Key([mod, "shift"], "Return", lazy.group["scratchpad"].dropdown_toggle('term'), desc="Toggle wezterm scratchpad"),
 
     # Rofi Applets --
     Key(["mod1"], "F1", lazy.spawn(rofi_launcher), desc="Run application launcher"),
@@ -184,6 +173,12 @@ groups = [
     Group(name="0", screen_affinity=0),
 ]
 
+## ScratchPads ------------------------
+groups.append(
+    ScratchPad('scratchpad', [
+        DropDown('term', 'wezterm', width=0.4, height=0.5, x=0.3, y=0.1, opacity=0.75),
+    ])
+)
 
 ## Change active group
 def go_to_group(name: str):
@@ -203,7 +198,8 @@ def go_to_group(name: str):
 
 
 for i in groups:
-    keys.append(Key([mod], i.name, lazy.function(go_to_group(i.name))))
+    if i.name != "scratchpad":
+        keys.append(Key([mod], i.name, lazy.function(go_to_group(i.name))))
 
 
 ## Move window to group
@@ -226,9 +222,8 @@ def go_to_group_and_move_window(name: str):
 
 
 for i in groups:
-    keys.append(
-        Key([mod, "shift"], i.name, lazy.function(go_to_group_and_move_window(i.name)))
-    )
+    if i.name != "scratchpad":
+        keys.append(Key([mod, "shift"], i.name, lazy.function(go_to_group_and_move_window(i.name))))
 
 ## Layouts ------------------------------
 var_border_width = 3
@@ -281,6 +276,7 @@ screens = [
                     icon_size=32
                 ),
                 extraWidget.GroupBox2(
+                    visible_groups=["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
                     rules=group_rules,
                     fontsize=22,
                     padding_x=10
@@ -307,7 +303,7 @@ screens = [
             48,
             background="#00000000",
             margin=[0, 0, 0, 0],
-            opacity=0.0,
+            opacity=1,
             border_width=[0, 0, 0, 0],
             border_color=["000000", "000000", "000000", "000000"],
         ),
@@ -323,6 +319,7 @@ screens = [
                     icon_size=25
                 ),
                 extraWidget.GroupBox2(
+                    visible_groups=["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
                     rules=group_rules,
                     fontsize=18,
                     padding_x=10
@@ -348,7 +345,7 @@ screens = [
             34,
             background="#00000000",
             margin=[0, 0, 0, 0],
-            opacity=0.0,
+            opacity=1,
             border_width=[0, 0, 0, 0],
             border_color=["000000", "000000", "000000", "000000"],
         ),

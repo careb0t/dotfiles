@@ -1,7 +1,5 @@
-{ config, lib, pkgs, unstable, inputs, ... }:
-let
-  helpers = config.lib.nixvim;
-in
+{ lib, pkgs, inputs, ... }:
+
 {
     # Import inputs from flake
     imports = [
@@ -76,6 +74,7 @@ in
             pkgs.catnip
             pkgs.deno
             pkgs.xorg.xkill
+            pkgs.wine
         ];
     };
 
@@ -95,6 +94,7 @@ in
     programs.zsh = {
         enable = true;
         enableCompletion = true;
+        completionInit = "zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'";
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
         shellAliases = {
@@ -249,10 +249,15 @@ in
         enable = true;
         defaultEditor = true;
         vimdiffAlias = true;
-        clipboard.register = "xclip";
+        clipboard = {
+            register = "unnamedplus";
+            providers = {
+                xclip.enable = true;
+            };
+        };
         colorschemes.base16 = {
             enable = true;
-            colorscheme = "dracula";
+            colorscheme = "black-metal";
         };
         opts = {
             number = true;
@@ -441,12 +446,193 @@ in
                     desc = "lsp - code action";
                 };
             }
+            {
+                mode = [ "n" ];
+                key = "<leader>ff";
+                action = {
+                    __raw = ''
+                        require("telescope.builtin").find_files
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "telescope - find files";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>fg";
+                action = {
+                    __raw = ''
+                        require("telescope.builtin").live_grep
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "telescope - live grep";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>fb";
+                action = {
+                    __raw = ''
+                        require("telescope.builtin").buffers
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "telescope - find buffers";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>fh";
+                action = {
+                    __raw = ''
+                        require("telescope.builtin").help_tags
+                    '';
+                };
+                options = {
+                    silent = false;
+                    desc = "telescope - help tags";
+                };
+            }
+            {
+                mode = [ "n" ];
+                key = "<leader>u";
+                action = "<cmd>Telescope undo<cr>";
+                options = {
+                    silent = false;
+                    desc = "telescope - undo history";
+                };
+            }
         ];
         plugins = {
-#             alpha = {
-#                 enable = true;
-#                 layout = [];
-#             };
+            dashboard = {
+                enable = true;
+                settings = {
+                    packages.enable = false;
+                    change_to_vcs_root = true;
+                    config = {
+                        footer = [
+                        "Работа – не волк, в лес не убежит"
+                        ];
+                        header = [
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣤⣤⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⠿⠿⠿⠿⢿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣶⣾⣿⣿⠀⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⠀⣿⣿⣷⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣾⣿⡿⠟⠛⠉⠉⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠉⠉⠛⠻⢿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⡿⠋⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠀⠀⠀⠀⠙⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠃⠀⠀⣠⣶⣾⣿⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⣿⣷⣦⣄⠀⠀⠸⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⢀⣾⣿⡿⠛⠉⠀⣿⣿⡇⠀⠀⣀⣀⠀⠀⠀⠀⠀⣀⣀⠀⠀⢸⣿⣿⠀⠉⠛⢿⣿⣷⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣆⢸⣿⣿⠀⠀⠀⠀⣿⣿⡇⠀⢾⣿⣿⡇⠀⠀⠀⢾⣿⣿⡇⠀⢸⣿⣿⠀⠀⠀⠈⣿⣿⡇⣼⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣿⣿⣿⣿⣄⠀⠀⠀⣿⣿⡇⠀⠈⠙⠋⠀⠀⠀⠀⠈⠙⠋⠀⠀⢸⣿⣿⠀⠀⠀⣰⣿⣿⣿⣿⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⣿⣿⣿⣷⣶⣶⣿⣿⣿⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣿⣿⣿⣶⣶⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠛⠛⠛⠛⠛⠛⠛⢻⣿⣿⠛⣿⣿⣿⢻⣿⣿⠛⠛⠛⠛⠛⠛⠛⠛⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⠀⢸⣿⣿⠀⣿⣿⣿⢸⣿⣿⠀⠀⣿⣿⣿⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣈⣉⣉⣉⣉⡉⢹⣿⣿⠀⢸⣿⣿⠀⣿⣿⣿⢸⣿⣿⠀⠀⣿⣿⡏⢉⣉⣉⣉⣉⣁⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⠀⢸⣿⣿⠀⣿⣿⣿⢸⣿⣿⠀⠀⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⢸⣿⣿⠀⢸⣿⣿⠀⣿⣿⣿⢸⣿⣿⠀⠀⣿⣿⡇⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⢸⣿⣿⠀⢸⣿⣿⠀⣿⣿⣿⢸⣿⣿⠀⠀⣿⣿⡇⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⢸⣿⣿⣄⣼⣿⣿⠀⣿⣿⣿⠸⣿⣿⣆⣠⣿⣿⡇⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣄⠻⢿⣿⣿⠿⢋⣴⣿⣿⣿⣦⡙⠿⣿⣿⡿⠛⣠⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣷⣶⣤⣴⣶⣿⣿⠿⠙⢿⣿⣿⣶⣦⣴⣶⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⠿⠛⠋⠁⠀⠀⠀⠈⠙⠛⠿⠿⠛⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                            "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+                        ];
+                        mru = {
+                            limit = 10;
+                        };
+                        project = {
+                            enable = true;
+                        };
+                        shortcut = [
+                        {
+                            action = {
+                            __raw = "function(path) vim.cmd('Telescope find_files') end";
+                            };
+                            desc = "Files";
+                            group = "Label";
+                            icon = " ";
+                            icon_hl = "@variable";
+                            key = "f";
+                        }
+                        {
+                            action = "Telescope app";
+                            desc = " Apps";
+                            group = "DiagnosticHint";
+                            key = "a";
+                        }
+                        {
+                            action = "Telescope dotfiles";
+                            desc = " dotfiles";
+                            group = "Number";
+                            key = "d";
+                        }
+                        ];
+                    };
+                    theme = "hyper";
+                };
+            };
+            transparent = {
+                enable = true;
+                settings.extra_groups = [
+                    "StatusLine"
+                    "StatusLineNC"
+                    "NormalFloat"
+                    "NeoTreeCursorLine"
+                    "NeoTreeDimText"
+                    "NeoTreeDirectoryIcon"
+                    "NeoTreeDirectoryName"
+                    "NeoTreeDotfile"
+                    "NeoTreeFileIcon"
+                    "NeoTreeFileName"
+                    "NeoTreeFileNameOpene"
+                    "NeoTreeFilterTerm"
+                    "NeoTreeFloatBorder"
+                    "NeoTreeFloatTitle"
+                    "NeoTreeTitleBar"
+                    "NeoTreeGitAdded"
+                    "NeoTreeGitConflict"
+                    "NeoTreeGitDeleted"
+                    "NeoTreeGitIgnored"
+                    "NeoTreeGitModified"
+                    "NeoTreeGitUnstaged"
+                    "NeoTreeGitUntracke"
+                    "NeoTreeGitStaged"
+                    "NeoTreeHiddenByName"
+                    "NeoTreeIndentMarker"
+                    "NeoTreeExpander"
+                    "NeoTreeNormal"
+                    "NeoTreeNormalNC"
+                    "NeoTreeSignColumn"
+                    "NeoTreeStatusLine"
+                    "NeoTreeStatusLineNC"
+                    "NeoTreeVertSplit"
+                    "NeoTreeWinSeparator"
+                    "NeoTreeEndOfBuffer"
+                    "NeoTreeRootName"
+                    "NeoTreeSymbolicLinkTarget"
+                    "NeoTreeTitleBar"
+                    "NeoTreeWindowsHidden"
+                    "NeotreeCursorLine"
+                    "BufferLineTabClose"
+                    "BufferLineBufferSelected"
+                    "BufferLineFill"
+                    "BufferLineBackground"
+                    "BufferLineSeparator"
+                    "BufferLineIndicatorSelected"
+                ];
+                luaConfig.pre = ''
+                    require('transparent').clear_prefix('lualine')
+                '';
+            };
             nvim-autopairs = {
                 enable = true;
             };
@@ -471,8 +657,8 @@ in
                                 ['<C-Space>'] = cmp.mapping.complete(),
                                 ['<C-e>'] = cmp.mapping.abort(),
                                 ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                                ['<S-Tab>'] = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
-                                ['<Tab>'] = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+                                ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'}),
+                                ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'}),
                             })
                         '';
                     };
@@ -641,125 +827,66 @@ in
                 settings = {
                     options = {
                         theme = "base16";
+                        icons_enabled = true;
+                        always_divide_middle = true;
                         disabled_filetypes = {
-                            __unkeyed-1 = "startify";
-                            __unkeyed-2 = "neo-tree";
                             statusline = [
-                                "dap-repl"
+                                "neo-tree"
+                                "neotree"
+                                "Neotree"
+                                "Neo-tree"
+                                "alpha"
+                                "toggleterm"
+                                "Telescope"
                             ];
-                            winbar = [
-                                "aerial"
-                                "dap-repl"
-                                "neotest-summary"
-                            ];
+                            tabline = [];
+                            winbar = [];
                         };
-                        globalstatus = true;
+                        ignore_focus = [
+                            "neo-tree"
+                            "neotree"
+                            "Neotree"
+                            "Neo-tree"
+                            "toggleterm"
+                        ];
+                        globalstatus = false;
+                        refresh = {
+                            statusline = 100;
+                            tabline = 100;
+                            winbar = 100;
+                        };
                     };
                     sections = {
                         lualine_a = [
-                        "mode"
+                            "mode"
                         ];
                         lualine_b = [
-                        "branch"
+                            "branch"
+                            "diff"
+                            "diagnostics"
                         ];
                         lualine_c = [
-                        "filename"
-                        "diff"
+                            "filename"
                         ];
                         lualine_x = [
-                        "diagnostics"
-                        {
-                            __unkeyed-1 = {
-                            __raw = ''
-                                function()
-                                    local msg = ""
-                                    local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
-                                    local clients = vim.lsp.get_active_clients()
-                                    if next(clients) == nil then
-                                        return msg
-                                    end
-                                    for _, client in ipairs(clients) do
-                                        local filetypes = client.config.filetypes
-                                        if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-                                            return client.name
-                                        end
-                                    end
-                                    return msg
-                                end
-                            '';
-                            };
-                            color = {
-                            fg = "#ffffff";
-                            };
-                            icon = "";
-                        }
-                        "encoding"
-                        "fileformat"
-                        "filetype"
+                            "encoding"
+                            "fileformat"
+                            "filetype"
                         ];
                         lualine_y = [
-                        {
-                            __unkeyed-1 = "aerial";
-                            colored = true;
-                            cond = {
-                            __raw = ''
-                                function()
-                                local buf_size_limit = 1024 * 1024
-                                if vim.api.nvim_buf_get_offset(0, vim.api.nvim_buf_line_count(0)) > buf_size_limit then
-                                    return false
-                                end
-
-                                return true
-                                end
-                            '';
-                            };
-                            dense = false;
-                            dense_sep = ".";
-                            depth = {
-                            __raw = "nil";
-                            };
-                            sep = " ) ";
-                        }
+                            "progress"
                         ];
                         lualine_z = [
-                        {
-                            __unkeyed-1 = "location";
-                        }
+                            "location"
                         ];
                     };
-                    tabline = {
-                        lualine_a = [
-                        {
-                            __unkeyed-1 = "buffers";
-                            symbols = {
-                            alternate_file = "";
-                            };
-                        }
-                        ];
-                        lualine_z = [
-                        "tabs"
-                        ];
-                    };
-                    winbar = {
-                        lualine_c = [
-                        {
-                            __unkeyed-1 = "navic";
-                        }
-                        ];
-                        lualine_x = [
-                        {
-                            __unkeyed-1 = "filename";
-                            newfile_status = true;
-                            path = 3;
-                            shorting_target = 150;
-                        }
-                        ];
-                    };
+                    tabline = {};
+                    winbar = {};
                 };
             };
             neo-tree = {
                 enable = true;
-                window.width = 40;
+                window.width = 30;
                 filesystem = {
                     filteredItems = {
                         hideGitignored = true;
@@ -802,11 +929,6 @@ in
             };
 
             #nvim-ts-autotag
-            #set manual format key for conform
-            #set manual lint key for lint
-            #set flash keys
-            #set lsp keys
-            #set telescope + undo key
         };
         extraPackages = with pkgs; [
             # linters
