@@ -26,7 +26,6 @@
             pkgs.vivaldi-ffmpeg-codecs
             pkgs.firefox
             pkgs.wezterm
-            #pkgs.neovim
             pkgs.zsh
             pkgs.starship
             pkgs.fzf
@@ -75,6 +74,7 @@
             pkgs.deno
             pkgs.xorg.xkill
             pkgs.wine
+            pkgs.unar
         ];
     };
 
