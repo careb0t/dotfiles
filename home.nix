@@ -75,6 +75,7 @@
             pkgs.xorg.xkill
             pkgs.wine
             pkgs.unar
+			pkgs.path-of-building
         ];
     };
 
