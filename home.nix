@@ -76,6 +76,8 @@
             pkgs.wine
             pkgs.unar
 			pkgs.path-of-building
+			pkgs.google-chrome
+			pkgs.chromium
         ];
     };
 
