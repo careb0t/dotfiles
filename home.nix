@@ -279,7 +279,7 @@
         keymaps = [
             {
                 mode = "n";
-                key = "<leader>t";
+                key = "<leader>ft";
                 action = ":Neotree filesystem reveal left toggle<CR>";
                 options = {
                     silent = true;
@@ -778,6 +778,13 @@
                     };
                 };
 
+            };
+            floaterm = {
+                enable = true;
+                shell = "zsh";
+                keymaps = {
+                    toggle = "<leader>t";
+                };
             };
             lint = {
                 enable = true;
