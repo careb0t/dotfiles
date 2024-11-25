@@ -704,11 +704,18 @@
                         cpp = [ "clang_format" ];
                         javascript = {
                             __unkeyed-1 = "prettierd";
-                            __unkeyed-2 = "prettier";
                             timeout_ms = 2000;
                             stop_after_first = true;
                         };
-
+#                         css = [
+#                             "prettierd"
+#                         ];
+#                         html = [
+#                             "prettierd"
+#                         ];
+#                         python = [
+#                             "ruff"
+#                         ];
                         "_" = [
                             "squeeze_blanks"
                             "trim_whitespace"
