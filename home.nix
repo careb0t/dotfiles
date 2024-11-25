@@ -694,6 +694,9 @@
             };
             conform-nvim = {
                 enable = true;
+                luaConfig.pre = ''
+                    local slow_format_filetypes = {}
+                '';
                 settings = {
                     formatters_by_ft = {
                         bash = [
