@@ -292,7 +292,7 @@
                 action = {
                     __raw = ''
                         function()
-                            conform.format({
+                            require('conform').format({
                                 lsp_fallback = true,
                                 async = false,
                                 timeout_ms = 500,
@@ -311,7 +311,7 @@
                 action = {
                     __raw = ''
                         function()
-                            lint.try_lint()
+                            require('lint').try_lint()
                         end
                     '';
                 };
@@ -673,6 +673,9 @@
 #                         '';
                     };
                 };
+            };
+            cmp-nvim-ultisnips = {
+                enable = true;
             };
             lspkind = {
                 enable = true;
