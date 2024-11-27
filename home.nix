@@ -16,6 +16,13 @@
         # NixOS version
         stateVersion = "24.05";
 
+        # Environment variables
+        sessionVariables = {
+            # Puppeteer browser path
+            PUPPETEER_CHROME_BIN = "${pkgs.google-chrome}/bin/google-chrome-stable";
+            PUPPETEER_SKIP_DOWNLOAD = 1;
+        };
+
         # Installed packages
         packages = let
             ad-strawberry-numix-icons = pkgs.callPackage ./icons.nix { };
