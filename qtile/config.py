@@ -34,6 +34,7 @@ def autostart():
     home = os.path.expanduser("~")
     subprocess.Popen([home + "/dotfiles/qtile/autostart"])
 
+
 # Dunst notifications
 notify_cmd = "dunstify -u low -h string:x-dunst-stack-tag:qtileconfig"
 
@@ -53,43 +54,78 @@ keys = [
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # Terminal --
     Key([mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"),
-    Key([mod, "shift"], "Return", lazy.group["scratchpad"].dropdown_toggle('term'), desc="Toggle wezterm scratchpad"),
-
+    Key(
+        [mod, "shift"],
+        "Return",
+        lazy.group["scratchpad"].dropdown_toggle("term"),
+        desc="Toggle wezterm scratchpad",
+    ),
     # Rofi Applets --
     Key(["mod1"], "F1", lazy.spawn(rofi_launcher), desc="Run application launcher"),
-
     # GUI Apps --
     Key([mod, "shift"], "f", lazy.spawn("thunar"), desc="Launch Thunar file manager"),
     Key([mod, "shift"], "w", lazy.spawn("vivaldi"), desc="Launch Vivaldi web browser"),
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
     Key([mod, "shift"], "l", lazy.spawn("lutris"), desc="Launch Lutris"),
     Key([mod, "shift"], "s", lazy.spawn("steam"), desc="Launch Steam"),
-    Key([mod, "shift"], "y", lazy.spawn("wezterm start --always-new-process yazi"), desc="Launch Yazi"),
-
+    Key(
+        [mod, "shift"],
+        "y",
+        lazy.spawn("wezterm start --always-new-process yazi"),
+        desc="Launch Yazi",
+    ),
     # Screenshot
     Key([mod], "s", lazy.spawn("flameshot gui"), desc="Take screenshot with Flameshot"),
-
     # Function keys : Volume --
-    Key([], "XF86AudioRaiseVolume", lazy.spawn(volume + " --inc"), desc="Raise speaker volume"),
-    Key([], "XF86AudioLowerVolume", lazy.spawn(volume + " --dec"), desc="Lower speaker volume"),
+    Key(
+        [],
+        "XF86AudioRaiseVolume",
+        lazy.spawn(volume + " --inc"),
+        desc="Raise speaker volume",
+    ),
+    Key(
+        [],
+        "XF86AudioLowerVolume",
+        lazy.spawn(volume + " --dec"),
+        desc="Lower speaker volume",
+    ),
     Key([], "XF86AudioMute", lazy.spawn(volume + " --toggle"), desc="Toggle mute"),
-    Key([], "XF86AudioMicMute", lazy.spawn(volume + " --toggle-mic"), desc="Toggle mute for mic"),
-
+    Key(
+        [],
+        "XF86AudioMicMute",
+        lazy.spawn(volume + " --toggle-mic"),
+        desc="Toggle mute for mic",
+    ),
     # Function keys : Media --
     Key([], "XF86AudioNext", lazy.spawn("mpc next"), desc="Next track"),
     Key([], "XF86AudioPrev", lazy.spawn("mpc prev"), desc="Previous track"),
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle"), desc="Toggle play/pause"),
     Key([], "XF86AudioStop", lazy.spawn("mpc stop"), desc="Stop playing"),
-
     # WM Specific --
     Key([mod], "c", lazy.window.kill(), desc="Kill focused window"),
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
-
     # Control Qtile
-    Key([mod, "control"], "r", lazy.reload_config(), lazy.spawn(notify_cmd + ' "Configuration Reloaded!"'), desc="Reload the config"),
-    Key([mod, "control"], "s", lazy.restart(), lazy.spawn(notify_cmd + ' "Restarting Qtile..."'), desc="Restart Qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(), lazy.spawn(notify_cmd + ' "Exiting Qtile..."'), desc="Shutdown Qtile"),
-
+    Key(
+        [mod, "control"],
+        "r",
+        lazy.reload_config(),
+        lazy.spawn(notify_cmd + ' "Configuration Reloaded!"'),
+        desc="Reload the config",
+    ),
+    Key(
+        [mod, "control"],
+        "s",
+        lazy.restart(),
+        lazy.spawn(notify_cmd + ' "Restarting Qtile..."'),
+        desc="Restart Qtile",
+    ),
+    Key(
+        [mod, "control"],
+        "q",
+        lazy.shutdown(),
+        lazy.spawn(notify_cmd + ' "Exiting Qtile..."'),
+        desc="Shutdown Qtile",
+    ),
     # Switch between windows
     Key([mod], "Left", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "Right", lazy.layout.right(), desc="Move focus to right"),
@@ -99,61 +135,129 @@ keys = [
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "Left", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, "shift"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key(
+        [mod, "shift"],
+        "Left",
+        lazy.layout.shuffle_left(),
+        desc="Move window to the left",
+    ),
+    Key(
+        [mod, "shift"],
+        "Right",
+        lazy.layout.shuffle_right(),
+        desc="Move window to the right",
+    ),
     Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([mod, "shift"], "Up", lazy.layout.shuffle_up(), desc="Move window up"),
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key(
+        [mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"
+    ),
+    Key(
+        [mod, "shift"],
+        "l",
+        lazy.layout.shuffle_right(),
+        desc="Move window to the right",
+    ),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
-    Key([mod, "control"], "Left", lazy.layout.grow_left(), desc="Grow window to the left",),
-    Key([mod, "control"], "Right", lazy.layout.grow_right(), desc="Grow window to the right"),
+    Key(
+        [mod, "control"],
+        "Left",
+        lazy.layout.grow_left(),
+        desc="Grow window to the left",
+    ),
+    Key(
+        [mod, "control"],
+        "Right",
+        lazy.layout.grow_right(),
+        desc="Grow window to the right",
+    ),
     Key([mod, "control"], "Down", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "Up", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
+    Key(
+        [mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"
+    ),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod, "control"], "Return", lazy.layout.normalize(), desc="Reset all window sizes"),
-
+    Key(
+        [mod, "control"],
+        "Return",
+        lazy.layout.normalize(),
+        desc="Reset all window sizes",
+    ),
     # Toggle floating and fullscreen
-    Key([mod], "space", lazy.window.toggle_floating(), desc="Put the focused window to/from floating mode"),
-    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Put the focused window to/from fullscreen mode"),
-
+    Key(
+        [mod],
+        "space",
+        lazy.window.toggle_floating(),
+        desc="Put the focused window to/from floating mode",
+    ),
+    Key(
+        [mod],
+        "f",
+        lazy.window.toggle_fullscreen(),
+        desc="Put the focused window to/from fullscreen mode",
+    ),
     # Go to next/prev group
-    Key([mod, "mod1"], "Right", lazy.screen.next_group(), desc="Move to the group on the right"),
-    Key([mod, "mod1"], "Left", lazy.screen.prev_group(), desc="Move to the group on the left"),
+    Key(
+        [mod, "mod1"],
+        "Right",
+        lazy.screen.next_group(),
+        desc="Move to the group on the right",
+    ),
+    Key(
+        [mod, "mod1"],
+        "Left",
+        lazy.screen.prev_group(),
+        desc="Move to the group on the left",
+    ),
     # Back-n-forth groups
     Key([mod], "b", lazy.screen.toggle_group(), desc="Move to the last visited group"),
-
     # Change focus to other window
     Key([mod], "Tab", lazy.layout.next(), desc="Move window focus to other window"),
-
     # Toggle between different layouts as defined below
     Key([mod, "shift"], "space", lazy.next_layout(), desc="Toggle between layouts"),
-
     # Increase the space for master window at the expense of slave windows
-    Key([mod], "equal", lazy.layout.increase_ratio(), desc="Increase the space for master window"),
+    Key(
+        [mod],
+        "equal",
+        lazy.layout.increase_ratio(),
+        desc="Increase the space for master window",
+    ),
     # Decrease the space for master window in the advantage of slave windows
-    Key([mod], "minus", lazy.layout.decrease_ratio(), desc="Decrease the space for master window"),
-
+    Key(
+        [mod],
+        "minus",
+        lazy.layout.decrease_ratio(),
+        desc="Decrease the space for master window",
+    ),
     # Toggle between split and unsplit sides of stack.
-    Key([mod, "shift"], "s", lazy.layout.toggle_split(), desc="Toggle between split and unsplit sides of stack"),
+    Key(
+        [mod, "shift"],
+        "s",
+        lazy.layout.toggle_split(),
+        desc="Toggle between split and unsplit sides of stack",
+    ),
 ]
 
 ## Mouse Bindings ------------------------------
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Drag(
+        [mod],
+        "Button1",
+        lazy.window.set_position_floating(),
+        start=lazy.window.get_position(),
+    ),
+    Drag(
+        [mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()
+    ),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
@@ -175,10 +279,16 @@ groups = [
 
 ## ScratchPads ------------------------
 groups.append(
-    ScratchPad('scratchpad', [
-        DropDown('term', 'wezterm', width=0.4, height=0.5, x=0.3, y=0.1, opacity=0.75),
-    ])
+    ScratchPad(
+        "scratchpad",
+        [
+            DropDown(
+                "term", "wezterm", width=0.4, height=0.5, x=0.3, y=0.1, opacity=0.75
+            ),
+        ],
+    )
 )
+
 
 ## Change active group
 def go_to_group(name: str):
@@ -223,7 +333,13 @@ def go_to_group_and_move_window(name: str):
 
 for i in groups:
     if i.name != "scratchpad":
-        keys.append(Key([mod, "shift"], i.name, lazy.function(go_to_group_and_move_window(i.name))))
+        keys.append(
+            Key(
+                [mod, "shift"],
+                i.name,
+                lazy.function(go_to_group_and_move_window(i.name)),
+            )
+        )
 
 ## Layouts ------------------------------
 var_border_width = 3
@@ -250,17 +366,17 @@ layouts = [
         split=True,
         wrap_focus_columns=True,
         wrap_focus_rows=True,
-        wrap_focus_stacks=True
-	),
+        wrap_focus_stacks=True,
+    ),
 ]
 
-group_rules = [ 
+group_rules = [
     GroupBoxRule(text_colour="#A06666").when(focused=False, occupied=True),
     GroupBoxRule(text_colour="#DD9998").when(focused=True, occupied=True),
     GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=False),
     GroupBoxRule(line_position=GroupBoxRule.LINE_TOP).when(focused=True, occupied=True),
     GroupBoxRule(line_colour="#DD9998").when(focused=True, occupied=True),
-    GroupBoxRule(line_width=3).when(focused=True, occupied=True)
+    GroupBoxRule(line_width=3).when(focused=True, occupied=True),
 ]
 
 ## Screens ------------------------------
@@ -270,35 +386,32 @@ screens = [
         top=bar.Bar(
             [
                 widget.LaunchBar(
-                    progs=[('/home/careb0t/dotfiles/qtile/nixos.png', 'rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi', "Rofi Launcher")],
+                    progs=[
+                        (
+                            "/home/careb0t/dotfiles/qtile/nixos.png",
+                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi",
+                            "Rofi Launcher",
+                        )
+                    ],
                     padding_y=-1,
                     padding=20,
-                    icon_size=32
+                    icon_size=32,
                 ),
                 extraWidget.GroupBox2(
                     visible_groups=["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
                     rules=group_rules,
                     fontsize=22,
-                    padding_x=10
+                    padding_x=10,
                 ),
                 widget.Spacer(),
-                widget.WindowName(
-                    foreground="DD9998",
-                    fontsize=18
-                ),
+                widget.WindowName(foreground="DD9998", fontsize=18),
                 widget.Spacer(),
-                extraWidget.StatusNotifier(),
-                extraWidget.Systray(),
-                widget.Clock(
-                    format="%m/%d/%y | %I:%M %p",
-                    foreground="#DD9998"
-                ),
+                widget.Systray(),
+                widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
                 widget.QuickExit(foreground="#DD9998"),
                 extraWidget.CurrentLayoutIcon(
-                    use_mask=True,
-                    foreground="#DD9998",
-                    scale=0.75
-                )
+                    use_mask=True, foreground="#DD9998", scale=0.75
+                ),
             ],
             48,
             background="#00000000",
@@ -313,34 +426,34 @@ screens = [
         top=bar.Bar(
             [
                 widget.LaunchBar(
-                    progs=[('/home/careb0t/dotfiles/qtile/nixos.png', 'rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi', "Rofi Launcher")],
+                    progs=[
+                        (
+                            "/home/careb0t/dotfiles/qtile/nixos.png",
+                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi",
+                            "Rofi Launcher",
+                        )
+                    ],
                     padding_y=-1,
                     padding=20,
-                    icon_size=25
+                    icon_size=25,
                 ),
                 extraWidget.GroupBox2(
                     visible_groups=["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
                     rules=group_rules,
                     fontsize=18,
-                    padding_x=10
+                    padding_x=10,
                 ),
                 widget.Spacer(),
                 widget.WindowName(
                     foreground="DD9998",
                 ),
                 widget.Spacer(),
-                extraWidget.StatusNotifier(),
-                extraWidget.Systray(),
-                widget.Clock(
-                    format="%m/%d/%y | %I:%M %p",
-                    foreground="#DD9998"
-                ),
+                widget.Systray(),
+                widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
                 widget.QuickExit(foreground="#DD9998"),
                 extraWidget.CurrentLayoutIcon(
-                    use_mask=True,
-                    foreground="#DD9998",
-                    scale=0.75
-                )
+                    use_mask=True, foreground="#DD9998", scale=0.75
+                ),
             ],
             34,
             background="#00000000",
