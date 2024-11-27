@@ -656,7 +656,7 @@
                     { name = "nvim_lsp"; }
                     { name = "path"; }
                     { name = "buffer"; }
-                    { name = "ultisnips"; }
+                    { name = "luasnip"; }
                 ];
                 settings = {
                     mapping = {
@@ -673,7 +673,7 @@
                         '';
                     };
                     snippet = {
-                        expand = "function(args) vim.fn['UltiSnips#Anon'](args.body) end";
+                        expand = "function(args) require('luasnip').lsp_expand(args.body) end";
                     };
                     window = {
 #                         __raw = ''
@@ -683,7 +683,7 @@
                     };
                 };
             };
-            cmp-nvim-ultisnips = {
+            cmp_luasnip = {
                 enable = true;
             };
             lspkind = {
