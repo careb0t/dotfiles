@@ -266,6 +266,10 @@
     enable = true;
     defaultEditor = true;
     vimdiffAlias = true;
+    extraConfigLua = ''
+      vim.api.nvim_set_hl(0, "NeoTreeGitConflict", { fg = "#DD9998", bg = nil, bold = true, italic = true })
+      vim.api.nvim_set_hl(0, "NeoTreeFGitUntracked", { fg = "#DD9998", bg = nil, italic = true })
+    '';
     clipboard = {
       register = "unnamedplus";
       providers = {
