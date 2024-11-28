@@ -23,9 +23,7 @@
 
     # Environment variables
     sessionVariables = {
-      # Puppeteer browser path
-      PUPPETEER_CHROME_BIN = "${pkgs.google-chrome}/bin/google-chrome-stable";
-      PUPPETEER_SKIP_DOWNLOAD = 1;
+
     };
 
     # Installed packages
@@ -90,8 +88,6 @@
         pkgs.wine
         pkgs.unar
         pkgs.path-of-building
-        pkgs.google-chrome
-        pkgs.chromium
       ];
   };
 
