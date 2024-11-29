@@ -88,6 +88,7 @@
         pkgs.wine
         pkgs.unar
         pkgs.path-of-building
+        pkgs.xdg-desktop-portal
       ];
   };
 
