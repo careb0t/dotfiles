@@ -54,12 +54,7 @@ keys = [
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # Terminal --
     Key([mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"),
-    Key(
-        [mod, "shift"],
-        "Return",
-        lazy.group["scratchpad"].dropdown_toggle("term"),
-        desc="Toggle wezterm scratchpad",
-    ),
+    Key([mod, "shift"], "Return", lazy.group["scratchpad"].dropdown_toggle("term"), desc="Toggle wezterm scratchpad"),
     # Rofi Applets --
     Key(["mod1"], "F1", lazy.spawn(rofi_launcher), desc="Run application launcher"),
     # GUI Apps --
@@ -278,7 +273,7 @@ groups.append(
         "scratchpad",
         [
             DropDown(
-                "term", "wezterm", width=0.4, height=0.5, x=0.3, y=0.1, opacity=0.75
+                "term", "wezterm start --class wezterm-scratchpad", width=0.4, height=0.5, x=0.3, y=0.1, opacity=1
             ),
         ],
     )
@@ -363,6 +358,7 @@ layouts = [
         wrap_focus_rows=True,
         wrap_focus_stacks=True,
     ),
+    floating_layout,
 ]
 
 group_rules = [
@@ -489,13 +485,9 @@ floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
-        Match(wm_class="alacritty-float|Music"),
-        Match(wm_class="Lxappearance|Nitrogen"),
-        Match(wm_class="Pavucontrol|Xfce4-power-manager-settings|Nm-connection-editor"),
-        Match(wm_class="feh|Viewnior|Gpicview|Gimp|MPlayer|Vlc|Spotify"),
-        Match(wm_class="Kvantum Manager|qt5ct"),
-        Match(wm_class="VirtualBox Manager|qemu|Qemu-system-x86_64"),
-        Match(title="branchdialog"),
+        Match(wm_class="copyq"),
+        Match(wm_class="wezterm-scratchpad"),
+        # Match(title="branchdialog"),
     ],
 )
 
