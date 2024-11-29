@@ -266,10 +266,6 @@
     enable = true;
     defaultEditor = true;
     vimdiffAlias = true;
-    extraConfigLua = ''
-      vim.api.nvim_set_hl(0, "NeoTreeGitConflict", { fg = "#DD9998", bg = nil, bold = true, italic = true })
-      vim.api.nvim_set_hl(0, "NeoTreeFGitUntracked", { fg = "#DD9998", bg = nil, italic = true })
-    '';
     clipboard = {
       register = "unnamedplus";
       providers = {
@@ -279,6 +275,20 @@
     colorschemes.base16 = {
       enable = true;
       colorscheme = "black-metal";
+    };
+    highlightOverride = {
+      NeoTreeGitConflict = {
+        fg = "#DD9998";
+        bg = null;
+        bold = true;
+        italic = true;
+      };
+      NeoTreeGitUntracked = {
+        fg = "#9F6666";
+        bg = null;
+        bold = false;
+        italic = true;
+      };
     };
     opts = {
       number = true;
@@ -641,7 +651,7 @@
           "NeoTreeGitIgnored"
           "NeoTreeGitModified"
           "NeoTreeGitUnstaged"
-          "NeoTreeGitUntracke"
+          "NeoTreeGitUntracked"
           "NeoTreeGitStaged"
           "NeoTreeHiddenByName"
           "NeoTreeIndentMarker"
