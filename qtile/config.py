@@ -68,12 +68,8 @@ keys = [
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
     Key([mod, "shift"], "l", lazy.spawn("lutris"), desc="Launch Lutris"),
     Key([mod, "shift"], "s", lazy.spawn("steam"), desc="Launch Steam"),
-    Key(
-        [mod, "shift"],
-        "y",
-        lazy.spawn("wezterm start --always-new-process yazi"),
-        desc="Launch Yazi",
-    ),
+    Key([mod, "shift"], "y", lazy.spawn("wezterm start --always-new-process yazi"), desc="Launch Yazi",),
+    Key([mod, "shift"], "c", lazy.spawn("copyq toggle"), desc="Toggle CopyQ"),
     # Screenshot
     Key([mod], "s", lazy.spawn("flameshot gui"), desc="Take screenshot with Flameshot"),
     # Function keys : Volume --
@@ -102,7 +98,6 @@ keys = [
     Key([], "XF86AudioPlay", lazy.spawn("mpc toggle"), desc="Toggle play/pause"),
     Key([], "XF86AudioStop", lazy.spawn("mpc stop"), desc="Stop playing"),
     # WM Specific --
-    Key([mod], "c", lazy.window.kill(), desc="Kill focused window"),
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
     # Control Qtile
     Key(
@@ -406,7 +401,7 @@ screens = [
                 widget.Spacer(),
                 widget.WindowName(foreground="DD9998", fontsize=18),
                 widget.Spacer(),
-                widget.Systray(),
+                extraWidget.StatusNotifier(),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
                 widget.QuickExit(foreground="#DD9998"),
                 extraWidget.CurrentLayoutIcon(
@@ -448,7 +443,7 @@ screens = [
                     foreground="DD9998",
                 ),
                 widget.Spacer(),
-                widget.Systray(),
+                extraWidget.StatusNotifier(),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
                 widget.QuickExit(foreground="#DD9998"),
                 extraWidget.CurrentLayoutIcon(

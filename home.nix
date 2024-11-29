@@ -47,6 +47,7 @@
         pkgs.duf
         pkgs.ripgrep
         pkgs.xclip
+        pkgs.copyq
         pkgs.zoxide
         pkgs.eza
         pkgs.yazi

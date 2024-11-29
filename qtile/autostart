@@ -45,6 +45,9 @@ while pgrep -x picom >/dev/null; do sleep 1; done
 
 picom --config $HOME/dotfiles/qtile/picom.conf &
 
+# Start CopyQ
+copyq &
+
 # Start Flameshot
 if [[ ! `pidof flameshot` ]]; then
 	pkill flameshot
