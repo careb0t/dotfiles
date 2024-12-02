@@ -157,6 +157,13 @@
   programs.thefuck.enableZshIntegration = true;
   programs.starship.enableZshIntegration = true;
 
+  # Direnv configuration
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   # GUI theme configuration
   home.pointerCursor = {
     package = pkgs.numix-cursor-theme;
