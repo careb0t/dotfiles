@@ -136,6 +136,8 @@
           fi
           git push
       }
+
+      eval "$(direnv hook zsh)"
     '';
     history.size = 10000;
     history.ignoreAllDups = true;
