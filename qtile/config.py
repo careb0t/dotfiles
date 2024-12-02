@@ -54,7 +54,12 @@ keys = [
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # Terminal --
     Key([mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"),
-    Key([mod, "shift"], "Return", lazy.group["scratchpad"].dropdown_toggle("term"), desc="Toggle wezterm scratchpad"),
+    Key(
+        [mod, "shift"],
+        "Return",
+        lazy.group["scratchpad"].dropdown_toggle("term"),
+        desc="Toggle wezterm scratchpad",
+    ),
     # Rofi Applets --
     Key(["mod1"], "F1", lazy.spawn(rofi_launcher), desc="Run application launcher"),
     # GUI Apps --
@@ -63,7 +68,12 @@ keys = [
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
     Key([mod, "shift"], "l", lazy.spawn("lutris"), desc="Launch Lutris"),
     Key([mod, "shift"], "s", lazy.spawn("steam"), desc="Launch Steam"),
-    Key([mod, "shift"], "y", lazy.spawn("wezterm start --always-new-process yazi"), desc="Launch Yazi",),
+    Key(
+        [mod, "shift"],
+        "y",
+        lazy.spawn("wezterm start --always-new-process yazi"),
+        desc="Launch Yazi",
+    ),
     Key([mod, "shift"], "c", lazy.spawn("copyq toggle"), desc="Toggle CopyQ"),
     # Screenshot
     Key([mod], "s", lazy.spawn("flameshot gui"), desc="Take screenshot with Flameshot"),
@@ -273,7 +283,13 @@ groups.append(
         "scratchpad",
         [
             DropDown(
-                "term", "wezterm start --class wezterm-scratchpad", width=0.4, height=0.5, x=0.3, y=0.1, opacity=1
+                "term",
+                "wezterm start --class wezterm-scratchpad",
+                width=0.4,
+                height=0.5,
+                x=0.3,
+                y=0.1,
+                opacity=1,
             ),
         ],
     )

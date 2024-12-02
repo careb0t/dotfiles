@@ -90,8 +90,12 @@
         pkgs.path-of-building
         pkgs.xdg-desktop-portal
         pkgs.lazygit
+        pkgs.xivlauncher
       ];
   };
+
+  # Flake templates
+  home.file.".devflakes".source = ./devflakes;
 
   # Qtile configuration
   xdg.configFile."qtile/config.py".source = ./qtile/config.py;
@@ -118,6 +122,7 @@
       nix-rebuild = "sudo nixos-rebuild switch";
       hm-rebuild = "cd /home/careb0t/dotfiles && make";
       hm-clean = "cd /home/careb0t/dotfiles && make clean";
+      nix-dev = "nix develop -c $SHELL";
     };
     initExtra = ''
       pushdots() {
