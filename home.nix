@@ -18,7 +18,7 @@
     username = "careb0t";
     homeDirectory = "/home/careb0t";
 
-    # NixOS version
+    # NixOS initial version DO NOT CHANGE THIS
     stateVersion = "24.05";
 
     # Environment variables
@@ -37,7 +37,7 @@
         pkgs.vivaldi
         pkgs.vivaldi-ffmpeg-codecs
         pkgs.firefox
-        pkgs.wezterm
+        # pkgs.wezterm # installed with flake input
         pkgs.zsh
         pkgs.starship
         pkgs.fzf
@@ -73,7 +73,7 @@
         # pkgs.steam # Steam must me installed at system level and enabled
         pkgs.lutris
         pkgs.deluge
-        pkgs.nerdfonts
+        pkgs.nerd-fonts.anonymice
         pkgs.gimp
         pkgs.networkmanager
         pkgs.numix-cursor-theme
@@ -94,20 +94,26 @@
       ];
   };
 
+  # Font configuration
+  fonts.fontconfig = {
+    enable = true;
+  };
+
   # Flake templates
   home.file.".devflakes".source = ./devflakes;
 
   # Qtile configuration
-  xdg.configFile."qtile/config.py".source = ./qtile/config.py;
+  xdg.configFile."qtile".source = ./qtile;
 
   # wezterm configuration
   xdg.configFile."wezterm/wezterm.lua".source = ./wezterm/wezterm.lua;
+  programs.wezterm.enable = true;
 
   # Starship configuration
   xdg.configFile."starship.toml".source = ./wezterm/starship.toml;
 
   # Zellij configuration
-  xdg.configFile."zellij".source = ./zellij;
+  # xdg.configFile."zellij".source = ./zellij;
 
   # Zsh configuration
   programs.zsh = {

@@ -9,6 +9,8 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
+        wezterm.url = "github:wez/wezterm?dir=nix";
+
         spicetify-nix = {
             url = "github:Gerg-L/spicetify-nix";
             inputs.nixpkgs.follows = "nixpkgs";

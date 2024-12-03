@@ -354,7 +354,7 @@ var_gap_top = 45
 var_gap_bottom = 5
 var_gap_left = 5
 var_gap_right = 5
-var_font_name = "JetBrainsMono Nerd Font"
+var_font_name = "AnonymicePro Nerd Font"
 
 layouts = [
     # Extension of the Stack layout
@@ -374,7 +374,18 @@ layouts = [
         wrap_focus_rows=True,
         wrap_focus_stacks=True,
     ),
-    floating_layout,
+    layout.Floating(
+        border_focus="#DD9998",
+        border_normal="#A06666",
+        border_width=var_border_width,
+        float_rules=[
+            # Run the utility of `xprop` to see the wm class and name of an X client.
+            *layout.Floating.default_float_rules,
+            Match(wm_class="copyq"),
+            Match(wm_class="wezterm-scratchpad"),
+            # Match(title="branchdialog"),
+        ],
+    )
 ]
 
 group_rules = [
@@ -492,20 +503,6 @@ dgroups_key_binder = None
 
 # A list of Rule objects which can send windows to various groups based on matching criteria.
 dgroups_app_rules = []  # type: list
-
-# The default floating layout to use. This allows you to set custom floating rules among other things if you wish.
-floating_layout = layout.Floating(
-    border_focus="#DD9998",
-    border_normal="#A06666",
-    border_width=var_border_width,
-    float_rules=[
-        # Run the utility of `xprop` to see the wm class and name of an X client.
-        *layout.Floating.default_float_rules,
-        Match(wm_class="copyq"),
-        Match(wm_class="wezterm-scratchpad"),
-        # Match(title="branchdialog"),
-    ],
-)
 
 # Behavior of the _NET_ACTIVATE_WINDOW message sent by applications
 #
