@@ -66,8 +66,6 @@ keys = [
     Key([mod, "shift"], "f", lazy.spawn("thunar"), desc="Launch Thunar file manager"),
     Key([mod, "shift"], "w", lazy.spawn("vivaldi"), desc="Launch Vivaldi web browser"),
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
-    Key([mod, "shift"], "l", lazy.spawn("lutris"), desc="Launch Lutris"),
-    Key([mod, "shift"], "s", lazy.spawn("steam"), desc="Launch Steam"),
     Key(
         [mod, "shift"],
         "y",
@@ -237,12 +235,12 @@ keys = [
         desc="Decrease the space for master window",
     ),
     # Toggle between split and unsplit sides of stack.
-    Key(
-        [mod, "shift"],
-        "s",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
+    #    Key(
+    #        [mod, "shift"],
+    #        "s",
+    #        lazy.layout.toggle_split(),
+    #        desc="Toggle between split and unsplit sides of stack",
+    #    ),
 ]
 
 ## Mouse Bindings ------------------------------
@@ -354,7 +352,7 @@ var_gap_top = 45
 var_gap_bottom = 5
 var_gap_left = 5
 var_gap_right = 5
-var_font_name = "IosevkaTerm Nerd Font"
+var_font_name = "Terminess Nerd Font"
 
 layouts = [
     # Extension of the Stack layout
@@ -406,11 +404,11 @@ screens = [
                 extraWidget.GroupBox2(
                     visible_groups=["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
                     rules=group_rules,
-                    fontsize=22,
+                    fontsize=26,
                     padding_x=10,
                 ),
                 widget.Spacer(),
-                widget.WindowName(foreground="DD9998", fontsize=18),
+                widget.WindowName(foreground="DD9998", fontsize=24),
                 widget.Spacer(),
                 extraWidget.StatusNotifier(),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
@@ -446,7 +444,7 @@ screens = [
                 extraWidget.GroupBox2(
                     visible_groups=["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
                     rules=group_rules,
-                    fontsize=18,
+                    fontsize=22,
                     padding_x=10,
                 ),
                 widget.Spacer(),
@@ -520,7 +518,7 @@ follow_mouse_focus = True
 # Default settings for bar widgets.
 widget_defaults = dict(
     font=var_font_name,
-    fontsize=14,
+    fontsize=18,
     padding=5,
 )
 

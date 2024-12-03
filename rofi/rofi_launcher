@@ -6,6 +6,7 @@ RASI="$DIR/launcher.rasi"
 
 # Run
 rofi \
-    -show drun \
+	-show drun \
 	-kb-cancel Alt-F1 \
-	-theme ${RASI}
+	-theme "${RASI}" \
+	-font "Terminess Nerd Font 16"

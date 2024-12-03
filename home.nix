@@ -73,8 +73,8 @@
         # pkgs.steam # Steam must me installed at system level and enabled
         pkgs.lutris
         pkgs.deluge
-        pkgs.nerd-fonts.anonymice
         pkgs.nerd-fonts.iosevka-term
+        pkgs.nerd-fonts.terminess-ttf
         pkgs.gimp
         pkgs.networkmanager
         pkgs.numix-cursor-theme
