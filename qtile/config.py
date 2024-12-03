@@ -354,7 +354,7 @@ var_gap_top = 45
 var_gap_bottom = 5
 var_gap_left = 5
 var_gap_right = 5
-var_font_name = "AnonymicePro Nerd Font"
+var_font_name = "IosevkaTerm Nerd Font"
 
 layouts = [
     # Extension of the Stack layout
