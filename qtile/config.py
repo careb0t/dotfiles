@@ -373,18 +373,6 @@ layouts = [
         wrap_focus_columns=True,
         wrap_focus_rows=True,
         wrap_focus_stacks=True,
-    ),
-    layout.Floating(
-        border_focus="#DD9998",
-        border_normal="#A06666",
-        border_width=var_border_width,
-        float_rules=[
-            # Run the utility of `xprop` to see the wm class and name of an X client.
-            *layout.Floating.default_float_rules,
-            Match(wm_class="copyq"),
-            Match(wm_class="wezterm-scratchpad"),
-            # Match(title="branchdialog"),
-        ],
     )
 ]
 
@@ -482,6 +470,20 @@ screens = [
         ),
     ),
 ]
+
+# Floating configuration
+floating_layout = layout.Floating(
+    border_focus="#DD9998",
+    border_normal="#A06666",
+    border_width=var_border_width,
+    float_rules=[
+        # Run the utility of `xprop` to see the wm class and name of an X client.
+        *layout.Floating.default_float_rules,
+        Match(wm_class="copyq"),
+        Match(wm_class="wezterm-scratchpad"),
+        # Match(title="branchdialog"),
+    ],
+)
 
 ## General Configuration Variables ------------------------------
 

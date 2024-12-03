@@ -74,6 +74,7 @@
         pkgs.lutris
         pkgs.deluge
         pkgs.nerd-fonts.anonymice
+        pkgs.nerd-fonts.iosevka-term
         pkgs.gimp
         pkgs.networkmanager
         pkgs.numix-cursor-theme

@@ -2,7 +2,7 @@ local wezterm = require 'wezterm'
 local config = {}
 
 config.enable_tab_bar = false
-config.font = wezterm.font 'AnonymicePro Nerd Font'
+config.font = wezterm.font 'IosevkaTerm Nerd Font'
 config.color_scheme = 'Black Metal (base16)'
 config.window_background_opacity = 0.75
 
