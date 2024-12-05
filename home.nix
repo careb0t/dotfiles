@@ -131,6 +131,7 @@
       ll = "eza -l --icons";
       nix-rebuild = "sudo nixos-rebuild switch";
       hm-rebuild = "cd /home/careb0t/dotfiles && make";
+      hm-update = "cd /home/careb0t/dotfiles && nix flake update && make";
       hm-clean = "cd /home/careb0t/dotfiles && make clean";
     };
     initExtra = ''
