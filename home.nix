@@ -294,6 +294,8 @@
       General = {
         uiColor = "#DD9998";
         contrastUiColor = "#A06666";
+        savePath = "/home/careb0t/Pictures/Screenshots";
+        filenamePattern = "%B%e %Y at %I:%M";
       };
     };
   };
