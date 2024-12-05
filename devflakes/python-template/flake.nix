@@ -24,7 +24,9 @@
           ];
 
           shellHook = ''
-            python --version
+            						clear
+            						echo "Welcome to your declarative Python development environment!"
+                        python --version
           '';
         };
     };

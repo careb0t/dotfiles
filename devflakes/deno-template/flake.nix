@@ -22,9 +22,10 @@
           packages = with pkgs; [
             deno
           ];
-
           shellHook = ''
-            "deno -version"
+            						clear
+            						echo "Welcome to your declarative Deno development environment!"
+                        deno --version
           '';
         };
     };
