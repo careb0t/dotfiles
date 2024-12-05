@@ -23,9 +23,10 @@
             deno
           ];
           shellHook = ''
-            						clear
-            						echo "Welcome to your declarative Deno development environment!"
-                        deno --version
+            																		echo ""
+                        												clear
+                                    						echo "Welcome to your declarative Deno development environment!"
+                                                deno --version
           '';
         };
     };
