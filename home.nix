@@ -867,6 +867,7 @@
         shell = "zsh";
         keymaps = {
           toggle = "<C-`>";
+          kill = "<C-BS>";
         };
       };
       lint = {
