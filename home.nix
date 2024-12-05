@@ -101,7 +101,10 @@
   };
 
   # Flake templates
-  home.file.".devflakes".source = ./devflakes;
+  nix.registry.devflakes.to = {
+    type = "path";
+    path = "${./devflakes}";
+  };
 
   # Qtile configuration
   xdg.configFile."qtile".source = ./qtile;
@@ -332,18 +335,6 @@
       maplocalleader = "\\";
     };
     keymaps = [
-      #{
-      #mode = [
-      #"n"
-      #"t"
-      #];
-      #key = "<C-`>";
-      #action = ":FloatermToggle";
-      #options = {
-      #silent = true;
-      #desc = "toggle foaterm";
-      #};
-      #}
       {
         mode = "n";
         key = "<leader>ft";
