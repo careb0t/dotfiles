@@ -6,7 +6,7 @@
   };
 
   outputs =
-    { self, nixpkgs, ... }:
+    { nixpkgs, ... }:
     let
       system = "x86_64-linux";
     in
@@ -24,7 +24,7 @@
           ];
 
           shellHook = ''
-            echo "python --version"
+            python --version
           '';
         };
     };

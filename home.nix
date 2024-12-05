@@ -132,22 +132,33 @@
       nix-rebuild = "sudo nixos-rebuild switch";
       hm-rebuild = "cd /home/careb0t/dotfiles && make";
       hm-clean = "cd /home/careb0t/dotfiles && make clean";
-      nix-dev = "nix develop -c $SHELL";
     };
     initExtra = ''
-      pushdots() {
-          cd /home/careb0t/dotfiles
-          git add -A
-          if [ "$1" != "" ]
-          then
-              git commit -m "$*"
-          else
-              git commit -m update
-          fi
-          git push
-      }
+                                    pushdots() {
+                                        cd /home/careb0t/dotfiles
+                                        git add -A
+                                        if [ "$1" != "" ]
+                                        then
+                                            git commit -m "$*"
+                                        else
+                                            git commit -m update
+                                        fi
+                                        git push
+                                    }
 
-      eval "$(direnv hook zsh)"
+                              			nix-dev() {
+                                      nix flake init -t devflakes#$1
+                              				if [ $? -ne 0 ]; then
+            														echo The following templates are available: 
+                  											for dir in /home/careb0t/dotfiles/devflakes/*/; do
+                          								echo $(basename $dir)
+                      									done
+      																else
+      																	direnv allow
+                                			fi
+                              			}
+
+                                    eval "$(direnv hook zsh)"
     '';
     history.size = 10000;
     history.ignoreAllDups = true;
