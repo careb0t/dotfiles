@@ -333,6 +333,18 @@
     };
     keymaps = [
       {
+        mode = [
+          "n"
+          "t"
+        ];
+        key = "<C-`>";
+        action = ":FloatermToggle";
+        options = {
+          silent = true;
+          desc = "toggle foaterm";
+        };
+      }
+      {
         mode = "n";
         key = "<leader>ft";
         action = ":Neotree filesystem reveal left toggle<CR>";
@@ -851,9 +863,6 @@
       floaterm = {
         enable = true;
         shell = "zsh";
-        keymaps = {
-          toggle = "<leader>t";
-        };
       };
       lint = {
         enable = true;
