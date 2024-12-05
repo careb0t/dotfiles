@@ -124,8 +124,8 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     shellAliases = {
-      ls = "eza -a";
-      ll = "eza -l";
+      ls = "eza -a --icons";
+      ll = "eza -l --icons";
       nix-rebuild = "sudo nixos-rebuild switch";
       hm-rebuild = "cd /home/careb0t/dotfiles && make";
       hm-clean = "cd /home/careb0t/dotfiles && make clean";
