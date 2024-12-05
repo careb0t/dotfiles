@@ -998,6 +998,7 @@
       };
       neo-tree = {
         enable = true;
+        closeIfLastWindow = true;
         window.width = 30;
         filesystem = {
           filteredItems = {
@@ -1012,6 +1013,14 @@
               ".git"
             ];
           };
+        };
+        eventHandlers = {
+          file_opened = ''
+              				function(file_path)
+                				--auto close
+                				require("neo-tree").close_all()
+              				end
+            					'';
         };
       };
       nvim-surround = {
