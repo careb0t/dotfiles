@@ -332,18 +332,18 @@
       maplocalleader = "\\";
     };
     keymaps = [
-      {
-        mode = [
-          "n"
-          "t"
-        ];
-        key = "<C-`>";
-        action = ":FloatermToggle";
-        options = {
-          silent = true;
-          desc = "toggle foaterm";
-        };
-      }
+      #{
+      #mode = [
+      #"n"
+      #"t"
+      #];
+      #key = "<C-`>";
+      #action = ":FloatermToggle";
+      #options = {
+      #silent = true;
+      #desc = "toggle foaterm";
+      #};
+      #}
       {
         mode = "n";
         key = "<leader>ft";
@@ -791,15 +791,15 @@
               timeout_ms = 2000;
               stop_after_first = true;
             };
-            #                         css = [
-            #                             "prettierd"
-            #                         ];
-            #                         html = [
-            #                             "prettierd"
-            #                         ];
-            #                         python = [
-            #                             "ruff"
-            #                         ];
+            css = [
+              "prettierd"
+            ];
+            html = [
+              "prettierd"
+            ];
+            python = [
+              "ruff"
+            ];
             "_" = [
               "squeeze_blanks"
               "trim_whitespace"
@@ -863,6 +863,9 @@
       floaterm = {
         enable = true;
         shell = "zsh";
+        keymaps = {
+          toggle = "<C-`>";
+        };
       };
       lint = {
         enable = true;
