@@ -316,6 +316,10 @@
     colorschemes.base16 = {
       enable = true;
       colorscheme = "black-metal";
+      settings = {
+        telescope = true;
+        telescope_borders = true;
+      };
     };
     highlightOverride = {
       NeoTreeGitConflict = {
@@ -468,7 +472,7 @@
         };
       }
       {
-        mode = [ "c" ];
+        mode = [ "n" ];
         key = "<c-s>";
         action = {
           __raw = ''
@@ -716,6 +720,10 @@
           "BufferLineBackground"
           "BufferLineSeparator"
           "BufferLineIndicatorSelected"
+          "TelescopeNormal"
+          "TelescopePreviewNormal"
+          "TelescopePromptNormal"
+          "TelescopeResultsNormal"
         ];
         luaConfig.pre = ''
           require('transparent').clear_prefix('lualine')
@@ -909,6 +917,12 @@
       };
       flash = {
         enable = true;
+        settings = {
+          jump.nohlsearch = true;
+          modes = {
+            search.enabled = true;
+          };
+        };
       };
       image = {
         enable = true;

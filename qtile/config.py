@@ -1,5 +1,5 @@
 ## Keys
-from libqtile.config import Key, KeyChord
+from libqtile.config import Key
 from libqtile.lazy import lazy
 
 ## Mouse
@@ -52,6 +52,8 @@ rofi_launcher = home + "/dotfiles/rofi/rofi_launcher"
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
+    # Keyboard Layouts
+    Key(["mod1"], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
     # Terminal --
     Key([mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"),
     Key(
@@ -412,7 +414,8 @@ screens = [
                 widget.Spacer(),
                 extraWidget.StatusNotifier(),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
-                widget.QuickExit(foreground="#DD9998"),
+                widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="#DD9998"),
+                widget.QuickExit(foreground="#DD9998", default_text="[ выключение ]"),
                 extraWidget.CurrentLayoutIcon(
                     use_mask=True, foreground="#DD9998", scale=0.75
                 ),
@@ -454,7 +457,8 @@ screens = [
                 widget.Spacer(),
                 extraWidget.StatusNotifier(),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
-                widget.QuickExit(foreground="#DD9998"),
+                widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="#DD9998"),
+                widget.QuickExit(foreground="#DD9998", default_text="[ выключение ]"),
                 extraWidget.CurrentLayoutIcon(
                     use_mask=True, foreground="#DD9998", scale=0.75
                 ),
