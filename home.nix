@@ -357,7 +357,7 @@
       {
         mode = "n";
         key = "<leader>ft";
-        action = ":Neotree filesystem reveal left toggle<CR>";
+        action = ":Neotree filesystem reveal toggle<CR>";
         options = {
           silent = true;
           desc = "toggle neotree";
@@ -687,8 +687,6 @@
           "NeoTreeFileName"
           "NeoTreeFileNameOpene"
           "NeoTreeFilterTerm"
-          "NeoTreeFloatBorder"
-          "NeoTreeFloatTitle"
           "NeoTreeTitleBar"
           "NeoTreeGitAdded"
           "NeoTreeGitConflict"
@@ -1013,7 +1011,9 @@
       neo-tree = {
         enable = true;
         closeIfLastWindow = true;
-        window.width = 30;
+        popupBorderStyle = "single";
+        window.position = "float";
+        window.popup.position = "50%";
         filesystem = {
           filteredItems = {
             hideGitignored = true;
