@@ -92,6 +92,7 @@
         pkgs.xdg-desktop-portal
         pkgs.lazygit
         pkgs.xivlauncher
+        pkgs.obs-studio
       ];
   };
 
