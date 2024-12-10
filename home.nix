@@ -34,6 +34,7 @@
       [
         ad-strawberry-numix-icons # derivation for red icon pack
         pkgs.picom
+        pkgs.ffmpeg
         pkgs.vivaldi
         pkgs.vivaldi-ffmpeg-codecs
         pkgs.firefox
@@ -92,7 +93,6 @@
         pkgs.xdg-desktop-portal
         pkgs.lazygit
         pkgs.xivlauncher
-        pkgs.obs-studio
       ];
   };
 
