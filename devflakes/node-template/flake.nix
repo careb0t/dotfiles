@@ -1,5 +1,5 @@
 {
-  description = "Deno development environment";
+  description = "Node.js development environment";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
