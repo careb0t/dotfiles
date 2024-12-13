@@ -307,15 +307,11 @@
     };
   };
 
-  # Set neovim as default editor
-  programs.neovim = {
-    defaultEditor = true;
-    vimdiffAlias = true;
-  };
-
   # Nixvim configuration
   programs.nixvim = {
     enable = true;
+    defaultEditor = true;
+    vimdiffAlias = true;
     clipboard = {
       register = "unnamedplus";
       providers = {

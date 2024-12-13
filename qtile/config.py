@@ -71,7 +71,7 @@ keys = [
     Key(
         [mod, "shift"],
         "y",
-        lazy.spawn("wezterm start --always-new-process yazi"),
+        lazy.spawn("wezterm start --always-new-process zsh -c yazi; exit"),
         desc="Launch Yazi",
     ),
     Key([mod, "shift"], "c", lazy.spawn("copyq toggle"), desc="Toggle CopyQ"),
