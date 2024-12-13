@@ -93,6 +93,7 @@
         pkgs.xdg-desktop-portal
         pkgs.lazygit
         pkgs.xivlauncher
+        pkgs.exiftool
       ];
   };
 
@@ -116,6 +117,9 @@
 
   # Starship configuration
   xdg.configFile."starship.toml".source = ./wezterm/starship.toml;
+
+  # Yazi configuration
+  xdg.configFile."yazi".source = ./yazi;
 
   # Zellij configuration
   # xdg.configFile."zellij".source = ./zellij;
@@ -303,11 +307,15 @@
     };
   };
 
+  # Set neovim as default editor
+  programs.neovim = {
+    defaultEditor = true;
+    vimdiffAlias = true;
+  };
+
   # Nixvim configuration
   programs.nixvim = {
     enable = true;
-    defaultEditor = true;
-    vimdiffAlias = true;
     clipboard = {
       register = "unnamedplus";
       providers = {
