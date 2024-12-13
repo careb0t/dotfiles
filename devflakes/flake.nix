@@ -13,6 +13,10 @@
           path = ./python-template;
           description = "Python development environment";
         };
+        node = {
+          path = ./node-template;
+          description = "Node.js development environment";
+        };
       };
     };
 }

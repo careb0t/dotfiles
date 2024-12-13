@@ -1,5 +1,5 @@
 {
-  description = "Python development environment";
+  description = "Deno development environment";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
@@ -20,16 +20,13 @@
         in
         pkgs.mkShell {
           packages = with pkgs; [
-            python3
+            nodejs
           ];
-
           shellHook = ''
-            																		python -m venv env 
-            																		source ./env/bin/activate
-                                    						clear
-                        												echo ""
-                                    						echo "Welcome to your declarative Python development environment!"
-                                                python --version
+            																		echo ""
+                        												clear
+                                    						echo "Welcome to your declarative Node.js development environment!"
+                                                node --version
           '';
         };
     };
