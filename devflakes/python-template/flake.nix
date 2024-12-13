@@ -24,10 +24,12 @@
           ];
 
           shellHook = ''
-                        						clear
-            												echo ""
-                        						echo "Welcome to your declarative Python development environment!"
-                                    python --version
+            																		python -m venv env 
+            																		source ./env/bin/activate
+                                    						clear
+                        												echo ""
+                                    						echo "Welcome to your declarative Python development environment!"
+                                                python --version
           '';
         };
     };
