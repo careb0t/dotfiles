@@ -1,5 +1,5 @@
 {
-  description = "Go development environment";
+  description = "PHP development environment";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
@@ -20,13 +20,13 @@
         in
         pkgs.mkShell {
           packages = with pkgs; [
-            go
+            php
           ];
           shellHook = ''
             																		echo ""
                         												clear
-                                    						echo "Welcome to your declarative Go development environment!"
-                                                go version
+                                    						echo "Welcome to your declarative PHP development environment!"
+                                                php -v
           '';
         };
     };

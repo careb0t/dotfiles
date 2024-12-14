@@ -17,6 +17,14 @@
           path = ./node-template;
           description = "Node.js development environment";
         };
+        go = {
+          path = ./go-template;
+          description = "Go development environment";
+        };
+        php = {
+          path = ./php-template;
+          description = "PHP development environment";
+        };
       };
     };
 }
