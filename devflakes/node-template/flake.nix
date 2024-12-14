@@ -20,7 +20,7 @@
         in
         pkgs.mkShell {
           packages = with pkgs; [
-            nodejs
+            nodejs_latest
           ];
           shellHook = ''
             																		echo ""
