@@ -54,7 +54,6 @@
         pkgs.yazi
         pkgs.btop
         pkgs.fastfetch
-        pkgs.p7zip
         pkgs.xcolor
         pkgs.killall
         pkgs.dunst
@@ -94,7 +93,6 @@
         pkgs.lazygit
         pkgs.xivlauncher
         pkgs.exiftool
-        pkgs.p7zip
         pkgs.p7zip-rar
       ];
   };
@@ -255,8 +253,8 @@
   # Discord + Vencord configuration
   xdg.configFile."Vencord/themes".source = ./Vencord/themes;
   programs.nixcord = {
-    enable = true;
-    discord.vencord.package = pkgs.vencord;
+    enable = false;
+    discord.vencord.package = pkgs.vencord-unstable;
     config = {
       transparent = true;
       themeLinks = [ ];
