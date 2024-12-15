@@ -94,6 +94,8 @@
         pkgs.lazygit
         pkgs.xivlauncher
         pkgs.exiftool
+        pkgs.p7zip
+        pkgs.p7zip-rar
       ];
   };
 
