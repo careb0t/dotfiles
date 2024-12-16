@@ -253,8 +253,8 @@
   # Discord + Vencord configuration
   xdg.configFile."Vencord/themes".source = ./Vencord/themes;
   programs.nixcord = {
-    enable = false;
-    discord.vencord.package = pkgs.vencord-unstable;
+    enable = true;
+    discord.vencord.package = pkgs.vencord;
     config = {
       transparent = true;
       themeLinks = [ ];
