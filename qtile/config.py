@@ -265,16 +265,16 @@ mouse = [
 groups = [
     # Screen affinity here is used to make
     # sure the groups startup on the right screens
-    Group(name="1", screen_affinity=1),
-    Group(name="2", screen_affinity=0),
-    Group(name="3", screen_affinity=1),
-    Group(name="4", screen_affinity=0),
-    Group(name="5", screen_affinity=1),
-    Group(name="6", screen_affinity=0),
-    Group(name="7", screen_affinity=1),
-    Group(name="8", screen_affinity=0),
-    Group(name="9", screen_affinity=1),
-    Group(name="0", screen_affinity=0),
+    Group(name="1", screen_affinity=0),
+    Group(name="2", screen_affinity=1),
+    Group(name="3", screen_affinity=0),
+    Group(name="4", screen_affinity=1),
+    Group(name="5", screen_affinity=0),
+    Group(name="6", screen_affinity=1),
+    Group(name="7", screen_affinity=0),
+    Group(name="8", screen_affinity=1),
+    Group(name="9", screen_affinity=0),
+    Group(name="0", screen_affinity=1),
 ]
 
 ## ScratchPads ------------------------
@@ -304,10 +304,10 @@ def go_to_group(name: str):
             return
 
         if name in "13579":
-            qtile.focus_screen(1)
+            qtile.focus_screen(0)
             qtile.groups_map[name].toscreen()
         else:
-            qtile.focus_screen(0)
+            qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
 
     return _inner
@@ -327,11 +327,11 @@ def go_to_group_and_move_window(name: str):
 
         if name in "13579":
             qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(1)
+            qtile.focus_screen(0)
             qtile.groups_map[name].toscreen()
         else:
             qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(0)
+            qtile.focus_screen(1)
             qtile.groups_map[name].toscreen()
 
     return _inner
