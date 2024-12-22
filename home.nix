@@ -94,6 +94,7 @@
         pkgs.xivlauncher
         pkgs.exiftool
         pkgs.p7zip-rar
+        pkgs.corectrl
       ];
   };
 
@@ -879,9 +880,9 @@
       };
       floaterm = {
         enable = true;
-        shell = "zsh";
-        keymaps = {
-          toggle = "<C-`>";
+        settings = {
+          shell = "zsh";
+          keymap_toggle = "<C-`>";
         };
       };
       lint = {
