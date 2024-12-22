@@ -94,6 +94,7 @@
         pkgs.xivlauncher
         pkgs.exiftool
         pkgs.p7zip-rar
+        #pkgs.discord
       ];
   };
 
@@ -254,7 +255,7 @@
   xdg.configFile."Vencord/themes".source = ./Vencord/themes;
   programs.nixcord = {
     enable = true;
-    discord.vencord.package = pkgs.vencord;
+    discord.vencord.unstable = true;
     config = {
       transparent = true;
       themeLinks = [ ];
