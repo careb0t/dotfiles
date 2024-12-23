@@ -94,7 +94,6 @@
         pkgs.xivlauncher
         pkgs.exiftool
         pkgs.p7zip-rar
-        #pkgs.discord
       ];
   };
 

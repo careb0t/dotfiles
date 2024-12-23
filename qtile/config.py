@@ -70,6 +70,12 @@ keys = [
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
     Key(
         [mod, "shift"],
+        "h",
+        lazy.spawn("wezterm start --always-new-process zsh -c cd /home/careb0t/dotfiles/ && nvim; exit"),
+        desc="Edit dotfiles",
+    ),
+    Key(
+        [mod, "shift"],
         "y",
         lazy.spawn("wezterm start --always-new-process zsh -c yazi; exit"),
         desc="Launch Yazi",
