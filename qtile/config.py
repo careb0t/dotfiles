@@ -69,9 +69,9 @@ keys = [
     Key([mod, "shift"], "w", lazy.spawn("vivaldi"), desc="Launch Vivaldi web browser"),
     Key([mod, "shift"], "d", lazy.spawn("discord"), desc="Launch Discord"),
     Key(
-        [mod, "shift"],
-        "h",
-        lazy.spawn("wezterm start --always-new-process zsh -c cd /home/careb0t/dotfiles/ && nvim; exit"),
+        [mod, "control"],
+        "c",
+        lazy.spawn("wezterm start --always-new-process --cwd /home/careb0t/dotfiles zsh -c nvim; exit"),
         desc="Edit dotfiles",
     ),
     Key(
