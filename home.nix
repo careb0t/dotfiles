@@ -307,6 +307,14 @@
     };
   };
 
+  # temporary fix for 'Unit tray.target not found' error on hm-rebuild
+  systemd.user.targets.tray = {
+    Unit = {
+      Description = "home-manager system tray";
+      Requires = [ "graphical-session-pre.target" ];
+    };
+  };
+
   # Nixvim configuration
   programs.nixvim = {
     enable = true;
