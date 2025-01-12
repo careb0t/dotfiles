@@ -187,7 +187,7 @@
     enableZshIntegration = true;
     daemon.enable = true;
     settings = {
-      enter_accept = false;
+      enter_accept = true;
     };
   };
 
