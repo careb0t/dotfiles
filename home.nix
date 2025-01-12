@@ -95,7 +95,6 @@
         pkgs.exiftool
         pkgs.p7zip-rar
         pkgs.piper
-        pkgs.solaar
       ];
   };
 
