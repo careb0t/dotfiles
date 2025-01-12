@@ -186,6 +186,9 @@
     enable = true;
     enableZshIntegration = true;
     daemon.enable = true;
+    settings = {
+      enter_accept = false;
+    };
   };
 
   # Zsh integration
