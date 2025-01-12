@@ -96,7 +96,6 @@
         pkgs.p7zip-rar
         pkgs.piper
         pkgs.solaar
-        pkgs.atuin
       ];
   };
 
@@ -182,6 +181,13 @@
   # Zsh tools
   programs.starship.enable = true;
   programs.zoxide.enable = true;
+
+  # Atuin configuration
+  programs.atuin = {
+    enable = true;
+    enableZshIntegration = true;
+    daemon.enable = true;
+  };
 
   # Zsh integration
   programs.wezterm.enableZshIntegration = true;
