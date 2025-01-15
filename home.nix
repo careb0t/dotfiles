@@ -112,9 +112,10 @@
   # Qtile configuration
   xdg.configFile."qtile".source = ./qtile;
 
-  # wezterm configuration
+  # terminal configuration
   xdg.configFile."wezterm/wezterm.lua".source = ./wezterm/wezterm.lua;
   programs.wezterm.enable = true;
+  programs.wzterm.enableZshIntegration = true;
 
   # Starship configuration
   xdg.configFile."starship.toml".source = ./wezterm/starship.toml;
