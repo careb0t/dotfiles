@@ -23,7 +23,7 @@
 
     # Environment variables
     sessionVariables = {
-
+      TERM = "wezterm";
     };
 
     # Installed packages
