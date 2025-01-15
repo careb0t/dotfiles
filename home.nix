@@ -115,7 +115,6 @@
   # terminal configuration
   xdg.configFile."wezterm/wezterm.lua".source = ./wezterm/wezterm.lua;
   programs.wezterm.enable = true;
-  programs.wzterm.enableZshIntegration = true;
 
   # Starship configuration
   xdg.configFile."starship.toml".source = ./wezterm/starship.toml;
@@ -124,7 +123,7 @@
   xdg.configFile."yazi".source = ./yazi;
 
   # Zellij configuration
-  # xdg.configFile."zellij".source = ./zellij;
+  xdg.configFile."zellij".source = ./zellij;
 
   # Zsh configuration
   programs.zsh = {
