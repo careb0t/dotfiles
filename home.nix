@@ -95,6 +95,7 @@
         pkgs.exiftool
         pkgs.p7zip-rar
         pkgs.piper
+        pkgs.discord # remove this when nixcord is working again
       ];
   };
 
@@ -264,7 +265,7 @@
   # Discord + Vencord configuration
   xdg.configFile."Vencord/themes".source = ./Vencord/themes;
   programs.nixcord = {
-    enable = true;
+    enable = false;
     discord.vencord.unstable = true;
     config = {
       transparent = true;
