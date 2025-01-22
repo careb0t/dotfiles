@@ -52,7 +52,7 @@
         pkgs.zoxide
         pkgs.eza
         pkgs.yazi
-        pkgs.btop
+        pkgs.btop-rocm
         pkgs.fastfetch
         pkgs.xcolor
         pkgs.killall
@@ -95,6 +95,7 @@
         pkgs.exiftool
         pkgs.p7zip-rar
         pkgs.piper
+        pkgs.rocmPackages.rocm-smi
       ];
   };
 

@@ -222,8 +222,6 @@ keys = [
         lazy.screen.prev_group(),
         desc="Move to the group on the left",
     ),
-    # Back-n-forth groups
-    Key([mod], "b", lazy.screen.toggle_group(), desc="Move to the last visited group"),
     # Change focus to other window
     Key([mod], "Tab", lazy.layout.next(), desc="Move window focus to other window"),
     # Toggle between different layouts as defined below
@@ -269,8 +267,6 @@ mouse = [
 
 ## Groups ------------------------------
 groups = [
-    # Screen affinity here is used to make
-    # sure the groups startup on the right screens
     Group(name="1"),
     Group(name="2"),
     Group(name="3"),
@@ -288,8 +284,22 @@ group_screens = []
 
 @hook.subscribe.client_managed
 def client_managed(client):
-    dict = { group: client.group, screen: qtile.active_screen }
-    group_screens.append(dict)
+    def _inner(qtile):
+        if client.group.name != "scratchpad": # do not add scratchpad to group_screens
+            if not any(d.get("group") == client.group.name for d in group_screens): # check to see if the group has already been added to the group_screens variables 
+                dict = { "group": client.group.name, "screen": qtile.current_screen.index }
+                group_screens.append(dict)
+    return _inner
+
+# remove group from group_screens when it contains no windows
+@hook.subscribe.client_killed
+def client_killed(client):
+    def _inner(qtile):
+        if len(qtile.groups_map[client.group.name].windows) == 0:
+            for d in group_screens:
+                if d.get("group") == client.group.name:
+                    group_screens.remove(d)
+    return _inner
 
 ## ScratchPads ------------------------
 groups.append(
@@ -313,17 +323,10 @@ groups.append(
 ## Change active group
 def go_to_group(name: str):
     def _inner(qtile):
-        if len(qtile.screens) == 1:
-            qtile.groups_map[name].toscreen()
-            return
-
-        if name in "13579":
-            qtile.focus_screen(0)
-            qtile.groups_map[name].toscreen()
-        else:
-            qtile.focus_screen(1)
-            qtile.groups_map[name].toscreen()
-
+        found_group = next((d for d in group_screens if d.get("group") == name), None)
+        if found_group is not None:
+            qtile.focus_screen(found_group["screen"])
+        qtile.groups_map[name].toscreen()
     return _inner
 
 
@@ -335,31 +338,31 @@ for i in groups:
 ## Move window to group
 def go_to_group_and_move_window(name: str):
     def _inner(qtile):
-        if len(qtile.screens) == 1:
-            qtile.current_window.togroup(name, switch_group=True)
-            return
-
-        if name in "13579":
-            qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(0)
-            qtile.groups_map[name].toscreen()
-        else:
-            qtile.current_window.togroup(name, switch_group=False)
-            qtile.focus_screen(1)
-            qtile.groups_map[name].toscreen()
-
+        qtile.current_window.togroup(name, switch_group=False)
+        found_group = next((d for d in group_screens if d.get("group") == name), None)
+        if found_group is not None:
+            qtile.focus_screen(found_group["screen"])
+        qtile.groups_map[name].toscreen()
     return _inner
 
 
 for i in groups:
     if i.name != "scratchpad":
-        keys.append(
-            Key(
-                [mod, "shift"],
-                i.name,
-                lazy.function(go_to_group_and_move_window(i.name)),
-            )
-        )
+        keys.append(Key([mod, "shift"], i.name, lazy.function(go_to_group_and_move_window(i.name))))
+
+# Toggle screen for group
+def toggle_screen():
+    def _inner(qtile):
+        found_group = next((d for d in group_screens if d.get("group") == qtile.current_group.name), None)
+        if found_group is not None:
+            if found_group["screen"] == 1:
+                found_group["screen"] = 0 
+            else:
+                found_group["screen"] = 1
+            qtile.current_group.toscreen(toggle=True)
+    return _inner
+
+keys.append(Key([mod], "b", lazy.function(toggle_screen()), desc="Toggle screen for active group"))
 
 ## Layouts ------------------------------
 var_border_width = 3
