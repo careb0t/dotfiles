@@ -5,6 +5,10 @@
     { ... }:
     {
       templates = {
+        gen = {
+          path = ./gen-template;
+          description = "General development environment";
+        };
         deno = {
           path = ./deno-template;
           description = "Deno development environment";
