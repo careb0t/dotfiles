@@ -97,6 +97,7 @@
         pkgs.piper
         pkgs.mangohud
         pkgs.umu-launcher
+        pkgs.feh
       ];
   };
 
