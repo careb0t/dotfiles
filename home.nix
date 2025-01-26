@@ -348,20 +348,20 @@
         telescope_borders = true;
       };
     };
-    highlightOverride = {
-      NeoTreeGitConflict = {
-        fg = "#DD9998";
-        bg = null;
-        bold = true;
-        italic = true;
-      };
-      NeoTreeGitUntracked = {
-        fg = "#9F6666";
-        bg = null;
-        bold = false;
-        italic = true;
-      };
-    };
+    #highlightOverride = {
+    #  NeoTreeGitConflict = {
+    #    fg = "#DD9998";
+    #    bg = null;
+    #    bold = true;
+    #    italic = true;
+    #  };
+    #  NeoTreeGitUntracked = {
+    #    fg = "#9F6666";
+    #    bg = null;
+    #    bold = false;
+    #    italic = true;
+    #  };
+    #};
     opts = {
       number = true;
       relativenumber = true;
@@ -381,21 +381,21 @@
       maplocalleader = "\\";
     };
     keymaps = [
-      {
-        mode = "n";
-        key = "<leader>ft";
-        action = ":Neotree filesystem reveal toggle<CR>";
-        options = {
-          silent = true;
-          desc = "toggle neotree";
-        };
-      }
+      #{
+      #  mode = "n";
+      #  key = "<leader>ft";
+      #  action = ":Neotree filesystem reveal toggle<CR>";
+      #  options = {
+      #    silent = true;
+      #    desc = "toggle neotree";
+      #  };
+      #}
       {
         mode = [
           "n"
           "v"
         ];
-        key = "<leader>gf";
+        key = "<leader>lf";
         action = {
           __raw = ''
             function()
@@ -414,7 +414,7 @@
       }
       {
         mode = [ "n" ];
-        key = "<leader>gl";
+        key = "<leader>ll";
         action = {
           __raw = ''
             function()
@@ -515,7 +515,7 @@
       }
       {
         mode = [ "n" ];
-        key = "K";
+        key = "<leader>lh";
         action = {
           __raw = ''
             vim.lsp.buf.hover
@@ -528,7 +528,7 @@
       }
       {
         mode = [ "n" ];
-        key = "<leader>gd";
+        key = "<leader>ld";
         action = {
           __raw = ''
             vim.lsp.buf.definition
@@ -541,7 +541,7 @@
       }
       {
         mode = [ "n" ];
-        key = "<leader>gr";
+        key = "<leader>lr";
         action = {
           __raw = ''
             vim.lsp.buf.references
@@ -619,11 +619,38 @@
       }
       {
         mode = [ "n" ];
-        key = "<leader>u";
+        key = "<leader>fu";
         action = "<cmd>Telescope undo<cr>";
         options = {
           silent = false;
           desc = "telescope - undo history";
+        };
+      }
+      {
+        mode = [ "n" ];
+        key = "<leader>fn";
+        action = "<cmd>Telescope notify<cr>";
+        options = {
+          silent = false;
+          desc = "telescope - notify";
+        };
+      }
+      {
+        mode = [ "n" ];
+        key = "<leader>fm";
+        action = "<cmd>Teescope manix<cr>";
+        options = {
+          silent = false;
+          desc = "telescope - Nix";
+        };
+      }
+      {
+        mode = [ "n" ];
+        key = "<leader>fb";
+        action = "<cmd>Telescope file_browser<cr>";
+        options = {
+          silent = false;
+          desc = "telescope - file broswer";
         };
       }
     ];
@@ -760,43 +787,103 @@
       neoscroll = {
         enable = true;
       };
-      cmp = {
+      smear-cursor = {
         enable = true;
-        autoEnableSources = true;
-        settings.sources = [
-          { name = "nvim_lsp"; }
-          { name = "path"; }
-          { name = "buffer"; }
-          { name = "luasnip"; }
-        ];
+      };
+      sleuth = {
+        enable = true;
+      };
+      hardtime = {
+        enable = true;
         settings = {
-          mapping = {
-            __raw = ''
-              cmp.mapping.preset.insert({
-                  ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                  ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                  ['<C-Space>'] = cmp.mapping.complete(),
-                  ['<C-e>'] = cmp.mapping.abort(),
-                  ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                  ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'}),
-                  ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'}),
-              })
-            '';
-          };
-          snippet = {
-            expand = "function(args) require('luasnip').lsp_expand(args.body) end";
-          };
-          window = {
-            #                         __raw = ''
-            #                             completion = cmp.config.window.bordered(),
-            #                             documentation = cmp.config.window.bordered(),
-            #                         '';
+          disabled_keys = {
+            "<Down>" = [
+              ""
+            ];
+            "<Left>" = [
+              ""
+            ];
+            "<Right>" = [
+              ""
+            ];
+            "<Up>" = [
+              ""
+            ];
           };
         };
       };
-      cmp_luasnip = {
+      neocord = {
         enable = true;
       };
+      nvim-lightbulb = {
+        enable = true;
+      };
+      todo-comments = {
+        enable = true;
+      };
+      notify = {
+        enable = true;
+        stages = "slide";
+      };
+      blink-cmp = {
+        enable = true;
+        settings = {
+          appearance = {
+            use_nvim_cmp_as_default = false;
+          };
+          completion = {
+            documentation = {
+              auto_show = true;
+            };
+          };
+          keymap = {
+            preset = "default";
+          };
+          signature = {
+            enabled = true;
+          };
+        };
+      };
+      #cmp = {
+      #  enable = true;
+      #  autoEnableSources = true;
+      #  settings.sources = [
+      #    { name = "nvim_lsp"; }
+      #    { name = "path"; }
+      #    { name = "buffer"; }
+      #    { name = "luasnip"; }
+      #  ];
+      #  settings = {
+      #    mapping = {
+      #      __raw = ''
+      #        cmp.mapping.preset.insert({
+      #            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      #            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      #            ['<C-Space>'] = cmp.mapping.complete(),
+      #            ['<C-e>'] = cmp.mapping.abort(),
+      #            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      #            ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'}),
+      #            ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'}),
+      #        })
+      #      '';
+      #    };
+      #    snippet = {
+      #      expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+      #    };
+      #    window = {
+      #      #                         __raw = ''
+      #      #                             completion = cmp.config.window.bordered(),
+      #      #                             documentation = cmp.config.window.bordered(),
+      #      #                         '';
+      #    };
+      #  };
+      #};
+      #cmp-cmdline = {
+      #	enable = true;
+      #};
+      #cmp_luasnip = {
+      #  enable = true;
+      #};
       lspkind = {
         enable = true;
         cmp = {
@@ -1035,35 +1122,35 @@
           winbar = { };
         };
       };
-      neo-tree = {
-        enable = true;
-        closeIfLastWindow = true;
-        popupBorderStyle = "single";
-        window.position = "float";
-        window.popup.position = "50%";
-        filesystem = {
-          filteredItems = {
-            hideGitignored = true;
-            hideDotfiles = false;
-            hideByName = [
-              ".github"
-              ".gitignore"
-              "package-lock.json"
-            ];
-            neverShow = [
-              ".git"
-            ];
-          };
-        };
-        eventHandlers = {
-          file_opened = ''
-              				function(file_path)
-                				--auto close
-                				require("neo-tree").close_all()
-              				end
-            					'';
-        };
-      };
+      #neo-tree = {
+      #  enable = true;
+      #  closeIfLastWindow = true;
+      #  popupBorderStyle = "single";
+      #  window.position = "float";
+      #  window.popup.position = "50%";
+      #  filesystem = {
+      #    filteredItems = {
+      #      hideGitignored = true;
+      #      hideDotfiles = false;
+      #      hideByName = [
+      #        ".github"
+      #        ".gitignore"
+      #        "package-lock.json"
+      #      ];
+      #      neverShow = [
+      #        ".git"
+      #      ];
+      #    };
+      #  };
+      #  eventHandlers = {
+      #    file_opened = ''
+      #        				function(file_path)
+      #          				--auto close
+      #          				require("neo-tree").close_all()
+      #        				end
+      #      					'';
+      #  };
+      #};
       nvim-surround = {
         enable = true;
       };
@@ -1074,6 +1161,8 @@
           undo = {
             enable = true;
           };
+          file-browser.enable = true;
+          manix.enable = true;
         };
       };
       treesitter = {
