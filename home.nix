@@ -98,6 +98,8 @@
         pkgs.mangohud
         pkgs.umu-launcher
         pkgs.feh
+        pkgs.obs-studio
+        pkgs.vlc
       ];
   };
 
@@ -638,7 +640,7 @@
       {
         mode = [ "n" ];
         key = "<leader>fm";
-        action = "<cmd>Teescope manix<cr>";
+        action = "<cmd>Telescope manix<cr>";
         options = {
           silent = false;
           desc = "telescope - Nix";
@@ -732,40 +734,40 @@
           "StatusLine"
           "StatusLineNC"
           "NormalFloat"
-          "NeoTreeCursorLine"
-          "NeoTreeDimText"
-          "NeoTreeDirectoryIcon"
-          "NeoTreeDirectoryName"
-          "NeoTreeDotfile"
-          "NeoTreeFileIcon"
-          "NeoTreeFileName"
-          "NeoTreeFileNameOpene"
-          "NeoTreeFilterTerm"
-          "NeoTreeTitleBar"
-          "NeoTreeGitAdded"
-          "NeoTreeGitConflict"
-          "NeoTreeGitDeleted"
-          "NeoTreeGitIgnored"
-          "NeoTreeGitModified"
-          "NeoTreeGitUnstaged"
-          "NeoTreeGitUntracked"
-          "NeoTreeGitStaged"
-          "NeoTreeHiddenByName"
-          "NeoTreeIndentMarker"
-          "NeoTreeExpander"
-          "NeoTreeNormal"
-          "NeoTreeNormalNC"
-          "NeoTreeSignColumn"
-          "NeoTreeStatusLine"
-          "NeoTreeStatusLineNC"
-          "NeoTreeVertSplit"
-          "NeoTreeWinSeparator"
-          "NeoTreeEndOfBuffer"
-          "NeoTreeRootName"
-          "NeoTreeSymbolicLinkTarget"
-          "NeoTreeTitleBar"
-          "NeoTreeWindowsHidden"
-          "NeotreeCursorLine"
+          #"NeoTreeCursorLine"
+          #"NeoTreeDimText"
+          #"NeoTreeDirectoryIcon"
+          #"NeoTreeDirectoryName"
+          #"NeoTreeDotfile"
+          #"NeoTreeFileIcon"
+          #"NeoTreeFileName"
+          #"NeoTreeFileNameOpene"
+          #"NeoTreeFilterTerm"
+          #"NeoTreeTitleBar"
+          #"NeoTreeGitAdded"
+          #"NeoTreeGitConflict"
+          #"NeoTreeGitDeleted"
+          #"NeoTreeGitIgnored"
+          #"NeoTreeGitModified"
+          #"NeoTreeGitUnstaged"
+          #"NeoTreeGitUntracked"
+          #"NeoTreeGitStaged"
+          #"NeoTreeHiddenByName"
+          #"NeoTreeIndentMarker"
+          #"NeoTreeExpander"
+          #"NeoTreeNormal"
+          #"NeoTreeNormalNC"
+          #"NeoTreeSignColumn"
+          #"NeoTreeStatusLine"
+          #"NeoTreeStatusLineNC"
+          #"NeoTreeVertSplit"
+          #"NeoTreeWinSeparator"
+          #"NeoTreeEndOfBuffer"
+          #"NeoTreeRootName"
+          #"NeoTreeSymbolicLinkTarget"
+          #"NeoTreeTitleBar"
+          #"NeoTreeWindowsHidden"
+          #"NeotreeCursorLine"
           "BufferLineTabClose"
           "BufferLineBufferSelected"
           "BufferLineFill"
@@ -825,33 +827,33 @@
         enable = true;
         stages = "slide";
       };
-      blink-cmp = {
-        enable = true;
-        settings = {
-          appearance = {
-            use_nvim_cmp_as_default = false;
-          };
-          completion = {
-            documentation = {
-              auto_show = true;
-            };
-          };
-          keymap = {
-            preset = "default";
-          };
-          signature = {
-            enabled = true;
-          };
-        };
-      };
+      #blink-cmp = {
+      #  enable = true;
+      #  settings = {
+      #    appearance = {
+      #      use_nvim_cmp_as_default = false;
+      #    };
+      #    completion = {
+      #      documentation = {
+      #        auto_show = true;
+      #      };
+      #    };
+      #    keymap = {
+      #      preset = "default";
+      #    };
+      #    signature = {
+      #      enabled = true;
+      #    };
+      #  };
+      #};
       #cmp = {
       #  enable = true;
       #  autoEnableSources = true;
       #  settings.sources = [
       #    { name = "nvim_lsp"; }
+      #    { name = "luasnip"; }
       #    { name = "path"; }
       #    { name = "buffer"; }
-      #    { name = "luasnip"; }
       #  ];
       #  settings = {
       #    mapping = {
@@ -879,11 +881,45 @@
       #  };
       #};
       #cmp-cmdline = {
-      #	enable = true;
+      #  enable = true;
+      #  autoLoad = true;
+      #};
+      #cmp-cmdline-history = {
+      #  enable = true;
+      #  autoLoad = true;
       #};
       #cmp_luasnip = {
       #  enable = true;
       #};
+      blink-cmp = {
+        enable = true;
+        settings = {
+          appearance = {
+            use_nvim_cmp_as_default = false;
+          };
+          completion = {
+            documentation = {
+              auto_show = true;
+            };
+          };
+          keymap = {
+            preset = "super-tab";
+          };
+          signature = {
+            enabled = true;
+          };
+          sources = {
+            providers = {
+              buffer = {
+                score_offset = -7;
+              };
+            };
+          };
+        };
+      };
+      ts-autotag = {
+        enable = true;
+      };
       lspkind = {
         enable = true;
         cmp = {
@@ -1069,10 +1105,10 @@
             always_divide_middle = true;
             disabled_filetypes = {
               statusline = [
-                "neo-tree"
-                "neotree"
-                "Neotree"
-                "Neo-tree"
+                #"neo-tree"
+                #"neotree"
+                #"Neotree"
+                #"Neo-tree"
                 "alpha"
                 "toggleterm"
                 "Telescope"
@@ -1081,11 +1117,11 @@
               winbar = [ ];
             };
             ignore_focus = [
-              "neo-tree"
-              "neotree"
-              "Neotree"
-              "Neo-tree"
-              "toggleterm"
+              #"neo-tree"
+              #"neotree"
+              #"Neotree"
+              #"Neo-tree"
+              #"toggleterm"
             ];
             globalstatus = false;
             refresh = {
