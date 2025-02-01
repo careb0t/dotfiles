@@ -96,10 +96,11 @@
         pkgs.p7zip-rar
         pkgs.piper
         pkgs.mangohud
-        pkgs.umu-launcher
         pkgs.feh
         pkgs.obs-studio
         pkgs.vlc
+        pkgs.protonup-qt
+        pkgs.xdg-utils
       ];
   };
 
@@ -261,6 +262,8 @@
         addToQueueTop
         history
         volumePercentage
+        betterGenres
+        beautifulLyrics
       ];
       theme = spicePkgs.themes.sleek;
       colorScheme = "coral";
@@ -270,7 +273,7 @@
   xdg.configFile."Vencord/themes".source = ./Vencord/themes;
   programs.nixcord = {
     enable = true;
-    discord.vencord.unstable = true;
+    discord.vencord.unstable = false;
     config = {
       transparent = true;
       themeLinks = [ ];
@@ -556,7 +559,7 @@
       }
       {
         mode = [ "n" ];
-        key = "<leader>ca";
+        key = "<leader>la";
         action = {
           __raw = ''
             vim.lsp.buf.code_action
@@ -650,6 +653,21 @@
         mode = [ "n" ];
         key = "<leader>fb";
         action = "<cmd>Telescope file_browser<cr>";
+        options = {
+          silent = false;
+          desc = "telescope - file broswer";
+        };
+      }
+      {
+        mode = [ "i" ];
+        key = "<C-CR>";
+        action = {
+          __raw = ''
+            function()
+              require("in-and-out").in_and_out()
+            end
+          '';
+        };
         options = {
           silent = false;
           desc = "telescope - file broswer";
@@ -827,6 +845,73 @@
         enable = true;
         stages = "slide";
       };
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+        settings.sources = [
+          { name = "nvim_lsp"; }
+          { name = "luasnip"; }
+          { name = "path"; }
+          { name = "buffer"; }
+        ];
+        settings = {
+          mapping = {
+            __raw = ''
+              cmp.mapping.preset.insert({
+                  ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                  ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                  ['<C-Space>'] = cmp.mapping.complete(),
+                  ['<C-e>'] = cmp.mapping.abort(),
+                  ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                  ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'}),
+                  ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'}),
+              })
+            '';
+          };
+          snippet = {
+            expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+          };
+          window = {
+            #                         __raw = ''
+            #                             completion = cmp.config.window.bordered(),
+            #                             documentation = cmp.config.window.bordered(),
+            #                         '';
+          };
+        };
+      };
+      wilder = {
+        enable = true;
+        modes = [
+          "?"
+          "/"
+          ":"
+        ];
+        pipeline = [
+          ''
+            wilder.branch(
+              wilder.cmdline_pipeline({
+                language = 'python',
+                fuzzy = 1,
+              }),
+              wilder.python_search_pipeline({
+                pattern = wilder.python_fuzzy_pattern(),
+                sorter = wilder.python_difflib_sorter(),
+                engine = 're',
+              })
+            )
+          ''
+        ];
+        renderer = ''
+          wilder.popupmenu_renderer({
+            highlighter = wilder.basic_highlighter(),
+            left = {' ', wilder.popupmenu_devicons()},
+            right = {' ', wilder.popupmenu_scrollbar()},
+          })
+        '';
+      };
+      cmp_luasnip = {
+        enable = true;
+      };
       #blink-cmp = {
       #  enable = true;
       #  settings = {
@@ -839,84 +924,23 @@
       #      };
       #    };
       #    keymap = {
-      #      preset = "default";
+      #      preset = "super-tab";
       #    };
       #    signature = {
       #      enabled = true;
       #    };
-      #  };
-      #};
-      #cmp = {
-      #  enable = true;
-      #  autoEnableSources = true;
-      #  settings.sources = [
-      #    { name = "nvim_lsp"; }
-      #    { name = "luasnip"; }
-      #    { name = "path"; }
-      #    { name = "buffer"; }
-      #  ];
-      #  settings = {
-      #    mapping = {
-      #      __raw = ''
-      #        cmp.mapping.preset.insert({
-      #            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      #            ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      #            ['<C-Space>'] = cmp.mapping.complete(),
-      #            ['<C-e>'] = cmp.mapping.abort(),
-      #            ['<CR>'] = cmp.mapping.confirm({ select = true }),
-      #            ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'}),
-      #            ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'}),
-      #        })
-      #      '';
-      #    };
-      #    snippet = {
-      #      expand = "function(args) require('luasnip').lsp_expand(args.body) end";
-      #    };
-      #    window = {
-      #      #                         __raw = ''
-      #      #                             completion = cmp.config.window.bordered(),
-      #      #                             documentation = cmp.config.window.bordered(),
-      #      #                         '';
+      #    sources = {
+      #      providers = {
+      #        buffer = {
+      #          score_offset = -7;
+      #        };
+      #      };
       #    };
       #  };
       #};
-      #cmp-cmdline = {
-      #  enable = true;
-      #  autoLoad = true;
-      #};
-      #cmp-cmdline-history = {
-      #  enable = true;
-      #  autoLoad = true;
-      #};
-      #cmp_luasnip = {
+      #blink-compat = {
       #  enable = true;
       #};
-      blink-cmp = {
-        enable = true;
-        settings = {
-          appearance = {
-            use_nvim_cmp_as_default = false;
-          };
-          completion = {
-            documentation = {
-              auto_show = true;
-            };
-          };
-          keymap = {
-            preset = "super-tab";
-          };
-          signature = {
-            enabled = true;
-          };
-          sources = {
-            providers = {
-              buffer = {
-                score_offset = -7;
-              };
-            };
-          };
-        };
-      };
       ts-autotag = {
         enable = true;
       };
@@ -933,6 +957,60 @@
         extraOptions = {
           maxWidth = 50;
           ellipsisChar = "...";
+        };
+      };
+      avante = {
+        enable = true;
+        settings = {
+          openai = {
+            endpoint = "https://api.deepseek.com/v1";
+            model = "deepseek-chat";
+            timeout = 30000;
+            temperature = 0;
+            max_tokens = 4096;
+            api_key_name = "OPENAI_API_KEY";
+          };
+          diff = {
+            autojump = true;
+            debug = false;
+            list_opener = "copen";
+          };
+          highlights = {
+            diff = {
+              current = "DiffText";
+              incoming = "DiffAdd";
+            };
+          };
+          hints = {
+            enabled = true;
+          };
+          mappings = {
+            diff = {
+              both = "cb";
+              next = "]x";
+              none = "c0";
+              ours = "co";
+              prev = "[x";
+              theirs = "ct";
+            };
+          };
+          provider = "openai";
+          windows = {
+            sidebar_header = {
+              align = "center";
+              rounded = true;
+            };
+            width = 30;
+            wrap = true;
+          };
+        };
+      };
+      render-markdown = {
+        enable = true;
+        settings = {
+          file_types = [
+            "Avante"
+          ];
         };
       };
       conform-nvim = {
@@ -1093,7 +1171,6 @@
           eslint.enable = true;
           cssls.enable = true;
           nixd.enable = true;
-          nil_ls.enable = true;
         };
       };
       lualine = {
@@ -1112,6 +1189,7 @@
                 "alpha"
                 "toggleterm"
                 "Telescope"
+                "Avante"
               ];
               tabline = [ ];
               winbar = [ ];
@@ -1214,9 +1292,18 @@
       which-key = {
         enable = true;
       };
-
-      #nvim-ts-autotag
     };
+    extraPlugins = [
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "in-and-out";
+        src = pkgs.fetchFromGitHub {
+          owner = "ysmb-wtsg";
+          repo = "in-and-out.nvim";
+          rev = "ca02f04c0817e7712f0c9bde5016c36b80339413";
+          hash = "sha256-ggaq3NOenNkzp4A8gNXjyRbbbLLQXmEXPhWU5lCWSqo=";
+        };
+      })
+    ];
     extraPackages = with pkgs; [
       # linters
       eslint_d
