@@ -52,7 +52,7 @@
         pkgs.zoxide
         pkgs.eza
         pkgs.yazi
-        pkgs.btop
+        pkgs.btop-rocm
         pkgs.fastfetch
         pkgs.xcolor
         pkgs.killall
@@ -99,7 +99,7 @@
         pkgs.feh
         pkgs.obs-studio
         pkgs.vlc
-        pkgs.protonup-qt
+        pkgs.umu-launcher
         pkgs.xdg-utils
       ];
   };
@@ -297,6 +297,7 @@
         keepCurrentChannel.enable = true;
         messageClickActions.enable = true;
         messageLinkEmbeds.enable = true;
+        noBlockedMessages.enable = true;
         noF1.enable = true;
         noTypingAnimation.enable = true;
         noUnblockToJump.enable = true;
@@ -843,7 +844,9 @@
       };
       notify = {
         enable = true;
-        stages = "slide";
+        settings = {
+          stages = "slide";
+        };
       };
       cmp = {
         enable = true;
