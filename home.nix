@@ -73,7 +73,6 @@
         pkgs.stremio
         # pkgs.steam # Steam must me installed at system level and enabled
         pkgs.lutris
-        pkgs.gamescope
         pkgs.deluge
         pkgs.nerd-fonts.iosevka-term
         pkgs.nerd-fonts.terminess-ttf
