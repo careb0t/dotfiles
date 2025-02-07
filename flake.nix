@@ -31,7 +31,10 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+          rocmSupport = true;
+        };
       };
     in
     {

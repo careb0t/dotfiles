@@ -34,6 +34,7 @@
       [
         ad-strawberry-numix-icons # derivation for red icon pack
         pkgs.picom
+        pkgs.gcc-unwrapped
         pkgs.ffmpeg
         pkgs.vivaldi
         pkgs.vivaldi-ffmpeg-codecs
@@ -52,7 +53,7 @@
         pkgs.zoxide
         pkgs.eza
         pkgs.yazi
-        pkgs.btop-rocm
+        pkgs.btop
         pkgs.fastfetch
         pkgs.xcolor
         pkgs.killall
@@ -84,7 +85,6 @@
         pkgs.libsForQt5.qtstyleplugin-kvantum
         pkgs.gparted
         pkgs.catnip
-        # pkgs.deno # Use dev flake for deno and other runtimes
         pkgs.xorg.xkill
         pkgs.wine
         pkgs.unar
@@ -101,6 +101,7 @@
         pkgs.vlc
         pkgs.umu-launcher
         pkgs.xdg-utils
+        pkgs.castero
       ];
   };
 
@@ -273,7 +274,7 @@
   xdg.configFile."Vencord/themes".source = ./Vencord/themes;
   programs.nixcord = {
     enable = true;
-    discord.vencord.unstable = false;
+    discord.vencord.unstable = true;
     config = {
       transparent = true;
       themeLinks = [ ];
@@ -314,6 +315,17 @@
     };
   };
 
+  # unclutter configuration
+  services.unclutter = {
+    enable = true;
+    timeout = 2;
+    extraOptions = [
+      "noevent"
+      "grab"
+      "ignore-scrolling"
+    ];
+  };
+
   # Flameshot configuration
   services.flameshot = {
     enable = true;
@@ -324,6 +336,15 @@
         savePath = "/home/careb0t/Pictures/Screenshots";
         filenamePattern = "%B%e %Y at %I:%M";
       };
+    };
+  };
+
+  # ollama configuration
+  services.ollama = {
+    enable = true;
+    acceleration = "rocm";
+    environmentVariables = {
+      OLLAMA_MODELS = "/ssd/ollama/models";
     };
   };
 
@@ -964,14 +985,16 @@
       };
       avante = {
         enable = true;
+        package = pkgs.vimPlugins.avante-nvim;
         settings = {
-          openai = {
-            endpoint = "https://api.deepseek.com/v1";
-            model = "deepseek-chat";
-            timeout = 30000;
-            temperature = 0;
-            max_tokens = 4096;
-            api_key_name = "OPENAI_API_KEY";
+          provider = "deepseek";
+          vendors = {
+            deepseek = {
+              __inherited_from = "openai";
+              endpoint = "https://api.deepseek.com";
+              model = "deepseek-coder";
+              api_key_name = "sk-6e593e750b364459a91d3309031187ef";
+            };
           };
           diff = {
             autojump = true;
@@ -997,7 +1020,6 @@
               theirs = "ct";
             };
           };
-          provider = "openai";
           windows = {
             sidebar_header = {
               align = "center";
