@@ -32,7 +32,7 @@ from libqtile import hook
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser("~")
-    subprocess.Popen([home + "/dotfiles/qtile/autostart"])
+    subprocess.Popen([home + "/dotfiles/home-manager/kremlin/qtile/autostart"])
 
 
 # Dunst notifications
@@ -46,8 +46,8 @@ mod = "mod4"
 
 # Scripts/Apps Variables
 home = os.path.expanduser("~")
-volume = home + "/dotfiles/qtile/volume"
-rofi_launcher = home + "/dotfiles/rofi/rofi_launcher"
+volume = home + "/dotfiles/home-manager/kremlin/qtile/volume"
+rofi_launcher = home + "/dotfiles/home-manager/rofi/rofi_launcher"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -400,8 +400,8 @@ screens = [
                 widget.LaunchBar(
                     progs=[
                         (
-                            "/home/careb0t/dotfiles/qtile/nixos.png",
-                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi",
+                            "/home/careb0t/dotfiles/home-manager/kremlin/qtile/nixos.png",
+                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/home-manager/rofi/launcher.rasi",
                             "Rofi Launcher",
                         )
                     ],
@@ -441,8 +441,8 @@ screens = [
                 widget.LaunchBar(
                     progs=[
                         (
-                            "/home/careb0t/dotfiles/qtile/nixos.png",
-                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi",
+                            "/home/careb0t/dotfiles/home-manager/kremline/qtile/nixos.png",
+                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/home-manager/rofi/launcher.rasi",
                             "Rofi Launcher",
                         )
                     ],

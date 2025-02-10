@@ -47,7 +47,7 @@ mod = "mod4"
 # Scripts/Apps Variables
 home = os.path.expanduser("~")
 volume = home + "/dotfiles/home-manager/lubyanka/qtile/volume"
-rofi_launcher = home + "/dotfiles/home-manager/lubyanka/rofi/rofi_launcher"
+rofi_launcher = home + "/dotfiles/home-manager/rofi/rofi_launcher"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -401,7 +401,7 @@ screens = [
                     progs=[
                         (
                             "/home/careb0t/dotfiles/home-manager/lubyanka/qtile/nixos.png",
-                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/home-manager/lubyanka/rofi/launcher.rasi",
+                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/home-manager/rofi/launcher.rasi",
                             "Rofi Launcher",
                         )
                     ],
@@ -441,8 +441,8 @@ screens = [
                 widget.LaunchBar(
                     progs=[
                         (
-                            "/home/careb0t/dotfiles/qtile/nixos.png",
-                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/rofi/launcher.rasi",
+                            "/home/careb0t/dotfiles/home-manager/lubyanka/qtile/nixos.png",
+                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/home-manager/rofi/launcher.rasi",
                             "Rofi Launcher",
                         )
                     ],

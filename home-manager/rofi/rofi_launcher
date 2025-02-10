@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Import Current Theme
-DIR="$HOME/dotfiles/rofi"
+DIR="$HOME/dotfiles/home-manager/rofi"
 RASI="$DIR/launcher.rasi"
 
 # Run

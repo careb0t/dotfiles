@@ -33,7 +33,7 @@ if [[ $(pidof dunst) ]]; then
 	pkill dunst
 fi
 
-dunst -config "$HOME/dotfiles/home-manager/lubyanka/qtile/dunstrc" &
+dunst -config "$HOME/dotfiles/home-manager/dunstrc" &
 
 # Lauch compositor
 # Terminate if picom is already running
