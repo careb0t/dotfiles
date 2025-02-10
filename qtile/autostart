@@ -52,3 +52,10 @@ if [[ ! $(pidof flameshot) ]]; then
 	pkill flameshot
 fi
 flameshot &
+
+# set touchpad to have natural scrolling on laptop
+if xinput --list | grep -q "Elan Touchpad"; then
+	xinput set-prop "Elan Touchpad" 330 1
+else
+	echo "Elan Touchpad not found" >&2
+fi
