@@ -152,7 +152,7 @@
   xdg.configFile."yazi".source = ../yazi;
 
   # Zellij configuration
-  xdg.configFile."zellij".source = ../zellij/;
+  xdg.configFile."zellij".source = ../zellij;
 
   # Zsh configuration
   programs.zsh = {
