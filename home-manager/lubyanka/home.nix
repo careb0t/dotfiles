@@ -51,7 +51,7 @@
     # Installed packages
     packages =
       let
-        ad-strawberry-numix-icons = pkgs.callPackage ../../icons.nix { };
+        ad-strawberry-numix-icons = pkgs.callPackage ../icons.nix { };
       in
       [
         ad-strawberry-numix-icons # derivation for red icon pack
