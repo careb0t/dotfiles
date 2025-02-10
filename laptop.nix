@@ -34,7 +34,6 @@
       [
         ad-strawberry-numix-icons # derivation for red icon pack
         pkgs.picom
-        pkgs.gcc-unwrapped
         pkgs.ffmpeg
         pkgs.vivaldi
         pkgs.vivaldi-ffmpeg-codecs
@@ -67,7 +66,6 @@
         pkgs.zellij
         pkgs.flameshot
         pkgs.xfce.thunar
-        pkgs.kate
         pkgs.vscode
         pkgs.xwallpaper
         pkgs.stremio
@@ -88,13 +86,10 @@
         pkgs.xorg.xkill
         pkgs.wine
         pkgs.unar
-        pkgs.path-of-building
         pkgs.xdg-desktop-portal
         pkgs.lazygit
-        pkgs.xivlauncher
         pkgs.exiftool
         pkgs.p7zip-rar
-        pkgs.piper
         pkgs.mangohud
         pkgs.feh
         pkgs.obs-studio
@@ -143,9 +138,9 @@
       ls = "eza -a --icons";
       ll = "eza -l --icons";
       nix-rebuild = "sudo nixos-rebuild switch";
-      hm-rebuild = "cd /home/careb0t/dotfiles && make";
-      hm-update = "cd /home/careb0t/dotfiles && nix flake update && make";
-      hm-clean = "cd /home/careb0t/dotfiles && make clean";
+      hm-rebuild = "cd /home/careb0t/dotfiles && home-manager switch --flake .#laptop";
+      hm-update = "cd /home/careb0t/dotfiles && nix flake update && home-manager switch --flake .#laptop";
+      hm-clean = "cd /home/careb0t/dotfiles && nix-collect-garbage -d";
     };
     initExtra = ''
                                     pushdots() {
@@ -342,10 +337,6 @@
   # ollama configuration
   services.ollama = {
     enable = true;
-    acceleration = "rocm";
-    environmentVariables = {
-      OLLAMA_MODELS = "/ssd/ollama/models";
-    };
   };
 
   # temporary fix for 'Unit tray.target not found' error on hm-rebuild

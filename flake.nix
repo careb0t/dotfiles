@@ -44,6 +44,11 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home.nix ];
         };
+        laptop = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./laptop.nix ];
+        };
       };
     };
 }
