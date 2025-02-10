@@ -287,6 +287,7 @@
         };
         biggerStreamPreview.enable = true;
         clearURLs.enable = true;
+        experiments.enable = true;
         fakeNitro.enable = true;
         favoriteEmojiFirst.enable = true;
         favoriteGifSearch.enable = true;
