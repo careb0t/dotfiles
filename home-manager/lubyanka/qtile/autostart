@@ -26,14 +26,14 @@ xsetroot -cursor_name left_ptr
 xrandr --output DP-2 --mode 1920x1080 --rate 144 --left-of HDMI-1 --primary --preferred --output HDMI-1 --mode 2560x1440 --rate 59.95
 
 # Restore wallpaper
-xwallpaper --output all --zoom $HOME/dotfiles/qtile/wallpaperdark.png
+xwallpaper --output all --zoom "$HOME/dotfiles/home-manager/lubyanka/qtile/wallpaperdark.png"
 
 # Launch dunst daemon
 if [[ $(pidof dunst) ]]; then
 	pkill dunst
 fi
 
-dunst -config $HOME/dotfiles/qtile/dunstrc &
+dunst -config "$HOME/dotfiles/home-manager/lubyanka/qtile/dunstrc" &
 
 # Lauch compositor
 # Terminate if picom is already running
@@ -42,7 +42,7 @@ killall -q picom
 # Wait until the processes have been shut down
 while pgrep -x picom >/dev/null; do sleep 1; done
 
-picom --config $HOME/dotfiles/qtile/picom.conf &
+picom --config "$HOME/dotfiles/home-manager/lubyanka/qtile/picom.conf" &
 
 # Start CopyQ
 copyq &
@@ -52,10 +52,3 @@ if [[ ! $(pidof flameshot) ]]; then
 	pkill flameshot
 fi
 flameshot &
-
-# set touchpad to have natural scrolling on laptop
-if xinput --list | grep -q "Elan Touchpad"; then
-	xinput set-prop "Elan Touchpad" 330 1
-else
-	echo "Elan Touchpad not found" >&2
-fi
