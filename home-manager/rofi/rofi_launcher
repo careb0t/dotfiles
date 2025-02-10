@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Import Current Theme
+DIR="$HOME/dotfiles/rofi"
+RASI="$DIR/launcher.rasi"
+
+# Run
+rofi \
+	-show drun \
+	-kb-cancel Alt-F1 \
+	-theme "${RASI}" \
+	-font "Terminess Nerd Font 16"
