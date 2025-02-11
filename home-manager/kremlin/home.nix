@@ -40,6 +40,7 @@
   home = {
     username = "careb0t";
     homeDirectory = "/home/careb0t";
+
     # Environment variables
     sessionVariables = {
       TERM = "wezterm";
@@ -115,7 +116,6 @@
         pkgs.vlc
         pkgs.umu-launcher
         pkgs.xdg-utils
-        pkgs.castero
       ];
   };
 
@@ -361,7 +361,7 @@
   # temporary fix for 'Unit tray.target not found' error on hm-rebuild
   systemd.user.targets.tray = {
     Unit = {
-      Description = "home-manager system tray";
+      Description = "Home Manager System Tray";
       Requires = [ "graphical-session-pre.target" ];
     };
   };
@@ -1359,5 +1359,5 @@
   systemd.user.startServices = "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "23.05";
+  home.stateVersion = "24.05";
 }
