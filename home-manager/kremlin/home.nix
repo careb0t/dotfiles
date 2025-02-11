@@ -116,6 +116,7 @@
         pkgs.vlc
         pkgs.umu-launcher
         pkgs.xdg-utils
+        pkgs.castero
       ];
   };
 
@@ -156,7 +157,7 @@
     shellAliases = {
       ls = "eza -a --icons";
       ll = "eza -l --icons";
-      nix-rebuild = "sudo nixos-rebuild switch";
+      nix-rebuild = "sudo nixos-rebuild switch --flake .#kremlin";
       hm-rebuild = "home-manager switch --flake .#careb0t@kremlin";
       hm-update = "nix flake update && home-manager switch --flake .#careb0t@kremlin";
       hm-clean = "nix-collect-garbage -d";
