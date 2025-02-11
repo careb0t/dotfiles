@@ -163,7 +163,7 @@
     shellAliases = {
       ls = "eza -a --icons";
       ll = "eza -l --icons";
-      nix-rebuild = "sudo nixos-rebuild switch";
+      nix-rebuild = "sudo nixos-rebuild switch --flake .#lubyanka";
       hm-rebuild = "home-manager switch --flake .#careb0t@lubyanka";
       hm-update = "nix flake update && home-manager switch --flake .#careb0t@lubyanka";
       hm-clean = "nix-garbage-collect -d";
@@ -1371,5 +1371,5 @@
   systemd.user.startServices = "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "23.05";
+  home.stateVersion = "24.05";
 }
