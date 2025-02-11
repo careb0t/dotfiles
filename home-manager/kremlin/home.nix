@@ -116,7 +116,6 @@
         pkgs.vlc
         pkgs.umu-launcher
         pkgs.xdg-utils
-        pkgs.castero
       ];
   };
 
@@ -302,6 +301,7 @@
         };
         biggerStreamPreview.enable = true;
         clearURLs.enable = true;
+        experiments.enable = true;
         fakeNitro.enable = true;
         favoriteEmojiFirst.enable = true;
         favoriteGifSearch.enable = true;
@@ -1360,5 +1360,5 @@
   systemd.user.startServices = "sd-switch";
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "24.05";
+  home.stateVersion = "24.11";
 }
