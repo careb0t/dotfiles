@@ -393,7 +393,6 @@ group_rules = [
 
 ## Screens ------------------------------
 screens = [
-    # HDMI monitor
     Screen(
         top=bar.Bar(
             [
@@ -419,57 +418,16 @@ screens = [
                 widget.WindowName(foreground="DD9998", fontsize=24),
                 widget.Spacer(),
                 extraWidget.StatusNotifier(),
-                widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
-                widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="#DD9998"),
-                widget.QuickExit(foreground="#DD9998", default_text="[ выключение ]"),
+                extraWidget.IWD(padding_y=16, show_text=False, show_image=True, interface="wlp61s0", active_colour="DD9998", inactive_colour="000000", scanning_colour="5F8787", disconnected_colour="A06666", foreground="DD9998"),
+                extraWidget.UPowerWidget(border_colour="DD9998", border_charge_colour="DD9998", border_critical_colour="A06666", fill_normal="DD9998", fill_critical="A0666", fill_low="A06666", foreground="DD9998"),
+                widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="DD9998"),
+                widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="DD9998"),
+                widget.QuickExit(foreground="DD9998", default_text="[ выключение ]"),
                 extraWidget.CurrentLayoutIcon(
-                    use_mask=True, foreground="#DD9998", scale=0.75
+                    use_mask=True, foreground="DD9998", scale=0.75
                 ),
             ],
             48,
-            background="#00000000",
-            margin=[0, 0, 0, 0],
-            opacity=1,
-            border_width=[0, 0, 0, 0],
-            border_color=["000000", "000000", "000000", "000000"],
-        ),
-    ),
-    # DPI monitor
-    Screen(
-        top=bar.Bar(
-            [
-                widget.LaunchBar(
-                    progs=[
-                        (
-                            "/home/careb0t/dotfiles/home-manager/kremline/qtile/nixos.png",
-                            "rofi -show drun -kb-cancel Alt-F1 -theme /home/careb0t/dotfiles/home-manager/rofi/launcher.rasi",
-                            "Rofi Launcher",
-                        )
-                    ],
-                    padding_y=-1,
-                    padding=20,
-                    icon_size=25,
-                ),
-                extraWidget.GroupBox2(
-                    visible_groups=["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-                    rules=group_rules,
-                    fontsize=22,
-                    padding_x=10,
-                ),
-                widget.Spacer(),
-                widget.WindowName(
-                    foreground="DD9998",
-                ),
-                widget.Spacer(),
-                extraWidget.StatusNotifier(),
-                widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
-                widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="#DD9998"),
-                widget.QuickExit(foreground="#DD9998", default_text="[ выключение ]"),
-                extraWidget.CurrentLayoutIcon(
-                    use_mask=True, foreground="#DD9998", scale=0.75
-                ),
-            ],
-            34,
             background="#00000000",
             margin=[0, 0, 0, 0],
             opacity=1,

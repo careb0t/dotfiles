@@ -116,6 +116,8 @@
         pkgs.vlc
         pkgs.umu-launcher
         pkgs.xdg-utils
+        pkgs.impala
+        pkgs.iwgtk
       ];
   };
 
