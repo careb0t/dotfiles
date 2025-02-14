@@ -72,16 +72,21 @@
   networking.networkmanager = {
     enable = true;
     wifi.backend = "iwd";
+    wifi.scanRandMacAddress = false;
   };
   networking.wireless.iwd = {
     enable = true;
     settings = {
+      IPv6 = {
+        Enabled = true;
+      };
       Settings = {
-        EnableNetworkConfiguration = true;
         AutoConnect = true;
       };
     };
   };
+
+  services.upower.enable = true;
 
   users.users = {
     careb0t = {
