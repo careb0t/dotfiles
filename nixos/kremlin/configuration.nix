@@ -122,7 +122,6 @@
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.enableHidpi = true; # disable if scaling is an issue
-  services.desktopManager.plasma6.enable = true;
   services.xserver.windowManager.qtile = {
     enable = true;
     extraPackages =
