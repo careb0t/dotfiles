@@ -417,6 +417,7 @@ screens = [
                 widget.Spacer(),
                 widget.WindowName(foreground="DD9998", fontsize=24),
                 widget.Spacer(),
+                extraWidget.Systray(),
                 extraWidget.StatusNotifier(),
                 extraWidget.IWD(padding_y=16, show_text=False, show_image=True, interface="wlan0", active_colour="DD9998", inactive_colour="000000", scanning_colour="5F8787", disconnected_colour="A06666", foreground="DD9998"),
                 extraWidget.UPowerWidget(border_colour="DD9998", border_charge_colour="DD9998", border_critical_colour="A06666", fill_normal="DD9998", fill_critical="A0666", fill_low="A06666", foreground="DD9998"),
