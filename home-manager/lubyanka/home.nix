@@ -123,6 +123,7 @@
         pkgs.vlc
         pkgs.umu-launcher
         pkgs.xdg-utils
+        pkgs.protonup-qt
       ];
   };
 
