@@ -114,7 +114,6 @@
         pkgs.feh
         pkgs.obs-studio
         pkgs.vlc
-        pkgs.umu-launcher
         pkgs.xdg-utils
         pkgs.iwgtk
       ];
