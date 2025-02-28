@@ -89,7 +89,6 @@
         pkgs.zellij
         pkgs.flameshot
         pkgs.xfce.thunar
-        pkgs.kate
         pkgs.vscode
         pkgs.xwallpaper
         pkgs.stremio
@@ -123,6 +122,7 @@
         pkgs.vlc
         pkgs.xdg-utils
         pkgs.protonup-qt
+        pkgs.gamescope
       ];
   };
 

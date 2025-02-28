@@ -418,7 +418,6 @@ screens = [
                 widget.Spacer(),
                 widget.WindowName(foreground="DD9998", fontsize=24),
                 widget.Spacer(),
-                extraWidget.Systray(),
                 extraWidget.StatusNotifier(),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
                 widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="#DD9998"),

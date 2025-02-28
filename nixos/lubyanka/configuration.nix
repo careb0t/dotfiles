@@ -195,6 +195,34 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Sunshine game streaming configuration
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    openFirewall = true;
+  };
+
+  # Firewall configuration (for Sunshine mostly)
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      47984
+      47989
+      47990
+      48010
+    ];
+    allowedUDPPortRanges = [
+      {
+        from = 47998;
+        to = 48000;
+      }
+      {
+        from = 8000;
+        to = 8010;
+      }
+    ];
+  };
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
