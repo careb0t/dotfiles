@@ -123,6 +123,7 @@
         pkgs.xdg-utils
         pkgs.protonup-qt
         pkgs.gamescope
+        pkgs.kdePackages.kasts
       ];
   };
 
