@@ -124,6 +124,7 @@
         pkgs.protonup-qt
         pkgs.gamescope
         pkgs.kdePackages.kasts
+        pkgs.gamemode
       ];
   };
 
@@ -167,7 +168,7 @@
       nix-rebuild = "sudo nixos-rebuild switch --flake .#lubyanka";
       hm-rebuild = "home-manager switch --flake .#careb0t@lubyanka";
       hm-update = "nix flake update && home-manager switch --flake .#careb0t@lubyanka";
-      hm-clean = "nix-garbage-collect -d";
+      hm-clean = "nix-collect-garbage -d";
     };
     initExtra = ''
                                     pushdots() {
@@ -185,7 +186,7 @@
                               			nix-dev() {
                                       nix flake init -t devflakes#$1
                               				if [ $? -ne 0 ]; then
-            														echo The following templates are available: 
+            														echo The following templates are available:
                   											for dir in /home/careb0t/dotfiles/home-manager/devflakes/*/; do
                           								echo $(basename $dir)
                       									done
