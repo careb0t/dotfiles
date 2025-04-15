@@ -116,6 +116,7 @@
         pkgs.vlc
         pkgs.xdg-utils
         pkgs.iwgtk
+        pkgs.gvfs
       ];
   };
 
@@ -174,18 +175,17 @@
                                         git push
                                     }
 
-                              			nix-dev() {
+                              	    nix-dev() {
                                       nix flake init -t devflakes#$1
-                              				if [ $? -ne 0 ]; then
-            														echo The following templates are available: 
-                  											for dir in /home/careb0t/dotfiles/home-manager/devflakes/*/; do
-                          								echo $(basename $dir)
-                      									done
-      																else
-      																	direnv allow
-                                			fi
-                              			}
-
+                              	      if [ $? -ne 0 ]; then
+            				echo The following templates are available:
+                  			for dir in /home/careb0t/dotfiles/home-manager/devflakes/*/; do
+                          		  echo $(basename $dir)
+                      			done
+      				      else
+      				        direnv allow
+                                      fi
+                              	    }
                                     eval "$(direnv hook zsh)"
     '';
     history.size = 10000;
