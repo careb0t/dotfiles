@@ -117,6 +117,7 @@
         pkgs.xdg-utils
         pkgs.iwgtk
         pkgs.gvfs
+        pkgs.gummy
       ];
   };
 
@@ -281,7 +282,7 @@
         beautifulLyrics
       ];
       theme = spicePkgs.themes.sleek;
-      colorScheme = "coral";
+      colorScheme = "Coral";
     };
 
   # Discord + Vencord configuration
