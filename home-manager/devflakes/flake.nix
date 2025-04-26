@@ -19,7 +19,7 @@
         };
         python-opencv = {
           path = ./python-opencv-template;
-          description = "Python development environment with OpenCV"
+          description = "Python development environment with OpenCV";
         };
         node = {
           path = ./node-template;
