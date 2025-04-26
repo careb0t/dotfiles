@@ -17,6 +17,10 @@
           path = ./python-template;
           description = "Python development environment";
         };
+        python-opencv = {
+          path = ./python-opencv-template;
+          description = "Python development environment with OpenCV"
+        };
         node = {
           path = ./node-template;
           description = "Node.js development environment";
