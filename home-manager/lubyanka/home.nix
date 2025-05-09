@@ -363,15 +363,6 @@
     };
   };
 
-  # ollama configuration
-  services.ollama = {
-    enable = true;
-    acceleration = "rocm";
-    environmentVariables = {
-      OLLAMA_MODELS = "/ssd/ollama/models";
-    };
-  };
-
   # temporary fix for 'Unit tray.target not found' error on hm-rebuild
   systemd.user.targets.tray = {
     Unit = {
@@ -399,20 +390,6 @@
         telescope_borders = true;
       };
     };
-    #highlightOverride = {
-    #  NeoTreeGitConflict = {
-    #    fg = "#DD9998";
-    #    bg = null;
-    #    bold = true;
-    #    italic = true;
-    #  };
-    #  NeoTreeGitUntracked = {
-    #    fg = "#9F6666";
-    #    bg = null;
-    #    bold = false;
-    #    italic = true;
-    #  };
-    #};
     opts = {
       number = true;
       relativenumber = true;
@@ -432,15 +409,6 @@
       maplocalleader = "\\";
     };
     keymaps = [
-      #{
-      #  mode = "n";
-      #  key = "<leader>ft";
-      #  action = ":Neotree filesystem reveal toggle<CR>";
-      #  options = {
-      #    silent = true;
-      #    desc = "toggle neotree";
-      #  };
-      #}
       {
         mode = [
           "n"
@@ -798,40 +766,6 @@
           "StatusLine"
           "StatusLineNC"
           "NormalFloat"
-          #"NeoTreeCursorLine"
-          #"NeoTreeDimText"
-          #"NeoTreeDirectoryIcon"
-          #"NeoTreeDirectoryName"
-          #"NeoTreeDotfile"
-          #"NeoTreeFileIcon"
-          #"NeoTreeFileName"
-          #"NeoTreeFileNameOpene"
-          #"NeoTreeFilterTerm"
-          #"NeoTreeTitleBar"
-          #"NeoTreeGitAdded"
-          #"NeoTreeGitConflict"
-          #"NeoTreeGitDeleted"
-          #"NeoTreeGitIgnored"
-          #"NeoTreeGitModified"
-          #"NeoTreeGitUnstaged"
-          #"NeoTreeGitUntracked"
-          #"NeoTreeGitStaged"
-          #"NeoTreeHiddenByName"
-          #"NeoTreeIndentMarker"
-          #"NeoTreeExpander"
-          #"NeoTreeNormal"
-          #"NeoTreeNormalNC"
-          #"NeoTreeSignColumn"
-          #"NeoTreeStatusLine"
-          #"NeoTreeStatusLineNC"
-          #"NeoTreeVertSplit"
-          #"NeoTreeWinSeparator"
-          #"NeoTreeEndOfBuffer"
-          #"NeoTreeRootName"
-          #"NeoTreeSymbolicLinkTarget"
-          #"NeoTreeTitleBar"
-          #"NeoTreeWindowsHidden"
-          #"NeotreeCursorLine"
           "BufferLineTabClose"
           "BufferLineBufferSelected"
           "BufferLineFill"
@@ -960,35 +894,6 @@
       cmp_luasnip = {
         enable = true;
       };
-      #blink-cmp = {
-      #  enable = true;
-      #  settings = {
-      #    appearance = {
-      #      use_nvim_cmp_as_default = false;
-      #    };
-      #    completion = {
-      #      documentation = {
-      #        auto_show = true;
-      #      };
-      #    };
-      #    keymap = {
-      #      preset = "super-tab";
-      #    };
-      #    signature = {
-      #      enabled = true;
-      #    };
-      #    sources = {
-      #      providers = {
-      #        buffer = {
-      #          score_offset = -7;
-      #        };
-      #      };
-      #    };
-      #  };
-      #};
-      #blink-compat = {
-      #  enable = true;
-      #};
       ts-autotag = {
         enable = true;
       };
@@ -1007,60 +912,60 @@
           ellipsisChar = "...";
         };
       };
-      avante = {
-        enable = true;
-        package = pkgs.vimPlugins.avante-nvim;
-        settings = {
-          provider = "ollama";
-          vendors = {
-            ollama = {
-              __inherited_from = "openai";
-              endpoint = "http://127.0.0.1:11434/v1";
-              model = "deepseek-coder-v2:16b";
-            };
-          };
-          diff = {
-            autojump = true;
-            debug = false;
-            list_opener = "copen";
-          };
-          highlights = {
-            diff = {
-              current = "DiffText";
-              incoming = "DiffAdd";
-            };
-          };
-          hints = {
-            enabled = true;
-          };
-          mappings = {
-            diff = {
-              both = "cb";
-              next = "]x";
-              none = "c0";
-              ours = "co";
-              prev = "[x";
-              theirs = "ct";
-            };
-          };
-          windows = {
-            sidebar_header = {
-              align = "center";
-              rounded = true;
-            };
-            width = 30;
-            wrap = true;
-          };
-        };
-      };
-      render-markdown = {
-        enable = true;
-        settings = {
-          file_types = [
-            "Avante"
-          ];
-        };
-      };
+      # avante = {
+      #   enable = true;
+      #   package = pkgs.vimPlugins.avante-nvim;
+      #   settings = {
+      #     provider = "ollama";
+      #     vendors = {
+      #       ollama = {
+      #         __inherited_from = "openai";
+      #         endpoint = "http://127.0.0.1:11434/v1";
+      #         model = "deepseek-coder-v2:16b";
+      #       };
+      #     };
+      #     diff = {
+      #       autojump = true;
+      #       debug = false;
+      #       list_opener = "copen";
+      #     };
+      #     highlights = {
+      #       diff = {
+      #         current = "DiffText";
+      #         incoming = "DiffAdd";
+      #       };
+      #     };
+      #     hints = {
+      #       enabled = true;
+      #     };
+      #     mappings = {
+      #       diff = {
+      #         both = "cb";
+      #         next = "]x";
+      #         none = "c0";
+      #         ours = "co";
+      #         prev = "[x";
+      #         theirs = "ct";
+      #       };
+      #     };
+      #     windows = {
+      #       sidebar_header = {
+      #         align = "center";
+      #         rounded = true;
+      #       };
+      #       width = 30;
+      #       wrap = true;
+      #     };
+      #   };
+      # };
+      # render-markdown = {
+      #   enable = true;
+      #   settings = {
+      #     file_types = [
+      #       "Avante"
+      #     ];
+      #   };
+      # };
       conform-nvim = {
         enable = true;
         luaConfig.pre = ''
