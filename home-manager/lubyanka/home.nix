@@ -290,7 +290,7 @@
         beautifulLyrics
       ];
       theme = spicePkgs.themes.sleek;
-      colorScheme = "coral";
+      colorScheme = "Coral";
     };
 
   # Discord + Vencord configuration
