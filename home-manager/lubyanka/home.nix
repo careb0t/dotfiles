@@ -759,7 +759,7 @@
       };
       yazi = {
         enable = true;
-        settings.yazi_floating_window_winblend = 100;
+        settings.yazi_floating_window_winblend = 50;
       };
       transparent = {
         enable = true;
