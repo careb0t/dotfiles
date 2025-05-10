@@ -170,7 +170,7 @@
       hm-update = "nix flake update && home-manager switch --flake .#careb0t@lubyanka";
       hm-clean = "nix-collect-garbage -d";
     };
-    initExtra = ''
+    initContent = ''
                                     pushdots() {
                                         cd /home/careb0t/dotfiles
                                         git add -A
