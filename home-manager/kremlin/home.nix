@@ -642,19 +642,6 @@
       }
       {
         mode = [ "n" ];
-        key = "<leader>fb";
-        action = {
-          __raw = ''
-            require("telescope.builtin").buffers
-          '';
-        };
-        options = {
-          silent = false;
-          desc = "telescope - find buffers";
-        };
-      }
-      {
-        mode = [ "n" ];
         key = "<leader>fh";
         action = {
           __raw = ''
@@ -696,10 +683,10 @@
       {
         mode = [ "n" ];
         key = "<leader>fb";
-        action = "<cmd>Telescope file_browser<cr>";
+        action = "<cmd>Yazi<cr>";
         options = {
           silent = false;
-          desc = "telescope - file broswer";
+          desc = "Yazi - file broswer";
         };
       }
       {
@@ -714,7 +701,7 @@
         };
         options = {
           silent = false;
-          desc = "telescope - file broswer";
+          desc = "Jump to outside of autocompleted brackets";
         };
       }
     ];
