@@ -241,7 +241,7 @@
     enable = true;
     enableZshIntegration = true;
     plugins = {
-      ouch = pkgs.yaziPlugins.ouch;
+      #ouch = pkgs.yaziPlugins.ouch;
     };
   };
 
