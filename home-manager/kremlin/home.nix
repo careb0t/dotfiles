@@ -140,7 +140,7 @@
   programs.wezterm.enable = true;
 
   # Starship configuration
-  xdg.configFile."wezterm/starship.toml".source = ../wezterm/starship.toml;
+  xdg.configFile."starship.toml".source = ../wezterm/starship.toml;
 
   # Yazi configuration
   xdg.configFile."yazi/yazi.toml".source = ../yazi/yazi.toml;
