@@ -1,5 +1,4 @@
 {
-{
   description = "Python development environment";
 
   inputs = {
