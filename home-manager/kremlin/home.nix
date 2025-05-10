@@ -227,6 +227,15 @@
     nix-direnv.enable = true;
   };
 
+  # Yazi configuration
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+    plugins = {
+      ouch = pkgs.yaziPlugins.ouch;
+    };
+  };
+
   # GUI theme configuration
   home.pointerCursor = {
     package = pkgs.numix-cursor-theme;
@@ -779,6 +788,10 @@
           };
           theme = "hyper";
         };
+      };
+      yazi = {
+        enable = true;
+        settings.yazi_floating_window_winblend = 100;
       };
       transparent = {
         enable = true;

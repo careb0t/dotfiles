@@ -11,7 +11,7 @@
   # You can import other home-manager modules here
   imports = [
     inputs.spicetify-nix.homeManagerModules.default
-    inputs.nixcord.homeManagerModules.nixcord
+    inputs.nixcord.homeManager.nixcord
     inputs.nixvim.homeManagerModules.nixvim
   ];
 
@@ -233,6 +233,15 @@
     silent = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;
+  };
+
+  # Yazi configuration
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+    plugins = {
+      ouch = pkgs.yaziPlugins.ouch;
+    };
   };
 
   # GUI theme configuration
@@ -759,6 +768,10 @@
           };
           theme = "hyper";
         };
+      };
+      yazi = {
+        enable = true;
+        settings.yazi_floating_window_winblend = 100;
       };
       transparent = {
         enable = true;
