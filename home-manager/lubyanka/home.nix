@@ -11,7 +11,7 @@
   # You can import other home-manager modules here
   imports = [
     inputs.spicetify-nix.homeManagerModules.default
-    inputs.nixcord.homeManager.nixcord
+    inputs.nixcord.homeModules.nixcord
     inputs.nixvim.homeManagerModules.nixvim
   ];
 
