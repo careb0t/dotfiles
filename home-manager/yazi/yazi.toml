@@ -1,8 +1,13 @@
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [manager]
-ratio = [1, 2, 3]
+ratio = [1, 4, 3]
 show_hidden = true
+mouse_events = [ "click", "scroll" ]
+[open]
+rules = [
+	{ name = "**.zip", use = [ "extract", "reveal" ] },
+]
 [plugin]
 prepend_previewers = [
 	# Archive previewer
