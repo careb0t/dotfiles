@@ -23,10 +23,9 @@
             nodejs_latest
           ];
           shellHook = ''
-            																		echo ""
-                        												clear
-                                    						echo "Welcome to your declarative Node.js development environment!"
-                                                node --version
+            PATH="$(realpath node_modules/.bin):$PATH"
+            echo "Welcome to your declarative Node.js development environment!"
+            node --version
           '';
         };
     };
