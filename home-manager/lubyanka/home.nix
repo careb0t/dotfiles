@@ -74,7 +74,7 @@
         pkgs.copyq
         pkgs.zoxide
         pkgs.eza
-        pkgs.yazi
+        #pkgs.yazi
         pkgs.ouch
         pkgs.btop
         pkgs.fastfetch
