@@ -33,6 +33,7 @@
           ];
 
           shellHook = ''
+            python -m venv env
             echo "Welcome to your declarative Python development environment!"
             python --version
           '';
