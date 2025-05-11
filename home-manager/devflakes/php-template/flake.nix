@@ -23,10 +23,8 @@
             php
           ];
           shellHook = ''
-            																		echo ""
-                        												clear
-                                    						echo "Welcome to your declarative PHP development environment!"
-                                                php -v
+            echo "Welcome to your declarative PHP development environment!"
+            php -v
           '';
         };
     };
