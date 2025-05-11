@@ -72,6 +72,7 @@
         pkgs.zoxide
         pkgs.eza
         pkgs.yazi
+        pkgs.ouch
         pkgs.btop
         pkgs.fastfetch
         pkgs.xcolor
