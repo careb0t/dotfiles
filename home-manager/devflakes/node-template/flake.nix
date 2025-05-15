@@ -21,6 +21,7 @@
         pkgs.mkShell {
           packages = with pkgs; [
             nodejs_latest
+            pnpm
           ];
           shellHook = ''
             PATH="$(realpath node_modules/.bin):$PATH"
