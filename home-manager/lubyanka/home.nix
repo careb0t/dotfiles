@@ -119,13 +119,14 @@
         pkgs.piper
         pkgs.mangohud
         pkgs.feh
-        pkgs.obs-studio
+        #pkgs.obs-studio
         pkgs.vlc
         pkgs.xdg-utils
         pkgs.protonup-qt
         pkgs.gamescope
         pkgs.kdePackages.kasts
         pkgs.gamemode
+        pkgs.screenkey
       ];
   };
 
@@ -247,6 +248,14 @@
     plugins = {
       ouch = pkgs.yaziPlugins.ouch;
     };
+  };
+
+  # OBS settings
+  programs.obs-studio = {
+    enable = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      #plugins go here
+    ];
   };
 
   # GUI theme configuration
