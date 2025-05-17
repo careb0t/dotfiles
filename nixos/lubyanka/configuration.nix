@@ -69,6 +69,12 @@
   # Linux kernel version
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Auto optimize the Nix store to save storage space
+  nix.settings = {
+    auto-optimise-store = true;
+  };
+
+  # Network configuration
   networking.hostName = "lubyanka";
   networking.networkmanager.enable = true;
 

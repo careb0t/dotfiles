@@ -68,6 +68,12 @@
   # Linux kernel version
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Auto optimize the Nix store to save storage space
+  nix.settings = {
+    auto-optimise-store = true;
+  };
+
+  # Networking configuration
   networking.hostName = "kremlin";
   networking.networkmanager = {
     enable = true;
