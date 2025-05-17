@@ -21,6 +21,7 @@
         pkgs.mkShell {
           packages = with pkgs; [
             php
+            phpPackages.composer
           ];
           shellHook = ''
             echo "Welcome to your declarative PHP development environment!"
