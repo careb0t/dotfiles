@@ -73,6 +73,8 @@
   nix.settings = {
     auto-optimise-store = true;
   };
+  # Run garbage collection whenever there is less than 10GB free on the NixOS drive
+  nix.gc.options = "--min-freed 10737418240";
 
   # Network configuration
   networking.hostName = "lubyanka";
