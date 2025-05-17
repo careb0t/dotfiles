@@ -167,7 +167,6 @@
       hm-rebuild = "home-manager switch --flake .#careb0t@kremlin";
       hm-update = "nix flake update && home-manager switch --flake .#careb0t@kremlin";
       hm-clean = "nix-collect-garbage -d";
-      gitdiff = "git diff origin/main";
     };
     initContent = ''
                                     pushdots() {
