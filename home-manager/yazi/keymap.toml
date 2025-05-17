@@ -1,12 +1,17 @@
 [[manager.prepend_keymap]]
 on   = [ "g", "g" ]
-run  = "cd /SSD/Games"
-desc = "Cd to /SSD/Games"
+run  = "cd /ssd/Games"
+desc = "Cd to /ssd/Games"
 
 [[manager.prepend_keymap]]
 on   = [ "g", "p" ]
 run  = "cd ~/Pictures"
 desc = "Cd to ~/Pictures"
+
+[[manager.prepend_keymap]]
+on   = [ "g", "v" ]
+run  = "cd ~/Videos"
+desc = "Cd to ~/Videos"
 
 [[manager.prepend_keymap]]
 on   = [ "g", "d" ]
