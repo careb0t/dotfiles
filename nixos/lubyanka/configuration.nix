@@ -49,13 +49,21 @@
       settings = {
         # Enable flakes and new 'nix' command
         experimental-features = "nix-command flakes";
+
+        # Enable automatic optimization of the Nix store to save storage space
+        auto-optimise-store = true;
+
         # Opinionated: disable global registry
         #flake-registry = "";
+
         # Workaround for https://github.com/NixOS/nix/issues/9574
         nix-path = config.nix.nixPath;
       };
       # Opinionated: disable channels
       channel.enable = false;
+
+      # Run garbage collection whenever there is less than 10GB free on the NixOS drive
+      gc.options = "--min-freed 10737418240";
 
       # Opinionated: make flake registry and nix path match flake inputs
       #registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
@@ -68,13 +76,6 @@
 
   # Linux kernel version
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Auto optimize the Nix store to save storage space
-  nix.settings = {
-    auto-optimise-store = true;
-  };
-  # Run garbage collection whenever there is less than 10GB free on the NixOS drive
-  nix.gc.options = "--min-freed 10737418240";
 
   # Network configuration
   networking.hostName = "lubyanka";
