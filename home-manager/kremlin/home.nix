@@ -119,6 +119,7 @@
         pkgs.iwgtk
         pkgs.gvfs
         pkgs.gummy
+        pkgs.kmonad
       ];
   };
 
@@ -136,8 +137,32 @@
     path = "${../devflakes}";
   };
 
+  # Enable systemd user services
+  systemd.user.enable = true;
+
   # Qtile configuration
   xdg.configFile."qtile".source = ./qtile;
+
+  # KMonad configuration and service
+  xdg.configFile."kmonad.kbd".source = ./kmonad.kbd;
+  systemd.user.services = {
+    kmonad = {
+      Unit = {
+        Description = "KMonad keyboard homerow mods configuration";
+        Documentation = [ "tldr kmonad " ];
+      };
+      Service = {
+        Restart = "always";
+        RestartSec = 3;
+        ExecStart = /home/careb0t/.config/kmonad.kbd;
+        Nice = -20;
+      };
+      Install = {
+        DefaultInstance = config;
+        WantedBy = "default.target";
+      };
+    };
+  };
 
   # terminal configuration
   xdg.configFile."wezterm/wezterm.lua".source = ../wezterm/wezterm.lua;
@@ -367,11 +392,6 @@
         filenamePattern = "%B%e %Y at %I:%M";
       };
     };
-  };
-
-  # ollama configuration
-  services.ollama = {
-    enable = true;
   };
 
   # temporary fix for 'Unit tray.target not found' error on hm-rebuild
@@ -1000,60 +1020,60 @@
           ellipsisChar = "...";
         };
       };
-      avante = {
-        enable = true;
-        package = pkgs.vimPlugins.avante-nvim;
-        settings = {
-          provider = "ollama";
-          vendors = {
-            ollama = {
-              __inherited_from = "openai";
-              endpoint = "http://127.0.0.1:11434/v1";
-              model = "deepseek-coder-v2:16b";
-            };
-          };
-          diff = {
-            autojump = true;
-            debug = false;
-            list_opener = "copen";
-          };
-          highlights = {
-            diff = {
-              current = "DiffText";
-              incoming = "DiffAdd";
-            };
-          };
-          hints = {
-            enabled = true;
-          };
-          mappings = {
-            diff = {
-              both = "cb";
-              next = "]x";
-              none = "c0";
-              ours = "co";
-              prev = "[x";
-              theirs = "ct";
-            };
-          };
-          windows = {
-            sidebar_header = {
-              align = "center";
-              rounded = true;
-            };
-            width = 30;
-            wrap = true;
-          };
-        };
-      };
-      render-markdown = {
-        enable = true;
-        settings = {
-          file_types = [
-            "Avante"
-          ];
-        };
-      };
+      # avante = {
+      #   enable = true;
+      #   package = pkgs.vimPlugins.avante-nvim;
+      #   settings = {
+      #     provider = "ollama";
+      #     vendors = {
+      #       ollama = {
+      #         __inherited_from = "openai";
+      #         endpoint = "http://127.0.0.1:11434/v1";
+      #         model = "deepseek-coder-v2:16b";
+      #       };
+      #     };
+      #     diff = {
+      #       autojump = true;
+      #       debug = false;
+      #       list_opener = "copen";
+      #     };
+      #     highlights = {
+      #       diff = {
+      #         current = "DiffText";
+      #         incoming = "DiffAdd";
+      #       };
+      #     };
+      #     hints = {
+      #       enabled = true;
+      #     };
+      #     mappings = {
+      #       diff = {
+      #         both = "cb";
+      #         next = "]x";
+      #         none = "c0";
+      #         ours = "co";
+      #         prev = "[x";
+      #         theirs = "ct";
+      #       };
+      #     };
+      #     windows = {
+      #       sidebar_header = {
+      #         align = "center";
+      #         rounded = true;
+      #       };
+      #       width = 30;
+      #       wrap = true;
+      #     };
+      #   };
+      # };
+      # render-markdown = {
+      #   enable = true;
+      #   settings = {
+      #     file_types = [
+      #       "Avante"
+      #     ];
+      #   };
+      # };
       conform-nvim = {
         enable = true;
         luaConfig.pre = ''
@@ -1346,6 +1366,8 @@
       })
     ];
     extraPackages = with pkgs; [
+      # compilers
+      gcc
       # linters
       eslint_d
       golint
