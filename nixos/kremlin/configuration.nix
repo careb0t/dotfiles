@@ -151,6 +151,7 @@
   };
 
   # KMonad configuration
+  programs.kmonad.enable = true;
   services.kmonad = {
    enable = true;
      keyboards = {
