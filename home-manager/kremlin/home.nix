@@ -119,8 +119,6 @@
         pkgs.iwgtk
         pkgs.gvfs
         pkgs.gummy
-        pkgs.kmonad
-        pkgs.gcc
       ];
   };
 
@@ -138,32 +136,8 @@
     path = "${../devflakes}";
   };
 
-  # Enable systemd user services
-  systemd.user.enable = true;
-
   # Qtile configuration
   xdg.configFile."qtile".source = ./qtile;
-
-  # KMonad configuration and service
-  xdg.configFile."kmonad.kbd".source = ./kmonad.kbd;
-  systemd.user.services = {
-    kmonad = {
-      Unit = {
-        Description = "KMonad keyboard homerow mods configuration";
-        Documentation = [ "tldr kmonad " ];
-      };
-      Service = {
-        Restart = "always";
-        RestartSec = 3;
-        ExecStart = "/home/careb0t/.config kmonad.kbd";
-        Nice = -20;
-      };
-      Install = {
-        DefaultInstance = config;
-        WantedBy = [ "default.target" ];
-      };
-    };
-  };
 
   # terminal configuration
   xdg.configFile."wezterm/wezterm.lua".source = ../wezterm/wezterm.lua;

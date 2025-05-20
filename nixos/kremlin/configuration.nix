@@ -151,7 +151,6 @@
   };
 
   # KMonad configuration
-  programs.kmonad.enable = true;
   services.kmonad = {
    enable = true;
      keyboards = {
@@ -192,6 +191,8 @@
     home-manager
     gnumake
     git
+    gcc
+    kmonad
   ];
 
   # enable third party executables
