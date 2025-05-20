@@ -50,9 +50,6 @@
         # Enable flakes and new 'nix' command
         experimental-features = "nix-command flakes";
 
-        # Enable automatic optimization of the Nix store to save storage space
-        auto-optimise-store = true;
-
         # Opinionated: disable global registry
         #flake-registry = "";
 
