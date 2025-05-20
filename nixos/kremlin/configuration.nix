@@ -104,8 +104,6 @@
       extraGroups = [
         "wheel"
         "networkmanager"
-        "input"
-        "uinput"
       ];
     };
   };
