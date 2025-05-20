@@ -120,6 +120,7 @@
         pkgs.gvfs
         pkgs.gummy
         pkgs.kmonad
+        pkgs.gcc
       ];
   };
 
@@ -154,12 +155,12 @@
       Service = {
         Restart = "always";
         RestartSec = 3;
-        ExecStart = /home/careb0t/.config/kmonad.kbd;
+        ExecStart = "/home/careb0t/.config kmonad.kbd";
         Nice = -20;
       };
       Install = {
         DefaultInstance = config;
-        WantedBy = "default.target";
+        WantedBy = [ "default.target" ];
       };
     };
   };
@@ -1366,8 +1367,6 @@
       })
     ];
     extraPackages = with pkgs; [
-      # compilers
-      gcc
       # linters
       eslint_d
       golint
