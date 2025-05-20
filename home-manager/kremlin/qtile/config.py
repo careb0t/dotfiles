@@ -52,8 +52,6 @@ rofi_launcher = home + "/dotfiles/home-manager/rofi/rofi_launcher"
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # Keyboard Layouts
-    Key(["mod1"], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
     # Terminal --
     Key([mod], "Return", lazy.spawn("wezterm"), desc="Launch wezterm"),
     Key(
