@@ -155,7 +155,7 @@
    enable = true;
      keyboards = {
        myKMonadOutput = {
-         device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
+         device = "/dev/input/by-id/usb-04d9_daskeyboard-event-kbd";
          config = builtins.readFile ./kmonad.kbd;
        };
      };
