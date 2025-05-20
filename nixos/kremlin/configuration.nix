@@ -145,9 +145,9 @@
   };
 
   # Configure keymap in X11
-  services.xserver.xkb = {
+  services.xserver = {
+    xkbOptions = "compose:ralt";
     layout = "us";
-    variant = "";
   };
 
   # KMonad configuration
