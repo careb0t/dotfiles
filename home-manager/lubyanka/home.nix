@@ -52,7 +52,6 @@
     packages =
       let
         ad-strawberry-numix-icons = pkgs.callPackage ../icons.nix { };
-        # openmw = pkgs.callPackage ./openmw.nix { };
       in
       [
         ad-strawberry-numix-icons # derivation for red icon pack
@@ -129,6 +128,7 @@
         pkgs.gamemode
         pkgs.screenkey
         pkgs.syncthing
+        pkgs.openmw
       ];
   };
 

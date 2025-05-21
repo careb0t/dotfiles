@@ -53,7 +53,14 @@
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
         "careb0t@lubyanka" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          pkgs =
+            let
+              nixpkgs' = (import nixpkgs { system = "x86_64-linux"; }).applyPatches {
+                name = "nixpkgs-patched-for-openmw";
+                src = nixpkgs;
+                patches = [ ./openmw.patch ];
+              };
+            in import nixpkgs' { system = "x86_64-linux" ; };
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/lubyanka/home.nix ];
         };
