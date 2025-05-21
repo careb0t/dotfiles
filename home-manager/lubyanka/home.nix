@@ -127,6 +127,7 @@
         pkgs.kdePackages.kasts
         pkgs.gamemode
         pkgs.screenkey
+        pkgs.syncthing
       ];
   };
 
