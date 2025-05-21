@@ -263,7 +263,6 @@
   # Syncthing confuguration
   services.syncthing = {
     enable = true;
-    openDefaultPorts = true;
   };
 
   # GUI theme configuration
