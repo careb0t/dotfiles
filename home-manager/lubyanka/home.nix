@@ -263,6 +263,11 @@
   # Syncthing confuguration
   services.syncthing = {
     enable = true;
+    settings = {
+      options = {
+        user = "careb0t";
+      };
+    };
   };
 
   # GUI theme configuration
