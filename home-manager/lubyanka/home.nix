@@ -52,11 +52,9 @@
     packages =
       let
         ad-strawberry-numix-icons = pkgs.callPackage ../icons.nix { };
-        openmw = pkgs.callPackage ./openmw.nix { };
       in
       [
         ad-strawberry-numix-icons # derivation for red icon pack
-        openmw
         pkgs.picom
         pkgs.gcc-unwrapped
         pkgs.ffmpeg
@@ -130,7 +128,7 @@
         pkgs.gamemode
         pkgs.screenkey
         pkgs.syncthing
-    ];
+      ];
   };
 
   # Font configuration
