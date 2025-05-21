@@ -215,12 +215,14 @@
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [
+      # Sunshine/Moonlight ports
       47984
       47989
       47990
       48010
     ];
     allowedUDPPortRanges = [
+      # Sunshine/Moonlight ports
       {
         from = 47998;
         to = 48000;
