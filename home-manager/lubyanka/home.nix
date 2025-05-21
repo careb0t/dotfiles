@@ -128,6 +128,7 @@
         pkgs.gamemode
         pkgs.screenkey
         pkgs.openmw
+        pkgs.syncthing
       ];
   };
 
@@ -257,6 +258,12 @@
     plugins = with pkgs.obs-studio-plugins; [
       #plugins go here
     ];
+  };
+
+  # Syncthing confuguration
+  services.syncthing = {
+    enable = true;
+    openDefaultPorts = true;
   };
 
   # GUI theme configuration
