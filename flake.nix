@@ -35,6 +35,7 @@
       self,
       nixpkgs,
       home-manager,
+      openmw
       ...
     }@inputs:
     let
@@ -59,7 +60,7 @@
       homeConfigurations = {
         "careb0t@lubyanka" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          environment.systemPackages = with openmw-nix.packages.x86_64-linux; [
+          environment.systemPackages = with openmw.packages.x86_64-linux; [
             delta-plugin
             openmw-dev
             openmw-validator
