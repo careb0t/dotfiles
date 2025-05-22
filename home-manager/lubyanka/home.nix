@@ -128,7 +128,7 @@
         pkgs.gamemode
         pkgs.screenkey
         pkgs.syncthing
-        pkgs.sops
+        pkgs.protonvpn-gui
       ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
         delta-plugin
         openmw-dev
