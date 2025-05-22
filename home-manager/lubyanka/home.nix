@@ -13,6 +13,7 @@
     inputs.spicetify-nix.homeManagerModules.default
     inputs.nixcord.homeModules.nixcord
     inputs.nixvim.homeManagerModules.nixvim
+    inputs.openmw.default
   ];
 
   nixpkgs = {
@@ -128,7 +129,7 @@
         pkgs.gamemode
         pkgs.screenkey
         pkgs.syncthing
-        pkgs.openmw
+        inputs.openmw.packages.x86_64-linux.default
       ];
   };
 
@@ -259,6 +260,9 @@
       #plugins go here
     ];
   };
+
+  # OpenMW symlink
+  home.file."openmw".source = inputs.openmw.packages.x86_64-linux.default;
 
   # Syncthing confuguration
   services.syncthing = {

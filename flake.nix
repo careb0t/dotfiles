@@ -23,6 +23,8 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    openmw.url = "codeberg:PopeRigby/openmw-nix";
   };
 
   outputs =
@@ -53,14 +55,7 @@
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
         "careb0t@lubyanka" = home-manager.lib.homeManagerConfiguration {
-          pkgs =
-            let
-              nixpkgs' = (import nixpkgs { system = "x86_64-linux"; }).applyPatches {
-                name = "nixpkgs-patched-for-openmw";
-                src = nixpkgs;
-                patches = [ ./openmw.patch ];
-              };
-            in import nixpkgs' { system = "x86_64-linux" ; };
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/lubyanka/home.nix ];
         };
