@@ -24,7 +24,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    openmw.url = "codeberg:PopeRigby/openmw-nix";
+    openmw = {
+      url = "https://codeberg.org/PopeRigby/openmw-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
