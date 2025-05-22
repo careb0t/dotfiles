@@ -25,7 +25,7 @@
     };
 
     openmw = {
-      url = "https://codeberg.org/PopeRigby/openmw-nix";
+      url = "git+https://codeberg.org/PopeRigby/openmw-nix.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -59,6 +59,12 @@
       homeConfigurations = {
         "careb0t@lubyanka" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          environment.systemPackages = with openmw-nix.packages.x86_64-linux; [
+            delta-plugin
+            openmw-dev
+            openmw-validator
+            plox
+          ];
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/lubyanka/home.nix ];
         };
