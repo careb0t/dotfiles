@@ -35,7 +35,6 @@
       self,
       nixpkgs,
       home-manager,
-      openmw-nix,
       ...
     }@inputs:
     let

@@ -3,7 +3,7 @@
     "fenix": {
       "inputs": {
         "nixpkgs": [
-          "openmw",
+          "openmw-nix",
           "nixpkgs"
         ],
         "rust-analyzer-src": "rust-analyzer-src"
@@ -377,7 +377,7 @@
         "type": "github"
       }
     },
-    "openmw": {
+    "openmw-nix": {
       "inputs": {
         "fenix": "fenix",
         "mygui": "mygui",
@@ -406,7 +406,7 @@
         "nixcord": "nixcord",
         "nixpkgs": "nixpkgs_2",
         "nixvim": "nixvim",
-        "openmw": "openmw",
+        "openmw-nix": "openmw-nix",
         "spicetify-nix": "spicetify-nix",
         "wezterm": "wezterm"
       }
@@ -454,7 +454,7 @@
         "flake-compat": "flake-compat_2",
         "flake-utils-plus": "flake-utils-plus",
         "nixpkgs": [
-          "openmw",
+          "openmw-nix",
           "nixpkgs"
         ]
       },
