@@ -28,6 +28,8 @@
       url = "git+https://codeberg.org/PopeRigby/openmw-nix.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    inputs.erosanix.url = "github:emmanuelrosa/erosanix";
   };
 
   outputs =

@@ -128,6 +128,7 @@
         pkgs.gamemode
         pkgs.screenkey
         pkgs.syncthing
+        pkgs.sops
       ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
         delta-plugin
         openmw-dev

@@ -81,6 +81,18 @@
   networking.hostName = "lubyanka";
   networking.networkmanager.enable = true;
 
+  # ProtonVPN configuration
+  protonvpn_config = let
+    protonvpn_secret = builtins.readFile ../../protonvpn_secret;
+  in
+  {
+    services.protonvpn = {
+      enable = true;
+      autoStart = true;
+      authentication = { username = "grishkabot"; password = "${protonvpn_secret}";};
+    };
+  };
+
   users.users = {
     careb0t = {
       isNormalUser = true;
