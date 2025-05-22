@@ -72,7 +72,7 @@
 
       # OpenMW addition
       nixosConfiguration.lubyanka = nixpkgs.lib.nixosSystem {
-        environment.systemPackages = with openmw-nix.packages.x86_64-linux; [
+        environment.systemPackages = with openmw.packages.x86_64-linux; [
           delta-plugin
           openmw-dev
           openmw-validator
