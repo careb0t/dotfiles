@@ -60,12 +60,6 @@
       homeConfigurations = {
         "careb0t@lubyanka" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          environment.systemPackages = with openmw.packages.x86_64-linux; [
-            delta-plugin
-            openmw-dev
-            openmw-validator
-            plox
-          ];
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/lubyanka/home.nix ];
         };
@@ -74,6 +68,16 @@
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/kremlin/home.nix ];
         };
+      };
+
+      # OpenMW addition
+      nixosConfiguration.lubyanka = nixpkgs.lib.nixosSystem {
+        environment.systemPackages = with openmw-nix.packages.x86_64-linux; [
+          delta-plugin
+          openmw-dev
+          openmw-validator
+          plox
+        ];
       };
     };
 }
