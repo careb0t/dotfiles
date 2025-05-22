@@ -24,7 +24,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    openmw = {
+    openmw-nix = {
       url = "git+https://codeberg.org/PopeRigby/openmw-nix.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -35,7 +35,7 @@
       self,
       nixpkgs,
       home-manager,
-      openmw,
+      openmw-nix,
       ...
     }@inputs:
     let
@@ -68,16 +68,6 @@
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home-manager/kremlin/home.nix ];
         };
-      };
-
-      # OpenMW addition
-      nixosConfiguration.lubyanka = nixpkgs.lib.nixosSystem {
-        environment.systemPackages = with openmw.packages.x86_64-linux; [
-          delta-plugin
-          openmw-dev
-          openmw-validator
-          plox
-        ];
       };
     };
 }

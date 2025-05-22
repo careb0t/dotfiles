@@ -128,7 +128,12 @@
         pkgs.gamemode
         pkgs.screenkey
         pkgs.syncthing
-      ];
+      ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
+        delta-plugin
+        openmw-dev
+        openmw-validator
+        plox
+      ]);
   };
 
   # Font configuration
