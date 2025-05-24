@@ -138,6 +138,9 @@
       ];
   };
 
+  # Fix Qtile status notifier plugins
+  programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+
   # Mount SSD and HDD
   fileSystems = {
     "/ssd" = {
