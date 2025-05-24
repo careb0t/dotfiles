@@ -460,7 +460,7 @@ screens = [
                     foreground="DD9998",
                 ),
                 widget.Spacer(),
-                extraWidget.Systray(),
+                extraWidget.StatusNotifier(),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
                 widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="#DD9998"),
                 widget.QuickExit(foreground="#DD9998", default_text="[ выключение ]"),
