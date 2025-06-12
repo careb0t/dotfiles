@@ -66,7 +66,6 @@
         pkgs.starship
         pkgs.fzf
         pkgs.bat
-        pkgs.thefuck
         pkgs.tldr
         pkgs.duf
         pkgs.ripgrep
@@ -366,7 +365,6 @@
         noF1.enable = true;
         noTypingAnimation.enable = true;
         noUnblockToJump.enable = true;
-        nsfwGateBypass.enable = true;
         onePingPerDM.enable = true;
         reverseImageSearch.enable = true;
         shikiCodeblocks.enable = true;
