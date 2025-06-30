@@ -147,7 +147,7 @@
   };
 
   # Qtile systray icon Fix
-  services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+  programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
   # Configure keymap in X11
   services.xserver = {
