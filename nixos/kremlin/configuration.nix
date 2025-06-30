@@ -150,8 +150,8 @@
   programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
   # Configure keymap in X11
-  services.xserver = {
-    xkbOptions = "compose:ralt";
+  services.xserver.xkb = {
+    options = "compose:ralt";
     layout = "us";
   };
 
