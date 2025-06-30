@@ -118,6 +118,7 @@
         pkgs.iwgtk
         pkgs.gvfs
         pkgs.gummy
+        pkgs.protonvpn-gui
       ];
   };
 

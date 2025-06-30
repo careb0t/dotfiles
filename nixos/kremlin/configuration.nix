@@ -92,6 +92,9 @@
     };
   };
 
+  # Fix for Proton VPN GUI app
+  networking.firewall.checkReversePath = false;
+
   services.upower.enable = true;
 
   users.users = {
