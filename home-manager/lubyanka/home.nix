@@ -128,6 +128,7 @@
         pkgs.screenkey
         pkgs.syncthing
         pkgs.telegram-desktop
+        pkgs.pwvucontrol
       ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
         delta-plugin
         openmw-dev
