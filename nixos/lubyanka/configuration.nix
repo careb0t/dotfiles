@@ -81,6 +81,9 @@
   networking.hostName = "lubyanka";
   networking.networkmanager.enable = true;
 
+  # Fix for Proton VPN GUI app
+  networking.firewall.checkReversePath = false;
+
   users.users = {
     careb0t = {
       isNormalUser = true;

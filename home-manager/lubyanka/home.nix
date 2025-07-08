@@ -129,6 +129,7 @@
         pkgs.syncthing
         pkgs.telegram-desktop
         pkgs.pwvucontrol
+        pkgs.protonvpn-gui
       ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
         delta-plugin
         openmw-dev
