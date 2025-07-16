@@ -97,7 +97,7 @@
         pkgs.deluge
         pkgs.nerd-fonts.iosevka-term
         pkgs.nerd-fonts.terminess-ttf
-        pkgs.gimp
+        pkgs.gimp3
         pkgs.networkmanager
         pkgs.numix-cursor-theme
         pkgs.dconf
