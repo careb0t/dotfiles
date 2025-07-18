@@ -383,12 +383,18 @@ layouts = [
 ]
 
 group_rules = [
-    GroupBoxRule(text_colour="#A06666").when(focused=False, occupied=True),
-    GroupBoxRule(text_colour="#DD9998").when(focused=True, occupied=True),
-    GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=False),
-    GroupBoxRule(line_position=GroupBoxRule.LINE_TOP).when(focused=True, occupied=True),
-    GroupBoxRule(line_colour="#DD9998").when(focused=True, occupied=True),
-    GroupBoxRule(line_width=3).when(focused=True, occupied=True),
+    GroupBoxRule(text_colour="#A06666").when(focused=False, occupied=True, urgent=False),
+    GroupBoxRule(text_colour="#A06666").when(focused=False, occupied=True, urgent=True),
+    GroupBoxRule(text_colour="#DD9998").when(focused=True, occupied=True, urgent=False),
+    GroupBoxRule(text_colour="#DD9998").when(focused=True, occupied=True, urgent=True),
+    GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=False, urgent=False),
+    GroupBoxRule(text_colour="#5F8787").when(focused=False, occupied=False, urgent=True),
+    GroupBoxRule(line_position=GroupBoxRule.LINE_TOP).when(focused=True, occupied=True, urgent=False),
+    GroupBoxRule(line_position=GroupBoxRule.LINE_TOP).when(focused=True, occupied=True, urgent=True),
+    GroupBoxRule(line_colour="#DD9998").when(focused=True, occupied=True, urgent=False),
+    GroupBoxRule(line_colour="#DD9998").when(focused=True, occupied=True, urgent=True),
+    GroupBoxRule(line_width=3).when(focused=True, occupied=True, urgent=False),
+    GroupBoxRule(line_width=3).when(focused=True, occupied=True, urgent=True),
 ]
 
 ## Screens ------------------------------
