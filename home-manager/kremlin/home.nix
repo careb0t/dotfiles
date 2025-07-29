@@ -94,7 +94,7 @@
         pkgs.deluge
         pkgs.nerd-fonts.iosevka-term
         pkgs.nerd-fonts.terminess-ttf
-        pkgs.gimp
+        pkgs.gimp3
         pkgs.networkmanager
         pkgs.numix-cursor-theme
         pkgs.dconf
@@ -119,6 +119,7 @@
         pkgs.gvfs
         pkgs.gummy
         pkgs.protonvpn-gui
+        pkgs.code-cursor
       ];
   };
 
@@ -1140,6 +1141,9 @@
         settings = {
           shell = "zsh";
           keymap_toggle = "<C-`>";
+          autoclose = 0;
+          height = 0.85;
+          wdith = 0.85;
         };
       };
       lint = {
