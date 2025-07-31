@@ -182,19 +182,9 @@
     initContent = ''
       function nix-dev() {
         nix flake init --template "https://github.com/the-nix-way/dev-templates"
+        echo "use flake" > .envrc
         direnv allow
       }
-      #nix-dev() {
-      #  nix flake init -t devflakes#$1
-      #  if [ $? -ne 0 ]; then
-      #    echo The following templates are available:
-      #    for dir in /home/careb0t/dotfiles/home-manager/devflakes/*/; do
-      #      echo $(basename $dir)
-      #    done
-      #  else
-      #    direnv allow
-      #  fi
-      #}
 
       eval "$(direnv hook zsh)"
     '';
