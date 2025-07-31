@@ -1090,6 +1090,8 @@
         settings = {
           shell = "zsh";
           keymap_toggle = "<C-`>";
+          height = 0.8;
+          width = 0.9;
         };
       };
       lint = {
