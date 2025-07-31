@@ -147,12 +147,6 @@
   # Run garbage collection whenever there is less than 10GB free on the NixOS drive
   nix.gc.options = "--min-freed 10737418240";
 
-  # Flake templates
-  nix.registry.devflakes.to = {
-    type = "path";
-    path = "${../devflakes}";
-  };
-
   # Qtile configuration
   xdg.configFile."qtile".source = ./qtile;
 
@@ -186,29 +180,21 @@
       hm-clean = "nix-collect-garbage -d";
     };
     initContent = ''
-      pushdots() {
-        cd /home/careb0t/dotfiles
-        git add -A
-        if [ "$1" != "" ]
-          then
-            git commit -m "$*"
-          else
-            git commit -m update
-        fi
-        git push
+      function nix-dev() {
+        nix flake init --template "https://github.com/the-nix-way/dev-templates"
+        direnv allow
       }
-
-      nix-dev() {
-        nix flake init -t devflakes#$1
-        if [ $? -ne 0 ]; then
-          echo The following templates are available:
-          for dir in /home/careb0t/dotfiles/home-manager/devflakes/*/; do
-            echo $(basename $dir)
-          done
-        else
-          direnv allow
-        fi
-      }
+      #nix-dev() {
+      #  nix flake init -t devflakes#$1
+      #  if [ $? -ne 0 ]; then
+      #    echo The following templates are available:
+      #    for dir in /home/careb0t/dotfiles/home-manager/devflakes/*/; do
+      #      echo $(basename $dir)
+      #    done
+      #  else
+      #    direnv allow
+      #  fi
+      #}
 
       eval "$(direnv hook zsh)"
     '';
