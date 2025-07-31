@@ -181,7 +181,7 @@
     };
     initContent = ''
       function nix-dev() {
-        nix flake init --template "github:the-nix-way/dev-templates/*#$1"
+        nix flake init --template "github:the-nix-way/dev-templates/\*#$1"
         echo "use flake" > .envrc
         direnv allow
       }
