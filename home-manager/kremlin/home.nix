@@ -120,6 +120,7 @@
         pkgs.gummy
         pkgs.protonvpn-gui
         pkgs.code-cursor
+        pkgs.bluetui
       ];
   };
 
