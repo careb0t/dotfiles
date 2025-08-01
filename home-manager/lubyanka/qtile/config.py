@@ -467,9 +467,11 @@ screens = [
                 ),
                 widget.Spacer(),
                 extraWidget.Systray(),
-                widget.Sep(),
+                widget.Clock(format="|", foreground="#DD9998"),
+                extraWidget.Bluetooth(foreground="#DD9998", default_text="ↈ"),
+                widget.Clock(format="|", foreground="#DD9998"),
                 widget.Clock(format="%m/%d/%y | %I:%M %p", foreground="#DD9998"),
-                widget.Sep(),
+                widget.Clock(format="|", foreground="#DD9998"),
                 widget.KeyboardLayout(configured_keyboards=["us", "ru"], display_map={"us":"us", "ru":"ru"}, foreground="#DD9998"),
                 widget.QuickExit(foreground="#DD9998", default_text="[ выключение ]"),
                 extraWidget.CurrentLayoutIcon(
