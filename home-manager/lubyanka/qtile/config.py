@@ -80,6 +80,12 @@ keys = [
         lazy.spawn("wezterm start --always-new-process zsh -c yazi; exit"),
         desc="Launch Yazi",
     ),
+    Key(
+        [mod, "shift"],
+        "b",
+        lazy.spawn("wezterm start --always-new-process zsh -c bluetui; exit"),
+        desc="Launch Bluetui",
+    ),
     Key([mod, "shift"], "c", lazy.spawn("copyq toggle"), desc="Toggle CopyQ"),
     # Screenshot
     Key([mod], "s", lazy.spawn("flameshot gui"), desc="Take screenshot with Flameshot"),
