@@ -535,7 +535,7 @@ dgroups_app_rules = []  # type: list
 # focus: automatically focus the window
 # smart: automatically focus if the window is in the current group
 # never: never automatically focus any window that requests it
-focus_on_window_activation = "focus"
+focus_on_window_activation = "smart"
 
 # Controls whether or not focus follows the mouse around as it moves across windows in a layout.
 follow_mouse_focus = True
