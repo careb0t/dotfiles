@@ -125,13 +125,13 @@
         pkgs.kdePackages.kasts
         pkgs.gamemode
         pkgs.screenkey
-        #pkgs.syncthing
+        pkgs.syncthing
         pkgs.telegram-desktop
         pkgs.pwvucontrol
         pkgs.protonvpn-gui
         pkgs.code-cursor
         pkgs.bluetui
-        #pkgs.input-remapper
+        pkgs.input-remapper
       ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
         delta-plugin
         openmw-dev
@@ -253,9 +253,6 @@
       };
     };
   };
-
-  # input-remapper configuration
-  services.input-remapper.enable = true;
 
   # GUI theme configuration
   home.pointerCursor = {

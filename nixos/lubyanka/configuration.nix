@@ -210,6 +210,9 @@
   # ratbagd configuration
   services.ratbagd.enable = true;
 
+  # input-remapper configuration
+  services.input-remapper.enable = true;
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
