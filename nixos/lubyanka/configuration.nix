@@ -175,6 +175,7 @@
     git
     polkit
     lact
+    input-remapper
   ];
 
   # Enable third-party executables

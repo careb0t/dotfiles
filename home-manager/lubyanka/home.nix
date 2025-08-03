@@ -131,7 +131,6 @@
         pkgs.protonvpn-gui
         pkgs.code-cursor
         pkgs.bluetui
-        pkgs.input-remapper
       ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
         delta-plugin
         openmw-dev
