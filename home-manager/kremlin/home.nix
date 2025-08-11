@@ -348,7 +348,7 @@
 
   # unclutter configuration
   services.unclutter = {
-    enable = true;
+    enable = false;
     timeout = 2;
     extraOptions = [
       "noevent"
