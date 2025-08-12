@@ -171,30 +171,12 @@
       hm-clean = "nix-collect-garbage -d";
     };
     initContent = ''
-                                    pushdots() {
-                                        cd /home/careb0t/dotfiles
-                                        git add -A
-                                        if [ "$1" != "" ]
-                                        then
-                                            git commit -m "$*"
-                                        else
-                                            git commit -m update
-                                        fi
-                                        git push
-                                    }
-
-                              	    nix-dev() {
-                                      nix flake init -t devflakes#$1
-                              	      if [ $? -ne 0 ]; then
-            				echo The following templates are available:
-                  			for dir in /home/careb0t/dotfiles/home-manager/devflakes/*/; do
-                          		  echo $(basename $dir)
-                      			done
-      				      else
-      				        direnv allow
-                                      fi
-                              	    }
-                                    eval "$(direnv hook zsh)"
+      function nix-dev() {
+        nix flake init --template "github:the-nix-way/dev-templates#$1"
+        echo "use flake" > .envrc
+        direnv allow
+      }
+      eval "$(direnv hook zsh)"
     '';
     history.size = 10000;
     history.ignoreAllDups = true;
