@@ -91,7 +91,7 @@
         pkgs.xfce.thunar
         pkgs.vscode
         pkgs.xwallpaper
-        pkgs.stremio
+        # pkgs.stremio
         # pkgs.steam # Steam must me installed at system level and enabled
         pkgs.lutris
         pkgs.deluge
