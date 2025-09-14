@@ -12,7 +12,7 @@
   imports = [
     inputs.spicetify-nix.homeManagerModules.default
     inputs.nixcord.homeModules.nixcord
-    inputs.nixvim.homeManagerModules.nixvim
+    inputs.nixvim.homeModules.nixvim
   ];
 
   nixpkgs = {
@@ -69,6 +69,7 @@
         pkgs.xclip
         pkgs.copyq
         pkgs.zoxide
+        pkgs.pay-respects
         pkgs.eza
         pkgs.yazi
         pkgs.ouch
@@ -88,7 +89,7 @@
         pkgs.xfce.thunar
         pkgs.vscode
         pkgs.xwallpaper
-        pkgs.stremio
+        # pkgs.stremio #remove comment when stremio package is fixed on nixpkgs
         # pkgs.steam # Steam must me installed at system level and enabled
         pkgs.lutris
         pkgs.deluge
@@ -205,8 +206,8 @@
   # Zsh integration
   programs.wezterm.enableZshIntegration = true;
   programs.zoxide.enableZshIntegration = true;
-  programs.thefuck.enableZshIntegration = true;
   programs.starship.enableZshIntegration = true;
+  programs.pay-respects.enableZshIntegration = true;
 
   # Direnv configuration
   programs.direnv = {
@@ -255,13 +256,13 @@
     platformTheme.name = "qtct";
     style.name = "kvantum";
   };
-  xdg.configFile = {
-    "Kvantum/kvantum.kvconfig".text = ''
-      [General]
-      theme=GraphiteDark
-    '';
-    "Kvantum/Graphite".source = "${pkgs.graphite-kde-theme}/share/Kvantum/Graphite";
-  };
+  #xdg.configFile = {
+    #"Kvantum/kvantum.kvconfig".text = ''
+    #[General]
+      #theme=GraphiteDark
+    #'';
+    #"Kvantum/Graphite".source = "${pkgs.graphite-kde-theme}/share/Kvantum/Graphite";
+  #};
 
   # Spicetify configuration
   programs.spicetify =

@@ -12,7 +12,7 @@
   imports = [
     inputs.spicetify-nix.homeManagerModules.default
     inputs.nixcord.homeModules.nixcord
-    inputs.nixvim.homeManagerModules.nixvim
+    inputs.nixvim.homeModules.nixvim
   ];
 
   nixpkgs = {
@@ -64,6 +64,7 @@
         # pkgs.wezterm # installed with flake input
         pkgs.zsh
         pkgs.starship
+        pkgs.pay-respects
         pkgs.fzf
         pkgs.bat
         pkgs.tldr
@@ -215,8 +216,8 @@
   # Zsh integration
   programs.wezterm.enableZshIntegration = true;
   programs.zoxide.enableZshIntegration = true;
-  programs.thefuck.enableZshIntegration = true;
   programs.starship.enableZshIntegration = true;
+  programs.pay-respects.enableZshIntegration = true;
 
   # Direnv configuration
   programs.direnv = {
@@ -283,13 +284,13 @@
     platformTheme.name = "qtct";
     style.name = "kvantum";
   };
-  xdg.configFile = {
-    "Kvantum/kvantum.kvconfig".text = ''
-      [General]
-      theme=GraphiteDark
-    '';
-    "Kvantum/Graphite".source = "${pkgs.graphite-kde-theme}/share/Kvantum/Graphite";
-  };
+  #xdg.configFile = {
+    #"Kvantum/kvantum.kvconfig".text = ''
+    #[General]
+      #theme=GraphiteDark
+    #'';
+    #"Kvantum/Graphite".source = "${pkgs.graphite-kde-theme}/share/Kvantum/Graphite";
+  #};
 
   # Spicetify configuration
   programs.spicetify =
@@ -907,15 +908,15 @@
       };
       lspkind = {
         enable = true;
-        cmp = {
-          enable = true;
-          maxWidth = 50;
-          ellipsisChar = "...";
-        };
-        symbolMap = {
-          #Copilot = " ";
-        };
-        extraOptions = {
+        settings = {
+          cmp = {
+            enable = true;
+            maxWidth = 50;
+            ellipsisChar = "...";
+          };
+          symbolMap = {
+            #Copilot = " ";
+          };
           maxWidth = 50;
           ellipsisChar = "...";
         };

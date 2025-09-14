@@ -201,6 +201,7 @@
     git
     gcc
     kmonad
+    (pkgs.callPackage ../stremio-linux-shell.nix {})
   ];
 
   # enable third party executables

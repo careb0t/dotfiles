@@ -53,6 +53,9 @@
         # Enable automatic optimization of the Nix store to save storage space
         auto-optimise-store = true;
 
+        # Increase download buffer size
+        download-buffer-size = 524288000;
+
         # Opinionated: disable global registry
         #flake-registry = "";
 
