@@ -965,16 +965,16 @@
         enable = true;
       };
       lspkind = {
-        enable = true;
-        cmp = {
+        settings = {
           enable = true;
-          maxWidth = 50;
-          ellipsisChar = "...";
-        };
-        symbolMap = {
-          #Copilot = " ";
-        };
-        extraOptions = {
+          cmp = {
+            enable = true;
+            maxWidth = 50;
+            ellipsisChar = "...";
+          };
+          symbolMap = {
+            #Copilot = " ";
+          };
           maxWidth = 50;
           ellipsisChar = "...";
         };
