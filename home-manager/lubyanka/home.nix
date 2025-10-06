@@ -36,6 +36,9 @@
       allowUnfreePredicate = _: true;
       # Enable ROCM support for AMD GPU
       rocmSupport = true;
+      permittedInsecurePackages = [ # needed until new stremio frontend is stable
+          "qtwebengine-5.15.19"
+      ];
     };
   };
 
