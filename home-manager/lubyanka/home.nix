@@ -1124,10 +1124,6 @@
         enable = true;
         servers = {
           ts_ls.enable = true;
-          vuels = {
-            enable = true;
-            package = pkgs.vue-language-server;
-          };
           yamlls.enable = true;
           bashls.enable = true;
           jsonls.enable = true;
