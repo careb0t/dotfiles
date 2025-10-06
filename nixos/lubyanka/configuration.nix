@@ -179,7 +179,7 @@
     polkit
     lact
     input-remapper
-    (pkgs.callPackage ../stremio-linux-shell.nix {})
+    # (pkgs.callPackage ../stremio-linux-shell.nix {})
   ];
 
   # Enable third-party executables
