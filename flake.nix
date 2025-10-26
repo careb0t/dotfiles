@@ -23,10 +23,12 @@
       url = "github:nix-community/nixvim";
     };
 
-    openmw-nix = {
-      url = "git+https://codeberg.org/PopeRigby/openmw-nix.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #openmw-nix = {
+      #url = "git+https://codeberg.org/PopeRigby/openmw-nix.git";
+      #inputs.nixpkgs.follows = "nixpkgs";
+    #};
+
+    nixpkgs-for-stremio.url = "nixpkgs/5135c59491985879812717f4c9fea69604e7f26f";
   };
 
   outputs =

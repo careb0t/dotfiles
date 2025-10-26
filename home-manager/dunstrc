@@ -1,5 +1,7 @@
 [global]
-monitor = 0
+timeout = 5
+override_dbus_timeout = 5
+monitor = 1
 follow = mouse
 width = 300
 height = 80
@@ -55,15 +57,18 @@ timeout = 5
 background = "#00000099"
 foreground = "#FFFFFFFF"
 frame_color = "#DD9998FF"
+override_dbus_timeout = 5
 
 [urgency_normal]
 timeout = 5
 background = "#00000099"
 foreground = "#FFFFFFFF"
 frame_color = "#DD9998FF"
+override_dbus_timeout = 5
 
 [urgency_critical]
 timeout = 5
 background = "#00000099"
 foreground = "#FFFFFFFF"
 frame_color = "#DD9998FF"
+override_dbus_timeout = 5

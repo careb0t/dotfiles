@@ -27,6 +27,16 @@
       #     patches = [ ./change-hello-to-hi.patch ];
       #   });
       # })
+      (final: prev: {
+        openmw = prev.openmw.overrideAttrs (old: {
+          src = prev.fetchFromGitHub {
+            owner = "OpenMW";
+            repo = "openmw";
+            rev = "1f900c863b8d5c3511ff1f4627e811bba920ab79";
+            hash = "sha256-VBTBG2qM2gE6zSCB8FhZh0Mw2KTLi9weKpaD3DU/H5E=";
+          };
+        });
+      })
     ];
     # Configure your nixpkgs instance
     config = {
@@ -37,7 +47,7 @@
       # Enable ROCM support for AMD GPU
       rocmSupport = true;
       permittedInsecurePackages = [ # needed until new stremio frontend is stable
-          "qtwebengine-5.15.19"
+        #"qtwebengine-5.15.19"
       ];
     };
   };
@@ -55,6 +65,9 @@
     packages =
       let
         ad-strawberry-numix-icons = pkgs.callPackage ../icons.nix { };
+        stremioPkgs = import inputs.nixpkgs-for-stremio {
+          inherit (pkgs) system;
+        };
       in
       [
         ad-strawberry-numix-icons # derivation for red icon pack
@@ -74,7 +87,7 @@
         pkgs.duf
         pkgs.ripgrep
         pkgs.xclip
-        pkgs.copyq
+        # pkgs.copyq
         pkgs.zoxide
         pkgs.eza
         #pkgs.yazi
@@ -95,7 +108,8 @@
         pkgs.xfce.thunar
         pkgs.vscode
         pkgs.xwallpaper
-        pkgs.stremio
+        #pkgs.stremio
+        (stremioPkgs.stremio)
         # pkgs.steam # Steam must me installed at system level and enabled
         pkgs.lutris
         pkgs.deluge
@@ -135,12 +149,14 @@
         pkgs.protonvpn-gui
         pkgs.code-cursor
         pkgs.bluetui
-      ] ++ (with inputs.openmw-nix.packages.${pkgs.system}; [
-        delta-plugin
-        openmw-dev
-        openmw-validator
-        plox
-      ]);
+        pkgs.openmw
+      ];
+      #++ (with inputs.openmw-nix.packages.${pkgs.system}; [
+        #delta-plugin
+        #openmw-dev
+        #openmw-validator
+        #plox
+      #]);
   };
 
   # Font configuration
@@ -875,33 +891,37 @@
       };
       wilder = {
         enable = true;
-        modes = [
-          "?"
-          "/"
-          ":"
-        ];
-        pipeline = [
-          ''
-            wilder.branch(
-              wilder.cmdline_pipeline({
-                language = 'python',
-                fuzzy = 1,
-              }),
-              wilder.python_search_pipeline({
-                pattern = wilder.python_fuzzy_pattern(),
-                sorter = wilder.python_difflib_sorter(),
-                engine = 're',
-              })
-            )
-          ''
-        ];
-        renderer = ''
-          wilder.popupmenu_renderer({
-            highlighter = wilder.basic_highlighter(),
-            left = {' ', wilder.popupmenu_devicons()},
-            right = {' ', wilder.popupmenu_scrollbar()},
-          })
-        '';
+        settings = {
+          modes = [
+            "?"
+            "/"
+            ":"
+          ];
+        };
+        options = {
+          pipeline = [
+            ''
+              wilder.branch(
+                wilder.cmdline_pipeline({
+                  language = 'python',
+                  fuzzy = 1,
+                }),
+                wilder.python_search_pipeline({
+                  pattern = wilder.python_fuzzy_pattern(),
+                  sorter = wilder.python_difflib_sorter(),
+                  engine = 're',
+                })
+              )
+            ''
+          ];
+          renderer = ''
+            wilder.popupmenu_renderer({
+              highlighter = wilder.basic_highlighter(),
+              left = {' ', wilder.popupmenu_devicons()},
+              right = {' ', wilder.popupmenu_scrollbar()},
+            })
+          '';
+        };
       };
       cmp_luasnip = {
         enable = true;
