@@ -335,7 +335,6 @@
   xdg.configFile."Vencord/themes".source = ../Vencord/themes;
   programs.nixcord = {
     enable = true;
-    discord.vencord.unstable = true;
     config = {
       transparent = true;
       themeLinks = [ ];
@@ -361,6 +360,8 @@
         messageClickActions.enable = true;
         messageLinkEmbeds.enable = true;
         noBlockedMessages.enable = true;
+        noBlockedMessages.ignoreBlockedMessages = true;
+        noDeepLinks.enable = true;
         noF1.enable = true;
         noTypingAnimation.enable = true;
         noUnblockToJump.enable = true;
@@ -899,28 +900,28 @@
           ];
         };
         options = {
-          pipeline = [
-            ''
-              wilder.branch(
-                wilder.cmdline_pipeline({
-                  language = 'python',
-                  fuzzy = 1,
-                }),
-                wilder.python_search_pipeline({
-                  pattern = wilder.python_fuzzy_pattern(),
-                  sorter = wilder.python_difflib_sorter(),
-                  engine = 're',
-                })
-              )
-            ''
-          ];
-          renderer = ''
-            wilder.popupmenu_renderer({
-              highlighter = wilder.basic_highlighter(),
-              left = {' ', wilder.popupmenu_devicons()},
-              right = {' ', wilder.popupmenu_scrollbar()},
-            })
-          '';
+          # pipeline = [
+          #   ''
+          #     wilder.branch(
+          #       wilder.cmdline_pipeline({
+          #         language = 'python',
+          #         fuzzy = 1,
+          #       }),
+          #       wilder.python_search_pipeline({
+          #         pattern = wilder.python_fuzzy_pattern(),
+          #         sorter = wilder.python_difflib_sorter(),
+          #         engine = 're',
+          #       })
+          #     )
+          #   ''
+          # ];
+          # renderer = ''
+          #   wilder.popupmenu_renderer({
+          #     highlighter = wilder.basic_highlighter(),
+          #     left = {' ', wilder.popupmenu_devicons()},
+          #     right = {' ', wilder.popupmenu_scrollbar()},
+          #   })
+          # '';
         };
       };
       cmp_luasnip = {

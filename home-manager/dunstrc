@@ -2,7 +2,7 @@
 timeout = 5
 override_dbus_timeout = 5
 monitor = 1
-follow = mouse
+follow = none
 width = 300
 height = 80
 origin = top-right
