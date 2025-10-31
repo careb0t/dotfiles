@@ -35,6 +35,7 @@
             rev = "1f900c863b8d5c3511ff1f4627e811bba920ab79";
             hash = "sha256-VBTBG2qM2gE6zSCB8FhZh0Mw2KTLi9weKpaD3DU/H5E=";
           };
+          patches = [ ];
         });
       })
     ];
