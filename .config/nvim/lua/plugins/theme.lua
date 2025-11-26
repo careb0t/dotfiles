@@ -1,1 +1,0 @@
-/home/careb0t/.config/omarchy/current/theme/neovim.lua
