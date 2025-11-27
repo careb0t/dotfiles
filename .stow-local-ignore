@@ -21,14 +21,3 @@ _darcs
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
-.config/hypr/input.conf
-.config/hypr/monitors.conf
-.config/hypr/windows.conf
-.config/hypr/workspaces.conf
-.config/vesktop/Crashpad/
-.config/vesktop/sessionData/
-.config/vesktop/settings.json
-.config/vesktop/SingletonCookie
-.config/vesktop/SingletonLock
-.config/vesktop/SingletonSocket
-.config/vesktop/state.json
