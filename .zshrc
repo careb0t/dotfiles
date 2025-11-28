@@ -37,5 +37,6 @@ zplug load
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
 
+# Load ZSH programs
 eval $(thefuck --alias)
-
+eval "$(atuin init zsh)"
