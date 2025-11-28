@@ -39,5 +39,4 @@ alias ls='eza -lh -a --group-directories-first --icons=auto'
 
 # Load ZSH plugins
 eval $(thefuck --alias)
-
-# eval "$(atuin init zsh)"
+eval "$(atuin init zsh)"
