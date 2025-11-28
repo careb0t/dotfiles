@@ -7,7 +7,7 @@
       "#000000",
       "#ef7d90",
       "#a7bfc6",
-      "#e3d69d",
+      "#e7dbaa",
       "#799fa5",
       "#f9b8c7",
       "#e7dcdc",
@@ -15,9 +15,9 @@
       "#808080",
       "#eb5d77",
       "#697b8b",
-      "#9c9458",
+      "#a79d62",
       "#5b6582",
-      "#f47995",
+      "#eb5d71",
       "#fcfafa",
       "#ffffff"
     ],
@@ -25,7 +25,7 @@
     "appOverrides": {},
     "additionalImages": []
   },
-  "timestamp": 1764334403305,
+  "timestamp": 1764338149185,
   "settings": {
     "includeNeovim": true,
     "includeVencord": false,
