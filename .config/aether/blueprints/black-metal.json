@@ -1,0 +1,40 @@
+{
+  "palette": {
+    "wallpaper": "/home/careb0t/.cache/aether/processed-wallpaper-1764333116188.jpg",
+    "wallpaperUrl": null,
+    "wallpaperSource": "local",
+    "colors": [
+      "#000000",
+      "#ef7d90",
+      "#a7bfc6",
+      "#e3d69d",
+      "#799fa5",
+      "#f9b8c7",
+      "#e7dcdc",
+      "#ffffff",
+      "#808080",
+      "#e73c58",
+      "#697b8b",
+      "#9c9458",
+      "#5b6582",
+      "#f47995",
+      "#fcfafa",
+      "#ffffff"
+    ],
+    "lightMode": false,
+    "appOverrides": {},
+    "additionalImages": []
+  },
+  "timestamp": 1764333122861,
+  "settings": {
+    "includeNeovim": true,
+    "includeVencord": true,
+    "includeZed": false,
+    "includeVscode": false,
+    "includeGtk": true,
+    "lightMode": false,
+    "selectedNeovimConfig": null,
+    "enableAppOverrides": false
+  },
+  "name": "Black Metal"
+}
