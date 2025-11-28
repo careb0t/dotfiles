@@ -1,0 +1,26 @@
+name: Mayhem
+accent: "#5e8484"
+cursor: "#5e8484"
+background: "#000000"
+foreground: "#ffffff"
+details: darker
+
+terminal_colors:
+  normal:
+    black:   "#000000"
+    red:     "#d89695"
+    green:   "#5e8484"
+    yellow:  "#e7dbaa"
+    blue:    "#5e8484"
+    magenta: "#d89695"
+    cyan:    "#e7dcdc"
+    white:   "#ffffff"
+  bright:
+    black:   "#a4a4a4"
+    red:     "#9c6565"
+    green:   "#3d5555"
+    yellow:  "#a79d62"
+    blue:    "#3d5555"
+    magenta: "#9c6565"
+    cyan:    "#fcfafa"
+    white:   "#ffffff"
