@@ -37,6 +37,8 @@ zplug load
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
 
-# Load ZSH programs
+# Load ZSH plugins
 eval $(thefuck --alias)
+
+. "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
