@@ -40,5 +40,4 @@ alias ls='eza -lh -a --group-directories-first --icons=auto'
 # Load ZSH plugins
 eval $(thefuck --alias)
 
-. "$HOME/.atuin/bin/env"
-eval "$(atuin init zsh)"
+# eval "$(atuin init zsh)"
