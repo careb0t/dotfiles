@@ -17,16 +17,23 @@ fi
 
 # Add your own customizations below
 
-# Zap plugin manager
-[ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && source "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh"
-plug "zsh-users/zsh-autosuggestions"
-plug "zsh-users/zsh-syntax-highlighting"
-plug "le0me55i/zsh-extract"
+# ZPlug plugin manager
+# source ~/.zplug/init.zsh
+#
+# zplug "zsh-users/zsh-autosuggestions"
+# zplug "marlonrichert/zsh-autocomplete"
+# zplug "zdharma-continuum/fast-syntax-highlighting"
+# zplug "MichaelAquilina/zsh-autoswitch-virtualenv"
+# zplug "le0me55i/zsh-extract"
+# zplug "plugins/npm", from:oh-my-zsh
+# zplug "plugins/docker", from:oh-my-zsh
+# zplug "plugins/docker-compose", from:oh-my-zsh
+# zplug "plugins/colorize", from:oh-my-zsh
+# zplug "plugins/colored-man-pages", from:oh-my-zsh
+# zplug "plugins/thefuck", from:oh-my-zsh
+# zplug "plugins/command-not-found", from:oh-my-zsh
+
+# zplug load
 
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
-
-
-# Load and initialise completion system
-autoload -Uz compinit
-compinit
