@@ -132,3 +132,5 @@ alias ls='eza -a -l --icons'
 eval "$(atuin init zsh)"
 
 export PATH=$PATH:/home/careb0t/.spicetify
+
+. "$HOME/.local/share/../bin/env"
