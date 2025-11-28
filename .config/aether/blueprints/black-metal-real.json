@@ -1,0 +1,40 @@
+{
+  "palette": {
+    "wallpaper": "/home/careb0t/.cache/aether/processed-wallpaper-1764333213520.jpg",
+    "wallpaperUrl": null,
+    "wallpaperSource": "local",
+    "colors": [
+      "#000000",
+      "#d89695",
+      "#5e8484",
+      "#e7dbaa",
+      "#5e8484",
+      "#d89695",
+      "#e7dcdc",
+      "#ffffff",
+      "#808080",
+      "#9c6565",
+      "#3d5555",
+      "#a79d62",
+      "#3d5555",
+      "#9c6565",
+      "#fcfafa",
+      "#ffffff"
+    ],
+    "lightMode": false,
+    "appOverrides": {},
+    "additionalImages": []
+  },
+  "timestamp": 1764342201930,
+  "settings": {
+    "includeNeovim": true,
+    "includeVencord": false,
+    "includeZed": false,
+    "includeVscode": false,
+    "includeGtk": false,
+    "lightMode": false,
+    "selectedNeovimConfig": null,
+    "enableAppOverrides": false
+  },
+  "name": "Black Metal Real"
+}
