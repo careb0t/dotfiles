@@ -24,7 +24,7 @@ plug "zsh-users/zsh-syntax-highlighting"
 plug "le0me55i/zsh-extract"
 
 # Aliases
-alias ls='eza -lh --group-directories-first --icons=auto'
+alias ls='eza -lh -a --group-directories-first --icons=auto'
 
 
 # Load and initialise completion system
