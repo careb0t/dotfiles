@@ -12,7 +12,7 @@
       "#d89695",
       "#e7dcdc",
       "#ffffff",
-      "#808080",
+      "#a4a4a4",
       "#9c6565",
       "#3d5555",
       "#a79d62",
@@ -25,7 +25,7 @@
     "appOverrides": {},
     "additionalImages": []
   },
-  "timestamp": 1764342201930,
+  "timestamp": 1764358466728,
   "settings": {
     "includeNeovim": true,
     "includeVencord": false,
@@ -36,5 +36,5 @@
     "selectedNeovimConfig": null,
     "enableAppOverrides": false
   },
-  "name": "Black Metal Real"
+  "name": "Black Metal"
 }

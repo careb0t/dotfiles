@@ -2,3 +2,7 @@ Finish customizing Black Metal Aether theme
 -- Need to go to ~/.config/omarchy/themes/aether/ and change it to black-metal
 -- Need to change the active border color in looknfeel.conf to single color (either light red or blue or gold)
 -- Need to give waybar the same level of transparency as ghostty
+
+Fix nvim lualine transparency
+-- transparency.lua is good enough current, but we need to figure out how to automatically load :luafile ~/.config/nvim/plugin/after/transparency.lua
+-- Open a discussion on Omarchy GitHub and ask if anyone else has been able to figure it out.
