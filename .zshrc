@@ -30,10 +30,13 @@ zplug "plugins/docker", from:oh-my-zsh
 zplug "plugins/docker-compose", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
 zplug "plugins/colored-man-pages", from:oh-my-zsh
-zplug "plugins/thefuck", from:oh-my-zsh
+zplug "plugins/thefuck", from:oh-my-zsh # don't forget to install thefuck
 zplug "plugins/command-not-found", from:oh-my-zsh
 
 zplug load
 
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
+
+eval $(thefuck --alias)
+
