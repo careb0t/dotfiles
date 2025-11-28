@@ -13,7 +13,7 @@
       "#e7dcdc",
       "#ffffff",
       "#808080",
-      "#e73c58",
+      "#eb5d77",
       "#697b8b",
       "#9c9458",
       "#5b6582",
@@ -25,16 +25,16 @@
     "appOverrides": {},
     "additionalImages": []
   },
-  "timestamp": 1764333218694,
+  "timestamp": 1764334403305,
   "settings": {
     "includeNeovim": true,
-    "includeVencord": true,
+    "includeVencord": false,
     "includeZed": false,
     "includeVscode": false,
-    "includeGtk": true,
+    "includeGtk": false,
     "lightMode": false,
     "selectedNeovimConfig": null,
     "enableAppOverrides": false
   },
-  "name": "Black-Metal-Blur"
+  "name": "Black Metal Blur"
 }
