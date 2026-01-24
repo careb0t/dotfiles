@@ -178,10 +178,10 @@
             "enabled": true
         },
         "FixImagesQuality": {
-            "enabled": true
+            "enabled": false
         },
         "FixSpotifyEmbeds": {
-            "enabled": true
+            "enabled": false
         },
         "FixYoutubeEmbeds": {
             "enabled": true
@@ -231,9 +231,6 @@
         "ImplicitRelationships": {
             "enabled": false
         },
-        "InvisibleChat": {
-            "enabled": false
-        },
         "IrcColors": {
             "enabled": false
         },
@@ -265,6 +262,9 @@
             "enabled": false
         },
         "MessageTags": {
+            "enabled": false
+        },
+        "MoreQuickReactions": {
             "enabled": false
         },
         "MutualGroupDMs": {
@@ -552,6 +552,10 @@
             "enabled": true
         }
     },
+    "uiElements": {
+        "chatBarButtons": {},
+        "messagePopoverButtons": {}
+    },
     "notifications": {
         "timeout": 5000,
         "position": "bottom-right",
@@ -562,6 +566,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1763613530180
+        "settingsSyncVersion": 1767894280370
     }
 }
