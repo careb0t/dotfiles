@@ -21,3 +21,9 @@ _darcs
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
+
+# Ignore specific aether config files, but keep blueprints/ managed
+^/\.config/aether/\.protocol-handler-installed
+^/\.config/aether/migration-version
+^/\.config/aether/theme\.css
+^/\.config/aether/theme\.override\.css
