@@ -1,1 +1,7 @@
 .git
+
+# Aether config (matches .stow-local-ignore)
+.config/aether/.protocol-handler-installed
+.config/aether/migration-version
+.config/aether/theme.css
+.config/aether/theme.override.css
