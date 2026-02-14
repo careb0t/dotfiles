@@ -20,3 +20,11 @@ source ~/.local/share/omarchy/default/bash/rc
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
+
+# pnpm
+export PNPM_HOME="/home/careb0t/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

@@ -17,6 +17,14 @@ fi
 
 # Add your own customizations below
 
+# pnpm
+export PNPM_HOME="/home/careb0t/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
 # ZPlug plugin manager
 source ~/.zplug/init.zsh
 
