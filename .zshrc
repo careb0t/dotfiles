@@ -58,7 +58,7 @@ rdmp4() {
   local url="$1"
   local output="${2:-$(echo "$url" | cut -d'/' -f 8)}"
   output="${output%.*}"
-  local tmpfile=$(mktemp --suffix=.mkv)
+  local tmpfile=$(mktemp)
   reddit-video-downloader "$url" "$tmpfile" && \
   ffmpeg -i "${tmpfile}.mp4" -c:v libx264 -c:a aac "${output}.mp4" && \
   rm -f "${tmpfile}.mp4"
