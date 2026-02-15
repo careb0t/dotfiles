@@ -58,10 +58,10 @@ rdmp4() {
   local url="$1"
   local output="${2:-$(echo "$url" | cut -d'/' -f 8)}"
   output="${output%.*}"
-  local tmpfile=$(mktemp)
+  local tmpfile=$(mktemp --suffix=.mp4)
   reddit-video-downloader "$url" "$tmpfile" && \
-  ffmpeg -i "${tmpfile}.mp4" -c:v libx264 -c:a aac "${output}.mp4" && \
-  rm -f "${tmpfile}.mp4"
+  ffmpeg -i "$tmpfile" -c:v libx264 -c:a aac "${output}.mp4" && \
+  rm -f "$tmpfile"
 }
 
 # Load ZSH plugins
