@@ -17,6 +17,9 @@ fi
 
 # Add your own customizations below
 
+# add Claude to PATH for using local installation
+export PATH="$HOME/.local/bin:$PATH"
+
 # ~/bin for local scripts (e.g. makegif)
 export PATH="$HOME/bin:$PATH"
 
