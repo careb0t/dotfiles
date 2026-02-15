@@ -48,6 +48,15 @@ zplug load
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
 alias ytmp4='yt-dlp -S res,ext:mp4:m4a --recode mp4'
+rdmp4() {
+  local url="$1"
+  local output="${2:-$(echo "$url" | cut -d'/' -f 8)}"
+  output="${output%.*}"
+  local tmpfile=$(mktemp --suffix=.mkv)
+  reddit-video-downloader "$url" "$tmpfile" && \
+  ffmpeg -i "${tmpfile}.mp4" -c:v libx264 -c:a aac "${output}.mp4" && \
+  rm -f "${tmpfile}.mp4"
+}
 
 # Load ZSH plugins
 eval "$(atuin init zsh)"
