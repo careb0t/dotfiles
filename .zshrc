@@ -47,7 +47,13 @@ zplug load
 
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
-alias ytmp4='yt-dlp -S res,ext:mp4:m4a --recode mp4'
+ytmp4() {
+  if [[ -n "$2" ]]; then
+    yt-dlp -S res,ext:mp4:m4a --recode mp4 -o "$2" "$1"
+  else
+    yt-dlp -S res,ext:mp4:m4a --recode mp4 "$1"
+  fi
+}
 rdmp4() {
   local url="$1"
   local output="${2:-$(echo "$url" | cut -d'/' -f 8)}"
