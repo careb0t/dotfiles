@@ -17,6 +17,9 @@ fi
 
 # Add your own customizations below
 
+# ~/bin for local scripts (e.g. makegif)
+export PATH="$HOME/bin:$PATH"
+
 # pnpm
 export PNPM_HOME="/home/careb0t/.local/share/pnpm"
 case ":$PATH:" in
@@ -44,6 +47,7 @@ zplug load
 
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
+alias ytmp4='yt-dlp -S res,ext:mp4:m4a --recode mp4'
 
 # Load ZSH plugins
 eval "$(atuin init zsh)"
