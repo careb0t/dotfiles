@@ -63,10 +63,18 @@ mp4dl() {
       rm -f "$tmpfile"
       ;;
     *twitter.com/*|*x.com/*)
-      if [[ -n "$output" ]]; then
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 --cookies-from-browser vivaldi -o "$output" "$url"
+      local x_cookies="$HOME/.config/yt-dlp/x.com_cookies.txt"
+      local cookie_arg=()
+      if [[ -f "$x_cookies" ]]; then
+        cookie_arg=(--cookies "$x_cookies")
       else
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 --cookies-from-browser vivaldi "$url"
+        echo "Warning: no cookies file found at $x_cookies, trying browser cookies"
+        cookie_arg=(--cookies-from-browser vivaldi)
+      fi
+      if [[ -n "$output" ]]; then
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
+      else
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" "$url"
       fi
       ;;
     *)
