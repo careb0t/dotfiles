@@ -50,21 +50,26 @@ zplug load
 
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
-ytmp4() {
-  if [[ -n "$2" ]]; then
-    yt-dlp -S res,ext:mp4:m4a --recode mp4 -o "$2" "$1"
-  else
-    yt-dlp -S res,ext:mp4:m4a --recode mp4 "$1"
-  fi
-}
-rdmp4() {
+mp4dl() {
   local url="$1"
-  local output="${2:-$(echo "$url" | cut -d'/' -f 8)}"
-  output="${output%.*}"
-  local tmpfile=$(mktemp --suffix=.mp4)
-  reddit-video-downloader "$url" "$tmpfile" && \
-  ffmpeg -i "$tmpfile" -c:v libx264 -c:a aac "${output}.mp4" && \
-  rm -f "$tmpfile"
+  local output="$2"
+  case "$url" in
+    *reddit.com/*|*redd.it/*|*v.redd.it/*)
+      output="${output:-$(echo "$url" | cut -d'/' -f 8)}"
+      output="${output%.*}"
+      local tmpfile=$(mktemp --suffix=.mp4)
+      reddit-video-downloader "$url" "$tmpfile" && \
+      ffmpeg -i "$tmpfile" -c:v libx264 -c:a aac "${output}.mp4" && \
+      rm -f "$tmpfile"
+      ;;
+    *)
+      if [[ -n "$output" ]]; then
+        yt-dlp -S res,ext:mp4:m4a --recode mp4 --postprocessor-args "VideoConvertor:-c:v libx264 -c:a aac" -o "$output" "$url"
+      else
+        yt-dlp -S res,ext:mp4:m4a --recode mp4 --postprocessor-args "VideoConvertor:-c:v libx264 -c:a aac" "$url"
+      fi
+      ;;
+  esac
 }
 
 # Load ZSH plugins
