@@ -64,9 +64,9 @@ mp4dl() {
       ;;
     *)
       if [[ -n "$output" ]]; then
-        yt-dlp -S res,ext:mp4:m4a --recode mp4 --postprocessor-args "VideoConvertor:-c:v libx264 -c:a aac" -o "$output" "$url"
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 -o "$output" "$url"
       else
-        yt-dlp -S res,ext:mp4:m4a --recode mp4 --postprocessor-args "VideoConvertor:-c:v libx264 -c:a aac" "$url"
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "$url"
       fi
       ;;
   esac
