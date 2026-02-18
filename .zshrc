@@ -62,6 +62,13 @@ mp4dl() {
       ffmpeg -i "$tmpfile" -c:v libx264 -c:a aac "${output}.mp4" && \
       rm -f "$tmpfile"
       ;;
+    *twitter.com/*|*x.com/*)
+      if [[ -n "$output" ]]; then
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 --cookies-from-browser vivaldi -o "$output" "$url"
+      else
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 --cookies-from-browser vivaldi "$url"
+      fi
+      ;;
     *)
       if [[ -n "$output" ]]; then
         yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 -o "$output" "$url"
