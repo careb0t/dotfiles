@@ -56,11 +56,13 @@ tmux itself is installed by omarchy-update, but TPM must be set up manually:
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-Then open tmux and press `Ctrl+g` then `I` to install all plugins:
+Then open tmux and press `C-Space` then `I` to install all plugins:
 - tmux-continuum
-- tmux-resurrect
+- tmux-resurrect (azorng/tmux-smooth-scroll)
 - tmux-smooth-scroll
 - vim-tmux-navigator
+
+The tmux config now lives at `~/.config/tmux/tmux.conf` and is managed via stow. It sources the omarchy base config and layers user overrides on top.
 
 ## 6. Stow Dotfiles
 
@@ -86,7 +88,7 @@ yay -S nodejs
 
 ## Notes
 
-- tmux prefix is `Ctrl+g` (not the default `Ctrl+b`)
+- tmux prefix is `C-Space` (secondary: `C-b`); config is at `~/.config/tmux/tmux.conf`
 - `mp4dl <url>` handles YouTube, Reddit, and X/Twitter downloads
   - X/Twitter downloads use a cookies file at `~/.config/yt-dlp/x.com_cookies.txt` — export from Vivaldi if needed
 - Hyprland binding for tmux terminal: `Super+Alt+Enter`
