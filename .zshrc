@@ -42,6 +42,7 @@ zplug load
 
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
+alias lg='lazygit'
 mp4dl() {
   local url="$1"
   local output="$2"
