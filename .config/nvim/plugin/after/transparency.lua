@@ -57,3 +57,29 @@ local groups = {
 for _, name in ipairs(groups) do
 	make_transparent(name)
 end
+
+-- Transparent lualine (dynamic - skips lualine_a to preserve gold mode/time tabs)
+local function make_lualine_transparent()
+	make_transparent("StatusLine")
+	make_transparent("StatusLineNC")
+	for _, group in ipairs(vim.fn.getcompletion("lualine_", "highlight")) do
+		if not group:match("^lualine_a") then
+			make_transparent(group)
+		end
+	end
+end
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+	callback = function()
+		vim.schedule(make_lualine_transparent)
+	end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy",
+	callback = function()
+		vim.schedule(make_lualine_transparent)
+	end,
+})
+
+vim.schedule(make_lualine_transparent)
