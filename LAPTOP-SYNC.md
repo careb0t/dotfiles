@@ -58,7 +58,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 Then open tmux and press `C-Space` then `I` to install all plugins:
 - tmux-continuum
-- tmux-resurrect (azorng/tmux-smooth-scroll)
+- tmux-resurrect
 - tmux-smooth-scroll
 - vim-tmux-navigator
 
