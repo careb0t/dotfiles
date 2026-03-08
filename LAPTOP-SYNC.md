@@ -26,21 +26,22 @@ The local install lands at `~/.local/share/claude/` and is symlinked from `~/.lo
 
 ## 2. Install Remaining Packages
 
-These are not managed by omarchy and must be installed manually:
+These are not managed by omarchy and must be installed manually via the omarchy menu (`Alt+Super+Space` → Install).
 
-```sh
-yay -S yt-dlp ffmpeg reddit-video-downloader
-```
+**Official repo** (Install → Package):
+- `yt-dlp`
+- `ffmpeg`
+
+**AUR** (Install → AUR Package):
+- `reddit-video-downloader`
 
 ## 3. Install Font — ShureTechMono Nerd Font
 
-The default font was changed from JetBrainsMono to ShureTechMono. Search AUR for the correct package:
+The default font was changed from JetBrainsMono to ShureTechMono. Install via the omarchy menu (`Alt+Super+Space` → Install → Package):
 
-```sh
-yay -Ss sharetechmono nerd
-```
+- `ttf-sharetech-mono-nerd`
 
-Install the result, then verify ghostty/waybar/hyprlock render correctly.
+Then verify ghostty/waybar/hyprlock render correctly.
 
 ## 4. Install pnpm
 
@@ -78,11 +79,7 @@ Open nvim and let lazy.nvim auto-install plugins. The following will install aut
 - `neocodeium` (AI completions — requires Node.js)
 - `nvim-tmux-navigation` (tmux/nvim pane nav)
 
-Make sure **Node.js** is installed or neocodeium won't work:
-
-```sh
-yay -S nodejs
-```
+Make sure **Node.js** is installed or neocodeium won't work. Install via the omarchy menu (`Alt+Super+Space` → Install → Development → JavaScript).
 
 ---
 
