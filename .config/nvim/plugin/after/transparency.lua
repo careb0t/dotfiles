@@ -1,83 +1,59 @@
--- transparent background
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
-vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
-vim.api.nvim_set_hl(0, "Terminal", { bg = "none" })
-vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
-vim.api.nvim_set_hl(0, "FoldColumn", { bg = "none" })
-vim.api.nvim_set_hl(0, "Folded", { bg = "none" })
-vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
-vim.api.nvim_set_hl(0, "LineNr", { bg = "none" })
-vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
-vim.api.nvim_set_hl(0, "WhichKeyFloat", { bg = "none" })
-vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
-vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
-vim.api.nvim_set_hl(0, "TelescopePromptBorder", { bg = "none" })
-vim.api.nvim_set_hl(0, "TelescopePromptTitle", { bg = "none" })
-
--- transparent background for neotree
-vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "none" })
-vim.api.nvim_set_hl(0, "NeoTreeVertSplit", { bg = "none" })
-vim.api.nvim_set_hl(0, "NeoTreeWinSeparator", { bg = "none" })
-vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "none" })
-
--- transparent lualine (dynamic - catches all groups and re-applies after colorscheme changes)
-vim.api.nvim_set_hl(0, "StatusLine", { bg = "none" })
-vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none" })
-
-local function make_lualine_transparent()
-  vim.api.nvim_set_hl(0, "StatusLine", { bg = "none" })
-  vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none" })
-  for _, group in ipairs(vim.fn.getcompletion("lualine_", "highlight")) do
-    -- preserve section 'a' (the gold mode indicator bars at the ends)
-    if not group:match("^lualine_a") then
-      local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
-      if ok then
-        vim.api.nvim_set_hl(0, group, vim.tbl_extend("force", hl, { bg = "none" }))
-      end
-    end
-  end
+-- Make highlight groups transparent while preserving their other attributes
+local function make_transparent(name)
+	local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+	if ok then
+		hl.bg = nil
+		vim.api.nvim_set_hl(0, name, hl)
+	end
 end
 
-vim.api.nvim_create_autocmd("ColorScheme", {
-  callback = function()
-    vim.schedule(make_lualine_transparent)
-  end,
-})
+local groups = {
+	-- transparent background
+	"Normal",
+	"NormalFloat",
+	"FloatBorder",
+	"Pmenu",
+	"Terminal",
+	"EndOfBuffer",
+	"FoldColumn",
+	"Folded",
+	"SignColumn",
+	"LineNr",
+	"CursorLineNr",
+	"NormalNC",
+	"WhichKeyFloat",
+	"TelescopeBorder",
+	"TelescopeNormal",
+	"TelescopePromptBorder",
+	"TelescopePromptTitle",
+	-- neotree
+	"NeoTreeNormal",
+	"NeoTreeNormalNC",
+	"NeoTreeVertSplit",
+	"NeoTreeWinSeparator",
+	"NeoTreeEndOfBuffer",
+	-- nvim-tree
+	"NvimTreeNormal",
+	"NvimTreeVertSplit",
+	"NvimTreeEndOfBuffer",
+	-- notify
+	"NotifyINFOBody",
+	"NotifyERRORBody",
+	"NotifyWARNBody",
+	"NotifyTRACEBody",
+	"NotifyDEBUGBody",
+	"NotifyINFOTitle",
+	"NotifyERRORTitle",
+	"NotifyWARNTitle",
+	"NotifyTRACETitle",
+	"NotifyDEBUGTitle",
+	"NotifyINFOBorder",
+	"NotifyERRORBorder",
+	"NotifyWARNBorder",
+	"NotifyTRACEBorder",
+	"NotifyDEBUGBorder",
+}
 
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    vim.schedule(make_lualine_transparent)
-  end,
-})
-
-vim.schedule(make_lualine_transparent)
-
--- transparent bufferline
-vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
-
--- transparent background for nvim-tree
-vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { bg = "none" })
-vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "none" })
-
--- transparent notify background
-vim.api.nvim_set_hl(0, "NotifyINFOBody", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyERRORBody", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyWARNBody", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyTRACEBody", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyDEBUGBody", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyINFOTitle", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyERRORTitle", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyWARNTitle", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyTRACETitle", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyDEBUGTitle", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyINFOBorder", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyERRORBorder", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyWARNBorder", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyTRACEBorder", { bg = "none" })
-vim.api.nvim_set_hl(0, "NotifyDEBUGBorder", { bg = "none" })
+for _, name in ipairs(groups) do
+	make_transparent(name)
+end

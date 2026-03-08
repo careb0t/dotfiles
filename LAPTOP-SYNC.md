@@ -29,10 +29,8 @@ The local install lands at `~/.local/share/claude/` and is symlinked from `~/.lo
 These are not managed by omarchy and must be installed manually:
 
 ```sh
-yay -S yt-dlp ffmpeg reddit-video-downloader gifsicle
+yay -S yt-dlp ffmpeg reddit-video-downloader
 ```
-
-> `gifsicle` is required by the `gifcom` zshrc alias for compressing GIFs.
 
 ## 3. Install Font — ShureTechMono Nerd Font
 
