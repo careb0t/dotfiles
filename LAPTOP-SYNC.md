@@ -31,6 +31,7 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 **Official repo** (Install → Package):
 - `yt-dlp`
 - `ffmpeg`
+- `nodejs` (Install → Development → JavaScript)
 
 **AUR** (Install → AUR Package):
 - `reddit-video-downloader`
@@ -76,10 +77,8 @@ stow .
 ## 7. Neovim — First Launch
 
 Open nvim and let lazy.nvim auto-install plugins. The following will install automatically:
-- `neocodeium` (AI completions — requires Node.js)
+- `neocodeium` (AI completions — requires Node.js, installed in step 2)
 - `nvim-tmux-navigation` (tmux/nvim pane nav)
-
-Make sure **Node.js** is installed or neocodeium won't work. Install via the omarchy menu (`Alt+Super+Space` → Install → Development → JavaScript).
 
 ---
 
