@@ -46,7 +46,8 @@
             "enabled": true
         },
         "AccountPanelServerProfile": {
-            "enabled": true
+            "enabled": true,
+            "prioritizeServerProfile": false
         },
         "AlwaysAnimate": {
             "enabled": false
@@ -55,10 +56,15 @@
             "enabled": false
         },
         "AlwaysTrust": {
-            "enabled": true
+            "enabled": true,
+            "domain": true,
+            "file": true
         },
         "AnonymiseFileNames": {
-            "enabled": true
+            "enabled": true,
+            "anonymiseByDefault": true,
+            "method": 0,
+            "randomisedLength": 7
         },
         "AppleMusicRichPresence": {
             "enabled": false
@@ -139,7 +145,11 @@
             "enabled": false
         },
         "CustomRPC": {
-            "enabled": false
+            "enabled": false,
+            "type": 0,
+            "appName": "The Elder Scrolls III: Morrowind",
+            "imageBig": "",
+            "imageSmall": ""
         },
         "Dearrow": {
             "enabled": false
@@ -163,7 +173,17 @@
             "enabled": false
         },
         "FakeNitro": {
-            "enabled": true
+            "enabled": false,
+            "enableStickerBypass": true,
+            "enableStreamQualityBypass": true,
+            "enableEmojiBypass": true,
+            "transformEmojis": true,
+            "transformStickers": true,
+            "transformCompoundSentence": false,
+            "emojiSize": 48,
+            "hyperLinkText": "{{NAME}}",
+            "useHyperLinks": true,
+            "disableEmbedPermissionCheck": false
         },
         "FakeProfileThemes": {
             "enabled": false
@@ -181,7 +201,7 @@
             "enabled": false
         },
         "FixSpotifyEmbeds": {
-            "enabled": false
+            "enabled": true
         },
         "FixYoutubeEmbeds": {
             "enabled": true
@@ -202,7 +222,9 @@
             "enabled": false
         },
         "GameActivityToggle": {
-            "enabled": true
+            "enabled": true,
+            "location": "PANEL",
+            "oldIcon": false
         },
         "GifPaste": {
             "enabled": false
@@ -250,7 +272,10 @@
             "enabled": false
         },
         "MessageClickActions": {
-            "enabled": true
+            "enabled": true,
+            "requireModifier": false,
+            "enableDoubleClickToEdit": true,
+            "enableDoubleClickToReply": true
         },
         "MessageLatency": {
             "enabled": false
@@ -259,9 +284,6 @@
             "enabled": false
         },
         "MessageLogger": {
-            "enabled": false
-        },
-        "MessageTags": {
             "enabled": false
         },
         "MoreQuickReactions": {
@@ -274,7 +296,9 @@
             "enabled": true
         },
         "NoBlockedMessages": {
-            "enabled": true
+            "enabled": true,
+            "ignoreMessages": false,
+            "applyToIgnoredUsers": true
         },
         "NoDevtoolsWarning": {
             "enabled": false
@@ -298,7 +322,11 @@
             "enabled": false
         },
         "NoReplyMention": {
-            "enabled": true
+            "enabled": true,
+            "userList": "1234567890123445,1234567890123445",
+            "shouldPingListed": true,
+            "inverseShiftReply": false,
+            "roleList": "1234567890123445,1234567890123445"
         },
         "NoServerEmojis": {
             "enabled": false
@@ -403,7 +431,9 @@
             "enabled": false
         },
         "ShikiCodeblocks": {
-            "enabled": true
+            "enabled": true,
+            "useDevIcon": "GREYSCALE",
+            "theme": "https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/dark-plus.json"
         },
         "ShowAllMessageButtons": {
             "enabled": true
@@ -433,10 +463,13 @@
             "enabled": false
         },
         "SpotifyControls": {
-            "enabled": true
+            "enabled": true,
+            "hoverControls": false
         },
         "SpotifyCrack": {
-            "enabled": true
+            "enabled": true,
+            "noSpotifyAutoPause": true,
+            "keepSpotifyActivityOnIdle": false
         },
         "SpotifyShareCommands": {
             "enabled": true
@@ -472,7 +505,8 @@
             "enabled": false
         },
         "UnlockedAvatarZoom": {
-            "enabled": true
+            "enabled": true,
+            "zoomMultiplier": 4
         },
         "UnsuppressEmbeds": {
             "enabled": false
@@ -502,7 +536,9 @@
             "enabled": false
         },
         "ViewIcons": {
-            "enabled": true
+            "enabled": true,
+            "format": "webp",
+            "imgSize": "1024"
         },
         "ViewRaw": {
             "enabled": false
@@ -514,7 +550,8 @@
             "enabled": false
         },
         "VolumeBooster": {
-            "enabled": false
+            "enabled": true,
+            "multiplier": 2
         },
         "WebKeybinds": {
             "enabled": true
@@ -550,6 +587,18 @@
         },
         "WebContextMenus": {
             "enabled": true
+        },
+        "CustomCommands": {
+            "enabled": false
+        },
+        "NoDefaultHangStatus": {
+            "enabled": false
+        },
+        "CharacterCounter": {
+            "enabled": false
+        },
+        "ConcatenatedComponentExtractor": {
+            "enabled": true
         }
     },
     "uiElements": {
@@ -566,6 +615,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1767894280370
+        "settingsSyncVersion": 1777789091345
     }
 }

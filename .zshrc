@@ -148,3 +148,5 @@ mp4gif() {
 
 # Load ZSH plugins
 eval "$(atuin init zsh)"
+
+export PATH=$PATH:/home/careb0t/.spicetify
