@@ -6,9 +6,9 @@ show_hidden = true
 mouse_events = [ "click", "scroll" ]
 [open]
 rules = [
-	{ name = "**.zip", use = [ "extract", "reveal" ] },
+	{ url = "**.zip", use = [ "extract", "reveal" ] },
 	# Folder
-	{ name = "*/", use = [ "edit", "open", "reveal" ] },
+	{ url = "*/", use = [ "edit", "open", "reveal" ] },
 	# Text
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	# Image
@@ -23,7 +23,7 @@ rules = [
 	# Empty file
 	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
 	# Fallback
-	{ name = "*", use = [ "open", "reveal" ] },
+	{ url = "*", use = [ "open", "reveal" ] },
 ]
 [opener]
 edit = [
@@ -34,7 +34,7 @@ prepend_previewers = [
 	# Archive previewer
 	{ mime = "application/*zip",            run = "ouch" },
 	{ mime = "application/octet-stream",    run = "ouch" },
-	{ name = "**.zip",											run = "ouch" },
+	{ url = "**.zip",											run = "ouch" },
 	{ mime = "application/x-tar",           run = "ouch" },
 	{ mime = "application/x-bzip2",         run = "ouch" },
 	{ mime = "application/x-7z-compressed", run = "ouch" },

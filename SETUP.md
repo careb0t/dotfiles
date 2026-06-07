@@ -1,6 +1,6 @@
-# Laptop Sync Checklist
+# New Machine Setup
 
-Steps to run after pulling updated dotfiles on the laptop.
+Steps to run after pulling and stowing the dotfiles on a new machine.
 
 ---
 
@@ -12,7 +12,7 @@ Run this first — it will automatically install several packages that the dotfi
 omarchy-update
 ```
 
-This handles: `tmux`, `claude-code`, `brightnessctl`, and other base system packages added since the last sync.
+This handles: `tmux`, `claude-code`, `lazygit`, `brightnessctl`, and other base system packages.
 
 ### Install Claude Code locally (user bin)
 
@@ -80,6 +80,28 @@ Open nvim and let lazy.nvim auto-install plugins. The following will install aut
 - `neocodeium` (AI completions — requires Node.js, installed in step 2)
 - `nvim-tmux-navigation` (tmux/nvim pane nav)
 
+## 8. Create Hyprland Window Rules
+
+`~/.config/hypr/windows.conf` is not tracked in the dotfiles repo (it varies per machine). Create it manually:
+
+```sh
+touch ~/.config/hypr/windows.conf
+```
+
+Add the following to make btop open as a properly sized floating window (omarchy's default floating size is too small for btop):
+
+```
+windowrule = tag -floating-window*, match:class org.omarchy.btop
+
+windowrule {
+    name = btop-floating
+    match:class = ^org.omarchy.btop$
+    float = on
+    size = 1600 900
+    center = on
+}
+```
+
 ---
 
 ## Notes
@@ -88,3 +110,4 @@ Open nvim and let lazy.nvim auto-install plugins. The following will install aut
 - `mp4dl <url>` handles YouTube, Reddit, and X/Twitter downloads
   - X/Twitter downloads use a cookies file at `~/.config/yt-dlp/x.com_cookies.txt` — export from Vivaldi if needed
 - Hyprland binding for tmux terminal: `Super+Alt+Enter`
+- `lg` opens lazygit
