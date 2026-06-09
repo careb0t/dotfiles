@@ -1,0 +1,9 @@
+#:schema https://yazi-rs.github.io/schemas/keymap.json
+
+[manager]
+prepend_keymap = [
+	{ on = ["g", "s"], run = "cd /ssd",          desc = "Go to /ssd" },
+	{ on = ["g", "v"], run = "cd ~/Videos",       desc = "Go to ~/Videos" },
+	{ on = ["g", "d"], run = "cd ~/dotfiles",     desc = "Go to ~/dotfiles" },
+	{ on = ["g", "p"], run = "cd ~/Pictures",     desc = "Go to ~/Pictures" },
+]

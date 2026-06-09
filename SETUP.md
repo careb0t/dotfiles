@@ -32,6 +32,7 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 - `yt-dlp`
 - `ffmpeg`
 - `nodejs` (Install → Development → JavaScript)
+- `ouch` (required for yazi to preview archive files — `.zip`, `.tar.gz`, `.rar`, etc.)
 
 **AUR** (Install → AUR Package):
 - `reddit-video-downloader`
