@@ -31,6 +31,7 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 **Official repo** (Install → Package):
 - `yt-dlp`
 - `ffmpeg`
+- `gifski` (required for `mp4gif` — high-quality GIF encoding)
 - `nodejs` (Install → Development → JavaScript)
 - `ouch` (required for yazi to preview archive files — `.zip`, `.tar.gz`, `.rar`, etc.)
 
