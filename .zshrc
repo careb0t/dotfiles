@@ -101,7 +101,8 @@ mp4gif() {
         printf "Usage: mp4gif [OPTIONS] <input> [output.gif]\n"
         printf "       mp4gif -a  batch convert all videos in current directory\n"
         printf "Options:\n"
-        printf "  -s  Small file size mode (fps=8, width=240, quality=60)\n"
+        printf "  -a  Batch convert all videos in current directory\n"
+        printf "  -s  Small mode for batch conversion (fps=8, width=240, quality=60)\n"
         printf "  -h  Show this help\n"
         return 0 ;;
       *) printf "Unknown option: %s\n" "$1"; return 1 ;;
@@ -181,121 +182,101 @@ mp4gif() {
   [[ -n "$total_dur" ]] && printf "Duration: %s (%.1f s)\n" "$dur_hms" "$total_dur"
   printf "Output:   %s\n\n" "$output"
 
-  # ── Time range ──
+  # ── Time range / quality / convert (looped so the user can retry with new settings) ──
   local start_raw end_raw start_sec end_sec dur_sec start_arg dur_arg
-  read -r "start_raw?Start time [HH:MM:SS or seconds, enter=beginning]: "
-  read -r "end_raw?End time   [HH:MM:SS or seconds, enter=end]:       "
-
-  if [[ -n "$start_raw" ]]; then
-    start_sec=$(_mp4gif_ts2sec "$start_raw")
-    start_arg="$start_raw"
-  fi
-  if [[ -n "$end_raw" ]]; then
-    end_sec=$(_mp4gif_ts2sec "$end_raw")
-    dur_sec=$(awk -v e="$end_sec" -v s="${start_sec:-0}" 'BEGIN { printf "%.3f", e - s }')
-    if ! awk -v d="$dur_sec" 'BEGIN { exit !(d > 0) }'; then
-      echo "Error: end time must be after start time."
-      return 1
-    fi
-    dur_arg="$dur_sec"
-  fi
-
-  # ── Quality settings ──
-  local fps width quality lossy=""
-  if (( small_mode )); then
-    fps=8; width=240; quality=60; lossy=80
-    printf "Small file size mode: fps=%s, width=%s px, quality=%s\n\n" "$fps" "$width" "$quality"
-  else
-    local fps_in width_in quality_in
-    read -r "fps_in?FPS          [default=24]:  "
-    read -r "width_in?Max width px  [default=720]: "
-    read -r "quality_in?Quality 1-100 [default=90]:  "
-    fps=${fps_in:-24}
-    width=${width_in:-720}
-    quality=${quality_in:-90}
-  fi
-
-  printf "\nConverting: %s -> %s\n" "$input" "$output"
-
-  local tmpdir frame_count size size_bytes
+  local fps width quality lossy fps_in width_in quality_in
+  local tmpdir frame_count size size_bytes keep
   local -a ffargs frames gargs
-  tmpdir=$(mktemp -d) || { echo "Error: could not create temp directory."; return 1; }
 
-  ffargs=(-v quiet -stats)
-  [[ -n "$start_arg" ]] && ffargs+=(-ss "$start_arg")
-  ffargs+=(-i "$input")
-  [[ -n "$dur_arg" ]] && ffargs+=(-t "$dur_arg")
-  ffargs+=(-vf "fps=${fps},scale=${width}:-1:flags=lanczos" "${tmpdir}/frame%04d.png")
+  while true; do
+    start_raw='' end_raw='' start_sec='' end_sec='' dur_sec='' start_arg='' dur_arg=''
+    read -r "start_raw?Start time [HH:MM:SS or seconds, enter=beginning]: "
+    read -r "end_raw?End time   [HH:MM:SS or seconds, enter=end]:       "
 
-  printf "Extracting frames...\n"
-  if ! ffmpeg "${ffargs[@]}"; then
-    printf "Error: frame extraction failed.\n"
-    rm -rf "$tmpdir"
-    return 1
-  fi
-
-  frames=("${tmpdir}"/frame*.png)
-  frame_count=${#frames[@]}
-  printf "%d frames extracted. Building GIF...\n" "$frame_count"
-
-  if (( frame_count == 0 )); then
-    printf "Error: no frames extracted.\n"
-    rm -rf "$tmpdir"
-    return 1
-  fi
-
-  gargs=(--fps "$fps" --quality "$quality" --repeat 0)
-  [[ -n "$lossy" ]] && gargs+=(--lossy-quality "$lossy")
-  gargs+=(-o "$output")
-
-  if ! gifski "${gargs[@]}" "${frames[@]}"; then
-    printf "Error: gifski failed.\n"
-    rm -f "$output"
-    rm -rf "$tmpdir"
-    return 1
-  fi
-
-  rm -rf "$tmpdir"
-
-  size=$(du -sh "$output" 2>/dev/null | cut -f1)
-  size_bytes=$(stat -c%s "$output" 2>/dev/null || echo 0)
-  printf "\nDone. Output: %s (%s)\n" "$output" "$size"
-
-  # ── Offer small-mode re-encode if file is over 15 MB ──
-  if (( size_bytes > 15728640 && !small_mode )); then
-    local redo
-    printf "\nWarning: GIF is %s (>15 MB). Regenerate in small file size mode? [y/N]: " "$size"
-    read -r redo
-    if [[ "$redo" =~ ^[Yy] ]]; then
-      rm -f "$output"
-      tmpdir=$(mktemp -d) || { echo "Error: could not create temp directory."; return 1; }
-      ffargs=(-v quiet -stats)
-      [[ -n "$start_arg" ]] && ffargs+=(-ss "$start_arg")
-      ffargs+=(-i "$input")
-      [[ -n "$dur_arg" ]] && ffargs+=(-t "$dur_arg")
-      ffargs+=(-vf "fps=8,scale=240:-1:flags=lanczos" "${tmpdir}/frame%04d.png")
-      printf "Extracting frames (small mode)...\n"
-      if ffmpeg "${ffargs[@]}"; then
-        frames=("${tmpdir}"/frame*.png)
-        frame_count=${#frames[@]}
-        if (( frame_count > 0 )) && \
-           gifski --fps 8 --quality 60 --lossy-quality 80 --repeat 0 \
-                  -o "$output" "${frames[@]}"; then
-          size=$(du -sh "$output" 2>/dev/null | cut -f1)
-          printf "\nDone (small mode). Output: %s (%s)\n" "$output" "$size"
-        else
-          printf "Error: small mode gifski failed.\n"
-          rm -rf "$tmpdir"
-          return 1
-        fi
-      else
-        printf "Error: small mode frame extraction failed.\n"
-        rm -rf "$tmpdir"
+    if [[ -n "$start_raw" ]]; then
+      start_sec=$(_mp4gif_ts2sec "$start_raw")
+      start_arg="$start_raw"
+    fi
+    if [[ -n "$end_raw" ]]; then
+      end_sec=$(_mp4gif_ts2sec "$end_raw")
+      dur_sec=$(awk -v e="$end_sec" -v s="${start_sec:-0}" 'BEGIN { printf "%.3f", e - s }')
+      if ! awk -v d="$dur_sec" 'BEGIN { exit !(d > 0) }'; then
+        echo "Error: end time must be after start time."
         return 1
       fi
-      rm -rf "$tmpdir"
+      dur_arg="$dur_sec"
     fi
-  fi
+
+    # ── Quality settings ──
+    lossy=""
+    if (( small_mode )); then
+      fps=8; width=240; quality=60; lossy=80
+      printf "Small file size mode: fps=%s, width=%s px, quality=%s\n\n" "$fps" "$width" "$quality"
+    else
+      read -r "fps_in?FPS          [default=24]:  "
+      read -r "width_in?Max width px  [default=720]: "
+      read -r "quality_in?Quality 1-100 [default=90]:  "
+      fps=${fps_in:-24}
+      width=${width_in:-720}
+      quality=${quality_in:-90}
+    fi
+
+    printf "\nConverting: %s -> %s\n" "$input" "$output"
+
+    tmpdir=$(mktemp -d) || { echo "Error: could not create temp directory."; return 1; }
+
+    ffargs=(-v quiet -stats)
+    [[ -n "$start_arg" ]] && ffargs+=(-ss "$start_arg")
+    ffargs+=(-i "$input")
+    [[ -n "$dur_arg" ]] && ffargs+=(-t "$dur_arg")
+    ffargs+=(-vf "fps=${fps},scale=${width}:-1:flags=lanczos" "${tmpdir}/frame%04d.png")
+
+    printf "Extracting frames...\n"
+    if ! ffmpeg "${ffargs[@]}"; then
+      printf "Error: frame extraction failed.\n"
+      rm -rf "$tmpdir"
+      return 1
+    fi
+
+    frames=("${tmpdir}"/frame*.png)
+    frame_count=${#frames[@]}
+    printf "%d frames extracted. Building GIF...\n" "$frame_count"
+
+    if (( frame_count == 0 )); then
+      printf "Error: no frames extracted.\n"
+      rm -rf "$tmpdir"
+      return 1
+    fi
+
+    gargs=(--fps "$fps" --quality "$quality" --repeat 0)
+    [[ -n "$lossy" ]] && gargs+=(--lossy-quality "$lossy")
+    gargs+=(-o "$output")
+
+    if ! gifski "${gargs[@]}" "${frames[@]}"; then
+      printf "Error: gifski failed.\n"
+      rm -f "$output"
+      rm -rf "$tmpdir"
+      return 1
+    fi
+
+    rm -rf "$tmpdir"
+
+    size=$(du -sh "$output" 2>/dev/null | cut -f1)
+    size_bytes=$(stat -c%s "$output" 2>/dev/null || echo 0)
+    printf "\nDone. Output: %s (%s)\n" "$output" "$size"
+
+    # ── Over 10 MB: let the user keep it, or delete it and re-enter settings ──
+    if (( size_bytes > 10485760 && !small_mode )); then
+      printf "\nWarning: GIF is %s (>10 MB). Keep this file, or delete it and try again with new settings? [k]eep/[d]elete: " "$size"
+      read -r keep
+      if [[ "$keep" =~ ^[Dd] ]]; then
+        rm -f "$output"
+        printf "\nDeleted. Let's try again.\n\n"
+        continue
+      fi
+    fi
+    break
+  done
 }
 
 # Load ZSH plugins
