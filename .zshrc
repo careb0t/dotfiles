@@ -43,6 +43,9 @@ zplug load
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
 alias lg='lazygit'
+dotsync() {
+  (cd ~/dotfiles && stow . --adopt && git restore .)
+}
 mp4dl() {
   local url="$1"
   local output="$2"
