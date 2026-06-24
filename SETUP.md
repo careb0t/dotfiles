@@ -34,9 +34,11 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 - `gifski` (required for `mp4gif` — high-quality GIF encoding)
 - `nodejs` (Install → Development → JavaScript)
 - `ouch` (required for yazi to preview archive files — `.zip`, `.tar.gz`, `.rar`, etc.)
+- `syncthing` (see step 9 for setup)
 
 **AUR** (Install → AUR Package):
 - `reddit-video-downloader`
+- `syncthingtray` (tray icon for Syncthing, shows up via waybar's tray module — see step 9)
 
 ## 3. Install Font — ShureTechMono Nerd Font
 
@@ -103,6 +105,45 @@ windowrule {
     center = on
 }
 ```
+
+## 9. Set Up Syncthing
+
+Keeps `~/Videos/Goon` synced live between machines. The folder behaves like a
+normal local directory in Thunar/Yazi — no separate GUI or command needed to
+add, remove, or edit files once this is set up.
+
+Enable the service (starts now and on every login):
+
+```sh
+systemctl --user enable --now syncthing.service
+```
+
+Create the synced folder:
+
+```sh
+mkdir -p ~/Videos/Goon
+```
+
+Open `http://127.0.0.1:8384` and go to Settings → GUI to set a username/password
+(the web UI is reachable on the local network by default).
+
+Pair the two devices: on each machine, go to Actions → Show ID and copy the
+device ID. On each machine, go to Remote Devices → Add Device and paste in the
+*other* machine's device ID, then accept the pairing prompt that appears on the
+other machine.
+
+Share the folder: on one machine, go to Folders → Add Folder, set the path to
+`~/Videos/Goon`, label it (e.g. "Goon"), then under that folder's Sharing tab
+enable sharing with the other device. On the other machine, accept the incoming
+folder-share prompt and set its path to `~/Videos/Goon` too.
+
+Once both sides show the folder as "Up to Date," any file dropped into
+`~/Videos/Goon` on either machine syncs to the other automatically. The web GUI
+is only needed for this one-time setup, never for everyday file adds/removes.
+
+`syncthingtray` provides a tray icon (sync status, pause/resume, quick link to
+the web GUI) via waybar's existing tray module — autostarted through
+`exec-once = uwsm-app -- syncthingtray` in `~/.config/hypr/autostart.conf`.
 
 ---
 
