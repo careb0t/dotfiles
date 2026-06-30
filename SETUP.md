@@ -214,15 +214,17 @@ sudo pacman -S openresolv
 sudo resolvconf -u
 ```
 
-### Allow wg-quick to run without a password prompt
+### Allow wg-quick and resolvconf to run without a password prompt
 
-The menu launches `wg-quick` via `sudo` in the background where there's no terminal for a password prompt. Create a sudoers rule that allows it passwordlessly:
+The menu launches `wg-quick` and `resolvconf` via `sudo` in the background where there's no terminal for a password prompt. Create a sudoers rule that allows both passwordlessly:
 
 ```sh
-echo 'careb0t ALL=(ALL) NOPASSWD: /usr/bin/wg-quick' | sudo tee /etc/sudoers.d/protonvpn-wg && sudo chmod 440 /etc/sudoers.d/protonvpn-wg
+echo 'careb0t ALL=(ALL) NOPASSWD: /usr/bin/wg-quick, /usr/bin/resolvconf' | sudo tee /etc/sudoers.d/protonvpn-wg && sudo chmod 440 /etc/sudoers.d/protonvpn-wg
 ```
 
 Replace `careb0t` with the local username if different.
+
+`resolvconf` must be included alongside `wg-quick` because the connect/disconnect scripts run `resolvconf -u` automatically after each VPN teardown. This prevents a signature mismatch error (`resolvconf: signature mismatch: /etc/resolv.conf`) that would otherwise block the next connection attempt.
 
 ### Download WireGuard configs
 

@@ -40,6 +40,7 @@ if [ -n "$active" ]; then
   for a in $active; do
     sudo -n wg-quick down "$a" 2>/dev/null
   done
+  sudo -n resolvconf -u 2>/dev/null || true
 fi
 
 err=$(sudo -n wg-quick up "$CONFIG" 2>&1)
