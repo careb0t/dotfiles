@@ -47,8 +47,30 @@ dotsync() {
   (cd ~/dotfiles && stow . --adopt && git restore .)
 }
 mp4dl() {
+  local porn_mode=0
+
+  while [[ "$1" == -* ]]; do
+    case "$1" in
+      -p|--porn) porn_mode=1; shift ;;
+      *) break ;;
+    esac
+  done
+
   local url="$1"
   local output="$2"
+  local -a cookie_arg=()
+
+  if (( porn_mode )); then
+    local domain
+    domain=$(printf '%s' "$url" | awk -F/ '{print $3}')
+    local cookie_file="$HOME/.config/yt-dlp/${domain}_cookies.txt"
+    if [[ -f "$cookie_file" ]]; then
+      cookie_arg=(--cookies "$cookie_file")
+    else
+      echo "Warning: no cookies file found at $cookie_file"
+    fi
+  fi
+
   case "$url" in
     *reddit.com/*|*redd.it/*|*v.redd.it/*)
       output="${output:-$(echo "$url" | cut -d'/' -f 8)}"
@@ -59,13 +81,14 @@ mp4dl() {
       rm -f "$tmpfile"
       ;;
     *twitter.com/*|*x.com/*)
-      local x_cookies="$HOME/.config/yt-dlp/x.com_cookies.txt"
-      local cookie_arg=()
-      if [[ -f "$x_cookies" ]]; then
-        cookie_arg=(--cookies "$x_cookies")
-      else
-        echo "Warning: no cookies file found at $x_cookies, trying browser cookies"
-        cookie_arg=(--cookies-from-browser vivaldi)
+      if (( !porn_mode )); then
+        local x_cookies="$HOME/.config/yt-dlp/x.com_cookies.txt"
+        if [[ -f "$x_cookies" ]]; then
+          cookie_arg=(--cookies "$x_cookies")
+        else
+          echo "Warning: no cookies file found at $x_cookies, trying browser cookies"
+          cookie_arg=(--cookies-from-browser vivaldi)
+        fi
       fi
       if [[ -n "$output" ]]; then
         yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
@@ -75,9 +98,9 @@ mp4dl() {
       ;;
     *)
       if [[ -n "$output" ]]; then
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 -o "$output" "$url"
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
       else
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "$url"
+        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" "$url"
       fi
       ;;
   esac

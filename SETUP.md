@@ -29,7 +29,6 @@ The local install lands at `~/.local/share/claude/` and is symlinked from `~/.lo
 These are not managed by omarchy and must be installed manually via the omarchy menu (`Alt+Super+Space` → Install).
 
 **Official repo** (Install → Package):
-- `yt-dlp`
 - `ffmpeg`
 - `gifski` (required for `mp4gif` — high-quality GIF encoding)
 - `nodejs` (Install → Development → JavaScript)
@@ -38,6 +37,60 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 
 **AUR** (Install → AUR Package):
 - `reddit-video-downloader`
+- `python-curl-cffi-git` (required for yt-dlp to impersonate a browser on sites like Pornhub that block bot requests)
+
+### Install yt-dlp (binary, not pacman)
+
+The pacman version of `yt-dlp` lags significantly behind upstream. Install the official binary directly so it stays current and can self-update:
+
+```sh
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o ~/.local/bin/yt-dlp
+chmod +x ~/.local/bin/yt-dlp
+```
+
+`~/.local/bin` is already on `$PATH` via `.zshrc`, so `yt-dlp` will be found immediately after this. Verify with:
+
+```sh
+yt-dlp --version
+```
+
+To update yt-dlp in the future:
+
+```sh
+yt-dlp -U
+```
+
+**mp4dl compatibility:** `mp4dl` calls `yt-dlp` by name for all non-Reddit URLs (YouTube, X/Twitter, etc.). As long as the binary is in `~/.local/bin`, it works with no changes needed. For X/Twitter downloads, also place your cookies file at:
+
+```
+~/.config/yt-dlp/x.com_cookies.txt
+```
+
+Export it from Vivaldi using a cookies.txt browser extension.
+
+### Adult site downloads (`-p` flag)
+
+Sites like Pornhub require two things beyond a standard yt-dlp call:
+
+1. **Browser impersonation** — handled by `python-curl-cffi-git` (installed above). Without it, yt-dlp gets a 403 Forbidden before it can even read the page.
+
+2. **A cookies file** — needed to pass age verification. yt-dlp on Hyprland cannot decrypt Vivaldi's v11 cookies from the keyring, so export manually:
+   - Install the **"Get cookies.txt LOCALLY"** extension in Vivaldi
+   - Navigate to the site while logged in and past age verification
+   - Click the extension and export cookies for the domain
+   - Place the file at `~/.config/yt-dlp/<domain>_cookies.txt`, e.g.:
+     ```
+     ~/.config/yt-dlp/www.pornhub.com_cookies.txt
+     ```
+
+Then download using the `-p` flag, which auto-detects the domain and loads the matching cookie file:
+
+```sh
+mp4dl -p https://www.pornhub.com/view_video.php?viewkey=...
+mp4dl -p https://www.pornhub.com/view_video.php?viewkey=... output.mp4
+```
+
+The flag works with any site — just name the cookie file after the domain as shown above.
 - `syncthingtray` (tray icon for Syncthing, shows up via waybar's tray module — see step 9)
 
 ## 3. Install Font — ShureTechMono Nerd Font
@@ -189,5 +242,6 @@ The menu reads the filenames and turns them into display names automatically —
 - tmux prefix is `C-Space` (secondary: `C-b`); config is at `~/.config/tmux/tmux.conf`
 - `mp4dl <url>` handles YouTube, Reddit, and X/Twitter downloads
   - X/Twitter downloads use a cookies file at `~/.config/yt-dlp/x.com_cookies.txt` — export from Vivaldi if needed
+  - `mp4dl -p <url>` for adult sites — auto-loads `~/.config/yt-dlp/<domain>_cookies.txt`; requires `python-curl-cffi-git` from AUR
 - Hyprland binding for tmux terminal: `Super+Alt+Enter`
 - `lg` opens lazygit
