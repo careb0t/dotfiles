@@ -1,0 +1,21 @@
+#!/bin/bash
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"
+
+active=$(wg show interfaces 2>/dev/null)
+if [ -z "$active" ]; then
+  notify-send -t 4000 "ProtonVPN" "Already disconnected"
+  exit 0
+fi
+
+failed=false
+for a in $active; do
+  if ! sudo -n wg-quick down "$a" 2>/dev/null; then
+    failed=true
+  fi
+done
+
+if $failed; then
+  notify-send -t 8000 "ProtonVPN" "Failed to disconnect. Try: More → Setup WireGuard Sudo"
+else
+  notify-send -t 4000 "ProtonVPN" "Disconnected"
+fi

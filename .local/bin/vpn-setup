@@ -1,0 +1,19 @@
+#!/bin/bash
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"
+USER=$(whoami)
+RULE="$USER ALL=(ALL) NOPASSWD: /usr/bin/wg-quick"
+FILE="/etc/sudoers.d/protonvpn-wg"
+
+mkdir -p "$HOME/.config/protonvpn/wireguard"
+
+msg="Run this once in a terminal to enable passwordless WireGuard:
+
+echo '$RULE' | sudo tee $FILE && sudo chmod 440 $FILE
+
+Then put your WireGuard .conf files in:
+~/.config/protonvpn/wireguard/
+
+Get configs at: protonvpn.com → Dashboard → Downloads → WireGuard
+Keep filenames short (max 15 chars, no spaces)."
+
+notify-send -t 20000 "ProtonVPN Setup" "$msg"

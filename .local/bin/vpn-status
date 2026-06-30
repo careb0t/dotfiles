@@ -1,0 +1,15 @@
+#!/bin/bash
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"
+
+active=$(wg show interfaces 2>/dev/null)
+if [ -z "$active" ]; then
+  notify-send -t 5000 "ProtonVPN Status" "Disconnected"
+else
+  detail=$(sudo -n wg show "$active" 2>/dev/null | grep -E "endpoint|transfer|latest handshake" | head -4)
+  ip=$(ip -4 addr show dev "$active" 2>/dev/null | grep -oP '(?<=inet )[^/]+' | head -1)
+  msg="Connected: $active"
+  [ -n "$ip" ] && msg="$msg | IP: $ip"
+  [ -n "$detail" ] && msg="$msg
+$detail"
+  notify-send -t 8000 "ProtonVPN Status" "$msg"
+fi

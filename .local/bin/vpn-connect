@@ -1,0 +1,57 @@
+#!/bin/bash
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"
+CONF_DIR="$HOME/.config/protonvpn/wireguard"
+
+CONFIG=""
+case "$1" in
+  --country)
+    shift
+    CONFIG=$(find "$CONF_DIR" -maxdepth 1 \( -name "${1}*.conf" -o -name "ProtonVPN_${1}*.conf" \) 2>/dev/null | sort | head -1)
+    ;;
+  --city)
+    shift
+    CONFIG=$(find "$CONF_DIR" -maxdepth 1 -iname "*${1}*.conf" 2>/dev/null | sort | head -1)
+    ;;
+  "")
+    CONFIG=$(find "$CONF_DIR" -maxdepth 1 -name "*.conf" 2>/dev/null | sort | head -1)
+    ;;
+  *)
+    CONFIG="$1"
+    ;;
+esac
+
+if [ -z "$CONFIG" ]; then
+  notify-send -t 10000 "ProtonVPN" "No config found. Download WireGuard configs from protonvpn.com → Dashboard → Downloads"
+  exit 1
+fi
+
+iface=$(basename "$CONFIG" .conf)
+if [ ${#iface} -gt 15 ]; then
+  notify-send -t 12000 "ProtonVPN" "Config name too long (max 15 chars): $iface — please rename the file."
+  exit 1
+fi
+
+chmod 600 "$CONFIG" 2>/dev/null
+
+notify-send -t 3000 "ProtonVPN" "Connecting to $iface..."
+
+active=$(wg show interfaces 2>/dev/null)
+if [ -n "$active" ]; then
+  for a in $active; do
+    sudo -n wg-quick down "$a" 2>/dev/null
+  done
+fi
+
+err=$(sudo -n wg-quick up "$CONFIG" 2>&1)
+rc=$?
+echo "$err" > /tmp/vpn-last-error
+
+if [ $rc -eq 0 ]; then
+  notify-send -t 5000 "ProtonVPN" "Connected: $iface"
+elif echo "$err" | grep -qi "password\|not allowed\|sudoers"; then
+  notify-send -t 12000 "ProtonVPN" "WireGuard needs passwordless sudo. Open More → Setup WireGuard Sudo"
+else
+  real_err=$(echo "$err" | grep -v '^\[#\]' | grep -v '^$')
+  [ -z "$real_err" ] && real_err="$err"
+  notify-send -t 12000 "ProtonVPN" "Connection failed: $real_err"
+fi

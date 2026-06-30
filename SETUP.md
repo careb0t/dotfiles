@@ -145,6 +145,43 @@ is only needed for this one-time setup, never for everyday file adds/removes.
 the web GUI) via waybar's existing tray module — autostarted through
 `exec-once = uwsm-app -- syncthingtray` in `~/.config/hypr/autostart.conf`.
 
+## 10. ProtonVPN (WireGuard)
+
+The VPN menu (`Super+Shift+V`) uses `wg-quick` directly — no ProtonVPN daemon or NetworkManager required.
+
+### Install dependencies
+
+```sh
+sudo pacman -S openresolv
+```
+
+`openresolv` provides the `resolvconf` command that `wg-quick` uses to apply DNS settings from the VPN config. After installing, initialize it once:
+
+```sh
+sudo resolvconf -u
+```
+
+### Allow wg-quick to run without a password prompt
+
+The menu launches `wg-quick` via `sudo` in the background where there's no terminal for a password prompt. Create a sudoers rule that allows it passwordlessly:
+
+```sh
+echo 'careb0t ALL=(ALL) NOPASSWD: /usr/bin/wg-quick' | sudo tee /etc/sudoers.d/protonvpn-wg && sudo chmod 440 /etc/sudoers.d/protonvpn-wg
+```
+
+Replace `careb0t` with the local username if different.
+
+### Download WireGuard configs
+
+1. Log in at protonvpn.com → **Dashboard → Downloads → WireGuard**
+2. Generate a config for each server you want
+3. Rename each file — the filename becomes the network interface name, so it must be **≤15 characters, no spaces**
+   - `CZ-33.conf` ✓ — Czech Republic server #33
+   - `ProtonVPN_US-AZ-1.conf` ✗ — too long (17 chars), wg-quick will fail
+4. Place the renamed files in `~/.config/protonvpn/wireguard/`
+
+The menu reads the filenames and turns them into display names automatically — `CZ-33.conf` shows as **Czech Republic #33**, `US-1.conf` as **United States #1**, etc.
+
 ---
 
 ## Notes
