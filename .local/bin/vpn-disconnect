@@ -10,6 +10,7 @@ fi
 CONF_DIR="$HOME/.config/protonvpn/wireguard"
 failed=false
 for a in $active; do
+  sudo -n resolvectl revert "$a" 2>/dev/null
   conf="$CONF_DIR/$a.conf"
   if [ ! -f "$conf" ]; then
     conf="$a"

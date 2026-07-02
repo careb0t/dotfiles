@@ -40,14 +40,32 @@ if [ -n "$active" ]; then
   for a in $active; do
     sudo -n wg-quick down "$a" 2>/dev/null
   done
-  sudo -n resolvconf -u 2>/dev/null || true
 fi
 
-err=$(sudo -n wg-quick up "$CONFIG" 2>&1)
+# wg-quick's built-in DNS handling shells out to `resolvconf`, which fights
+# systemd-resolved for ownership of /etc/resolv.conf: every time resolved
+# regenerates its stub file it wipes resolvconf's signature, so the next
+# `resolvconf -a` call rejects it as a "signature mismatch" and wg-quick
+# tears the interface back down. Strip DNS from the config wg-quick sees
+# (so its resolvconf call is a no-op) and set DNS ourselves via resolvectl,
+# which talks to systemd-resolved directly instead of racing it over a file.
+dns_servers=$(grep -i '^[[:space:]]*DNS[[:space:]]*=' "$CONFIG" | head -1 | cut -d= -f2- | tr -d ' ')
+
+tmpdir=$(mktemp -d)
+trap 'rm -rf "$tmpdir"' EXIT
+tmpconf="$tmpdir/$iface.conf"
+grep -vi '^[[:space:]]*DNS[[:space:]]*=' "$CONFIG" > "$tmpconf"
+chmod 600 "$tmpconf"
+
+err=$(sudo -n wg-quick up "$tmpconf" 2>&1)
 rc=$?
 echo "$err" > /tmp/vpn-last-error
 
 if [ $rc -eq 0 ]; then
+  if [ -n "$dns_servers" ]; then
+    sudo -n resolvectl dns "$iface" ${dns_servers//,/ } 2>/dev/null
+    sudo -n resolvectl domain "$iface" "~." 2>/dev/null
+  fi
   notify-send -t 5000 "ProtonVPN" "Connected: $iface"
 elif echo "$err" | grep -qi "password\|not allowed\|sudoers"; then
   notify-send -t 12000 "ProtonVPN" "WireGuard needs passwordless sudo. Open More → Setup WireGuard Sudo"
