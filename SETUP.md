@@ -237,6 +237,40 @@ Replace `careb0t` with the local username if different.
 
 The menu reads the filenames and turns them into display names automatically — `CZ-33.conf` shows as **Czech Republic #33**, `US-1.conf` as **United States #1**, etc.
 
+## 11. Set Up Yazi as the System File Picker
+
+Routes file open/save dialogs in GTK, Chromium/Electron (Vivaldi, Discord clients), Qt6, and Steam through yazi (in a ghostty window) instead of the native GTK/Thunar file chooser.
+
+### Install the portal backend (AUR)
+
+Install via the omarchy menu: `Alt+Super+Space` → Install → AUR Package → `xdg-desktop-portal-termfilechooser`.
+
+### Config (already stowed)
+
+- `~/.config/xdg-desktop-portal-termfilechooser/config` — tells the portal to use the bundled `yazi-wrapper.sh`, and sets `TERMCMD=ghostty --title=termfilechooser --font-size=14 -e` so the picker opens in ghostty at a readable size instead of the tiny default.
+- `~/.config/xdg-desktop-portal/hyprland-portals.conf` — sets `org.freedesktop.impl.portal.FileChooser=termfilechooser` as preferred, so the portal picks this over GTK for file dialogs while leaving other portal interfaces (screenshot, screen-share, etc.) on `hyprland;gtk`.
+- `~/.config/hypr/envs.conf` — sets `GTK_USE_PORTAL=1`, which is what makes GTK's native file chooser widget (used internally by GTK apps, Chromium/Electron, and Steam) delegate to the portal instead of showing its own dialog. Also sets `QT_QPA_PLATFORMTHEME=xdgdesktopportal`, enabled by default, which does the same for Qt6 apps (qBittorrent, Kdenlive, Qt Designer, etc.) via Qt's built-in portal theme plugin.
+
+**Note:** on a machine where these files already exist as plain files (not yet stow-managed), `stow .` will refuse to symlink over them — move or remove the existing real files first.
+
+### Apply changes
+
+`GTK_USE_PORTAL` only takes effect for processes started after it's exported, so **log out and back in (or reboot)** after stowing. Then restart the portal services once to pick up the new preferred-backend config:
+
+```sh
+systemctl --user restart xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+```
+
+### Verify
+
+```sh
+gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --method org.freedesktop.portal.FileChooser.OpenFile "" "Pick a file" "{}"
+```
+
+A ghostty window running yazi should pop up.
+
+**Known gap:** Firefox-based browsers (Floorp, Zen Browser) don't honor `GTK_USE_PORTAL` — they need `widget.use-xdg-desktop-portal.file-picker` set to `1` via `user.js` in each profile. Not yet set up.
+
 ---
 
 ## Notes
