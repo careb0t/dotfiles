@@ -2,5 +2,5 @@
 cmd=yazi-wrapper.sh
 default_dir=$HOME
 env=TERMCMD=ghostty --title=termfilechooser --font-size=14 -e
-open_mode=suggested
-save_mode=suggested
+open_mode=last
+save_mode=last
