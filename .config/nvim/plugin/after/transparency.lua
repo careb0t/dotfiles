@@ -26,6 +26,12 @@ local groups = {
 	"TelescopeNormal",
 	"TelescopePromptBorder",
 	"TelescopePromptTitle",
+	-- diagnostics
+	"DiagnosticSignError",
+	"DiagnosticSignWarn",
+	"DiagnosticSignInfo",
+	"DiagnosticSignHint",
+	"DiagnosticSignOk",
 	-- neotree
 	"NeoTreeNormal",
 	"NeoTreeNormalNC",
