@@ -291,9 +291,9 @@ mp4gif() {
     size_bytes=$(stat -c%s "$output" 2>/dev/null || echo 0)
     printf "\nDone. Output: %s (%s)\n" "$output" "$size"
 
-    # ── Over 10 MB: let the user keep it, or delete it and re-enter settings ──
-    if (( size_bytes > 10485760 && !small_mode )); then
-      printf "\nWarning: GIF is %s (>10 MB). Keep this file, or delete it and try again with new settings? [k]eep/[d]elete: " "$size"
+    # ── Over 50 MB: let the user keep it, or delete it and re-enter settings ──
+    if (( size_bytes > 52428800 && !small_mode )); then
+      printf "\nWarning: GIF is %s (>50 MB). Keep this file, or delete it and try again with new settings? [k]eep/[d]elete: " "$size"
       read -r keep
       if [[ "$keep" =~ ^[Dd] ]]; then
         rm -f "$output"
