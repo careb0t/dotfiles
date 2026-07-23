@@ -168,7 +168,7 @@ mp4gif() {
       if ffmpeg -v quiet -i "$f" \
            -vf "fps=${fps},scale=${width}:-1:flags=lanczos" \
            "${tmpdir}/frame%04d.png" 2>/dev/null; then
-        frames=("${tmpdir}"/frame*.png)
+        frames=("${tmpdir}"/frame*.png(N))
         if (( ${#frames[@]} > 0 )) && \
            gifski --fps "$fps" --quality "$quality" --repeat 0 \
                   -o "$out" "${frames[@]}" 2>/dev/null; then
@@ -307,7 +307,7 @@ _mp4gif_convert() {
       return 1
     fi
 
-    frames=("${tmpdir}"/frame*.png)
+    frames=("${tmpdir}"/frame*.png(N))
     frame_count=${#frames[@]}
     printf "%d frames extracted. Building GIF...\n" "$frame_count"
 
@@ -334,7 +334,7 @@ _mp4gif_convert() {
     size_bytes=$(stat -c%s "$output" 2>/dev/null || echo 0)
     printf "\nDone. Output: %s (%s)\n" "$output" "$size"
 
-    # ── Over 50 MB: let the user keep it, or delete it ──
+    # ── Over 50 MB: let the user keep it, delete it and retry, or (multi-file) skip to the next file ──
     if (( size_bytes > 52428800 && !small_mode )); then
       if (( allow_retry )); then
         printf "\nWarning: GIF is %s (>50 MB). Keep this file, or delete it and try again with new settings? [k]eep/[d]elete: " "$size"
@@ -345,11 +345,15 @@ _mp4gif_convert() {
           continue
         fi
       else
-        printf "\nWarning: GIF is %s (>50 MB). Keep or delete this file? [k]eep/[d]elete: " "$size"
+        printf "\nWarning: GIF is %s (>50 MB). Keep, delete and retry, or skip to the next file? [k]eep/[d]elete/[s]kip: " "$size"
         read -r keep
         if [[ "$keep" =~ ^[Dd] ]]; then
           rm -f "$output"
-          printf "\nDeleted. Moving on to the next file.\n"
+          printf "\nDeleted. Let's try again.\n\n"
+          continue
+        elif [[ "$keep" =~ ^[Ss] ]]; then
+          rm -f "$output"
+          printf "\nSkipped. Moving on to the next file.\n"
         fi
       fi
     fi
