@@ -117,6 +117,7 @@ _mp4gif_ts2sec() {
 mp4gif() {
   command -v gifski &>/dev/null || { echo "Error: gifski is not installed."; return 1; }
   command -v ffmpeg  &>/dev/null || { echo "Error: ffmpeg is not installed.";  return 1; }
+  command -v fzf     &>/dev/null || { echo "Error: fzf is not installed.";     return 1; }
 
   local small_mode=0 batch_mode=0
   while [[ "$1" == -* ]]; do
@@ -124,11 +125,12 @@ mp4gif() {
       -a) batch_mode=1 ;;
       -s) small_mode=1 ;;
       -h|--help)
-        printf "Usage: mp4gif [OPTIONS] <input> [output.gif]\n"
-        printf "       mp4gif -a  batch convert all videos in current directory\n"
+        printf "Usage: mp4gif [OPTIONS] [input] [output.gif]\n"
+        printf "       mp4gif [OPTIONS]  interactively pick file(s) via fzf (tab = multi-select)\n"
+        printf "       mp4gif -a         batch convert all videos in current directory\n"
         printf "Options:\n"
         printf "  -a  Batch convert all videos in current directory\n"
-        printf "  -s  Small mode for batch conversion (fps=8, width=240, quality=60)\n"
+        printf "  -s  Small mode (fps=8, width=240, quality=60)\n"
         printf "  -h  Show this help\n"
         return 0 ;;
       *) printf "Unknown option: %s\n" "$1"; return 1 ;;
@@ -187,16 +189,57 @@ mp4gif() {
     return 0
   fi
 
-  # ── SINGLE FILE MODE ────────────────────────────────────────────────────────
-  if [[ -z "$1" ]]; then
-    printf "Usage: mp4gif [OPTIONS] <input.(mp4|webm|mkv|...)> [output.gif]\n"
-    printf "       mp4gif -a  batch convert all videos in current directory\n"
-    printf "       mp4gif -s  small file size mode\n"
-    return 1
+  # ── FILE SELECTION ──────────────────────────────────────────────────────────
+  local -a inputs
+  local output_override=""
+
+  if [[ -n "$1" ]]; then
+    # Direct usage: mp4gif input.mp4 [output.gif]
+    [[ ! -f "$1" ]] && { printf "Error: file not found: %s\n" "$1"; return 1; }
+    inputs=("$1")
+    output_override="$2"
+  else
+    local -a candidates
+    candidates=(*.(mp4|webm|mkv|avi|mov|flv|wmv|m4v|ts|vob|ogv|3gp)(N))
+    (( ${#candidates[@]} == 0 )) && { echo "No video files found in current directory."; return 0; }
+
+    local fzf_out
+    fzf_out=$(printf '%s\n' "${candidates[@]}" | fzf -m \
+      --prompt="Select video(s) (tab=multi-select) > " \
+      --height=~60% --border \
+      --preview 'ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 {} 2>/dev/null | xargs printf "Duration: %s s\n"')
+    [[ -z "$fzf_out" ]] && { echo "No file selected."; return 0; }
+
+    inputs=("${(@f)fzf_out}")
+
+    if (( ${#inputs[@]} == 1 )); then
+      local out_in
+      read -r "out_in?Output name [enter=${inputs[1]:r}.gif]: "
+      output_override="$out_in"
+    fi
   fi
 
-  local input="$1" output="${2:-${1:r}.gif}"
-  [[ ! -f "$input" ]] && { printf "Error: file not found: %s\n" "$input"; return 1; }
+  # ── When multiple files are queued, don't let one file's retry loop block the rest ──
+  local allow_retry=1
+  (( ${#inputs[@]} > 1 )) && allow_retry=0
+
+  local input output
+  for input in "${inputs[@]}"; do
+    if [[ ! -f "$input" ]]; then
+      printf "Error: file not found: %s\n" "$input"
+      continue
+    fi
+    if (( ${#inputs[@]} == 1 )) && [[ -n "$output_override" ]]; then
+      output="$output_override"
+    else
+      output="${input:r}.gif"
+    fi
+    _mp4gif_convert "$input" "$output" "$small_mode" "$allow_retry"
+  done
+}
+
+_mp4gif_convert() {
+  local input="$1" output="$2" small_mode="$3" allow_retry="$4"
 
   local total_dur dur_hms
   total_dur=$(ffprobe -v error -show_entries format=duration \
@@ -204,7 +247,7 @@ mp4gif() {
   dur_hms=$(printf "%s" "$total_dur" | awk '{
     h=int($1/3600); m=int(($1-h*3600)/60); s=$1-h*3600-m*60
     printf "%02d:%02d:%05.2f", h, m, s }')
-  printf "Input:    %s\n" "$input"
+  printf "\nInput:    %s\n" "$input"
   [[ -n "$total_dur" ]] && printf "Duration: %s (%.1f s)\n" "$dur_hms" "$total_dur"
   printf "Output:   %s\n\n" "$output"
 
@@ -291,14 +334,23 @@ mp4gif() {
     size_bytes=$(stat -c%s "$output" 2>/dev/null || echo 0)
     printf "\nDone. Output: %s (%s)\n" "$output" "$size"
 
-    # ── Over 50 MB: let the user keep it, or delete it and re-enter settings ──
+    # ── Over 50 MB: let the user keep it, or delete it ──
     if (( size_bytes > 52428800 && !small_mode )); then
-      printf "\nWarning: GIF is %s (>50 MB). Keep this file, or delete it and try again with new settings? [k]eep/[d]elete: " "$size"
-      read -r keep
-      if [[ "$keep" =~ ^[Dd] ]]; then
-        rm -f "$output"
-        printf "\nDeleted. Let's try again.\n\n"
-        continue
+      if (( allow_retry )); then
+        printf "\nWarning: GIF is %s (>50 MB). Keep this file, or delete it and try again with new settings? [k]eep/[d]elete: " "$size"
+        read -r keep
+        if [[ "$keep" =~ ^[Dd] ]]; then
+          rm -f "$output"
+          printf "\nDeleted. Let's try again.\n\n"
+          continue
+        fi
+      else
+        printf "\nWarning: GIF is %s (>50 MB). Keep or delete this file? [k]eep/[d]elete: " "$size"
+        read -r keep
+        if [[ "$keep" =~ ^[Dd] ]]; then
+          rm -f "$output"
+          printf "\nDeleted. Moving on to the next file.\n"
+        fi
       fi
     fi
     break
