@@ -91,16 +91,32 @@ mp4dl() {
         fi
       fi
       if [[ -n "$output" ]]; then
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
+        yt-dlp --js-runtimes node -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
       else
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" "$url"
+        yt-dlp --js-runtimes node -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" "$url"
+      fi
+      ;;
+    *youtube.com/*|*youtu.be/*)
+      if (( !porn_mode )); then
+        local yt_cookies="$HOME/.config/yt-dlp/youtube.com_cookies.txt"
+        if [[ -f "$yt_cookies" ]]; then
+          cookie_arg=(--cookies "$yt_cookies")
+        else
+          echo "Warning: no cookies file found at $yt_cookies, trying browser cookies"
+          cookie_arg=(--cookies-from-browser vivaldi)
+        fi
+      fi
+      if [[ -n "$output" ]]; then
+        yt-dlp --js-runtimes node -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
+      else
+        yt-dlp --js-runtimes node -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" "$url"
       fi
       ;;
     *)
       if [[ -n "$output" ]]; then
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
+        yt-dlp --js-runtimes node -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" -o "$output" "$url"
       else
-        yt-dlp -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" "$url"
+        yt-dlp --js-runtimes node -S "vcodec:h264,res,ext:mp4:m4a" --remux-video mp4 "${cookie_arg[@]}" "$url"
       fi
       ;;
   esac
