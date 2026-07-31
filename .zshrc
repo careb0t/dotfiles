@@ -135,17 +135,14 @@ mp4gif() {
   command -v ffmpeg  &>/dev/null || { echo "Error: ffmpeg is not installed.";  return 1; }
   command -v fzf     &>/dev/null || { echo "Error: fzf is not installed.";     return 1; }
 
-  local small_mode=0 batch_mode=0
+  local small_mode=0
   while [[ "$1" == -* ]]; do
     case "$1" in
-      -a) batch_mode=1 ;;
       -s) small_mode=1 ;;
       -h|--help)
         printf "Usage: mp4gif [OPTIONS] [input] [output.gif]\n"
         printf "       mp4gif [OPTIONS]  interactively pick file(s) via fzf (tab = multi-select)\n"
-        printf "       mp4gif -a         batch convert all videos in current directory\n"
         printf "Options:\n"
-        printf "  -a  Batch convert all videos in current directory\n"
         printf "  -s  Small mode (fps=8, width=240, quality=60)\n"
         printf "  -h  Show this help\n"
         return 0 ;;
@@ -153,57 +150,6 @@ mp4gif() {
     esac
     shift
   done
-
-  # ── BATCH MODE ──────────────────────────────────────────────────────────────
-  if (( batch_mode )); then
-    local files=(*.(mp4|webm|mkv|avi|mov|flv|wmv|m4v|ts|vob|ogv|3gp)(N))
-    local total=${#files[@]}
-    (( total == 0 )) && { echo "No video files found in current directory."; return 0; }
-
-    printf "Found %d video file(s) to process.\n" "$total"
-    local count=0 skipped=0 fps width quality ok
-    local -a failed=() frames
-    if (( small_mode )); then
-      fps=8; width=240; quality=60
-    else
-      fps=24; width=720; quality=90
-    fi
-
-    local f out tmpdir
-    for f in "${files[@]}"; do
-      out="${f:r}.gif"
-      if [[ -f "$out" ]]; then
-        printf "  [skip] %s\n" "$f"
-        (( skipped++ ))
-        continue
-      fi
-      (( count++ ))
-      printf "  [%d/%d] %s -> %s\n" "$count" "$(( total - skipped ))" "$f" "$out"
-      tmpdir=$(mktemp -d)
-      ok=0
-      if ffmpeg -v quiet -i "$f" \
-           -vf "fps=${fps},scale=${width}:-1:flags=lanczos" \
-           "${tmpdir}/frame%04d.png" 2>/dev/null; then
-        frames=("${tmpdir}"/frame*.png(N))
-        if (( ${#frames[@]} > 0 )) && \
-           gifski --fps "$fps" --quality "$quality" --repeat 0 \
-                  -o "$out" "${frames[@]}" 2>/dev/null; then
-          printf "         Done. (%s)\n" "$(du -sh "$out" 2>/dev/null | cut -f1)"
-          ok=1
-        fi
-      fi
-      (( ok )) || { printf "         Failed.\n"; rm -f "$out"; failed+=("$f"); }
-      rm -rf "$tmpdir"
-    done
-
-    printf "\nBatch complete: %d converted, %d skipped.\n" "$count" "$skipped"
-    if (( ${#failed[@]} > 0 )); then
-      printf "Failed %d file(s):\n" "${#failed[@]}"
-      printf "  - %s\n" "${failed[@]}"
-      return 1
-    fi
-    return 0
-  fi
 
   # ── FILE SELECTION ──────────────────────────────────────────────────────────
   local -a inputs
@@ -217,7 +163,11 @@ mp4gif() {
   else
     local -a candidates
     candidates=(*.(mp4|webm|mkv|avi|mov|flv|wmv|m4v|ts|vob|ogv|3gp)(N))
-    (( ${#candidates[@]} == 0 )) && { echo "No video files found in current directory."; return 0; }
+    if (( ${#candidates[@]} == 0 )); then
+      # No videos directly in this directory — fall back to subdirectories.
+      candidates=(**/*.(mp4|webm|mkv|avi|mov|flv|wmv|m4v|ts|vob|ogv|3gp)(N))
+    fi
+    (( ${#candidates[@]} == 0 )) && { echo "No video files found in current directory or subdirectories."; return 0; }
 
     local fzf_out
     fzf_out=$(printf '%s\n' "${candidates[@]}" | fzf -m \
