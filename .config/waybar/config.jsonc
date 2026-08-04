@@ -4,16 +4,13 @@
   "position": "top",
   "spacing": 0,
   "height": 26,
+  // modules-right lives in an include so it can be overridden per-machine.
+  // ~/.config/waybar/host.jsonc is a local, untracked file (like
+  // ~/.config/hypr/windows.conf) — if present, its modules-right wins.
+  // Otherwise falls through to the shared default in modules-defaults.jsonc.
+  "include": ["~/.config/waybar/host.jsonc", "~/.config/waybar/modules-defaults.jsonc"],
   "modules-left": ["custom/omarchy", "hyprland/workspaces"],
   "modules-center": ["clock", "custom/weather", "custom/update", "custom/voxtype", "custom/screenrecording-indicator", "custom/notification-silencing-indicator"],
-  "modules-right": [
-    "group/tray-expander",
-    "bluetooth",
-    "network",
-    "pulseaudio",
-    "cpu",
-    "battery"
-  ],
   "hyprland/workspaces": {
     "all-outputs": true,
     "on-click": "activate",

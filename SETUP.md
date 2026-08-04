@@ -137,6 +137,15 @@ Open nvim and let lazy.nvim auto-install plugins. The following will install aut
 - `neocodeium` (AI completions — requires Node.js, installed in step 2)
 - `nvim-tmux-navigation` (tmux/nvim pane nav)
 
+## 7b. Waybar Per-Machine Overrides (optional)
+
+`~/.config/waybar/host.jsonc` is not tracked in the dotfiles repo (it varies
+per machine, like `windows.conf` below). If present, it overrides
+`modules-right` from `config.jsonc`'s `include`; if absent, waybar falls back
+to the shared default in `modules-defaults.jsonc` (with battery). Only needed
+on a machine that should show a different set of right-side modules — e.g.
+the desktop drops `battery` since it has no battery hardware.
+
 ## 8. Create Hyprland Window Rules
 
 `~/.config/hypr/windows.conf` is not tracked in the dotfiles repo (it varies per machine). Create it manually:
@@ -155,6 +164,19 @@ windowrule {
     match:class = ^org.omarchy.btop$
     float = on
     size = 1600 900
+    center = on
+}
+```
+
+Also add this rule so the yazi file picker (see step 11) opens floating and centered instead of tiling like a normal window. It matches on the `--title=termfilechooser` set by `TERMCMD` in the termfilechooser config, so it only applies to yazi-as-file-picker — regular ghostty/yazi usage is unaffected:
+
+```
+windowrule {
+    name = yazi-filepicker-floating
+    match:class = ^com.mitchellh.ghostty$
+    match:initial_title = ^termfilechooser$
+    float = on
+    size = 1200 800
     center = on
 }
 ```

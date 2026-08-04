@@ -1,0 +1,13 @@
+{
+  // Default modules-right, used on any machine without a
+  // ~/.config/waybar/host.jsonc override (see config.jsonc's "include").
+  // This is the shared/laptop baseline — keep battery here.
+  "modules-right": [
+    "group/tray-expander",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "cpu",
+    "battery"
+  ]
+}
