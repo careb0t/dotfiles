@@ -34,6 +34,7 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 - `nodejs` (Install → Development → JavaScript)
 - `ouch` (required for yazi to preview archive files — `.zip`, `.tar.gz`, `.rar`, etc.)
 - `syncthing` (see step 9 for setup)
+- `python-pillow` and `pyside6` (required for `gifcollage` — see step 12)
 
 **AUR** (Install → AUR Package):
 - `reddit-video-downloader`
@@ -292,6 +293,47 @@ gdbus call --session --dest org.freedesktop.portal.Desktop --object-path /org/fr
 A ghostty window running yazi should pop up.
 
 **Known gap:** Firefox-based browsers (Floorp, Zen Browser) don't honor `GTK_USE_PORTAL` — they need `widget.use-xdg-desktop-portal.file-picker` set to `1` via `user.js` in each profile. Not yet set up.
+
+## 12. gifcollage (animated GIF/WebP collage viewer)
+
+Opens a single window showing a rotating grid of animated GIFs and animated
+WebPs from a directory you pick interactively. Lives at
+`~/.local/bin/gifcollage`, symlinked from the dotfiles repo via stow like the
+`vpn-*` scripts.
+
+### Dependencies
+
+- `fzf`, `fd` — already installed by `omarchy-update` (step 1)
+- `python-pillow`, `pyside6` — install manually (step 2); used to detect
+  animated WebPs and to render the grid (`QLabel`/`QMovie` natively animate
+  both GIF and WebP)
+
+### Usage
+
+```sh
+gifcollage [SEARCH_ROOT] [--grid N] [--interval SECONDS] [--once] [--letterbox]
+```
+
+Run it in a terminal:
+
+1. fzf prompts you to pick the target directory (browsing starts at
+   `SEARCH_ROOT`, default `$HOME`).
+2. A second fzf (multi-select with Tab) lets you exclude subdirectories from
+   the scan.
+3. Every `.gif` and *animated* `.webp` file under the target directory
+   (minus excluded subdirs) is collected, shuffled, and split across an
+   N×N grid (default 4×4, auto-shrinks if there are fewer files than
+   cells). Each cell swaps to its next file on its own randomized timer
+   (averaging `--interval` seconds), so the whole grid doesn't flip at
+   once.
+
+Flags:
+- `--grid N` — max grid size, N×N (default `4`)
+- `--interval SECONDS` — average seconds between a cell's swaps (default `2`)
+- `--once` — close the window once every cell has shown its files once,
+  instead of looping forever
+- `--letterbox` — fit each animation entirely inside its cell (preserves
+  aspect ratio, adds black bars) instead of the default crop-to-fill
 
 ---
 

@@ -1,0 +1,339 @@
+#!/usr/bin/env python3
+"""
+gifcollage - a single window showing a rotating grid collage of animated
+GIF/WebP files, built with PySide6 (QLabel + QMovie animate both formats
+natively).
+
+Usage:
+    gifcollage [SEARCH_ROOT] [--grid N] [--interval SECONDS] [--once]
+
+    SEARCH_ROOT   Where the first directory picker starts browsing from.
+                  Defaults to $HOME.
+
+Flow:
+    1. fzf lets you pick the target directory (any dir under SEARCH_ROOT).
+    2. fzf (multi-select) lets you pick subdirectories of the target
+       directory to EXCLUDE from the scan.
+    3. All *.gif and animated *.webp files under the target dir (minus
+       excluded subdirs) are collected, shuffled, and split round-robin
+       across an N x N grid of cells in a single window. Every
+       `--interval` seconds all cells advance to their next file; each
+       cell loops its own slice, so together the grid cycles through
+       everything.
+
+Requires: fzf, fd, python3 with PySide6 and Pillow.
+"""
+import argparse
+import os
+import random
+import shutil
+import signal
+import subprocess
+import sys
+from pathlib import Path
+
+DEFAULT_EXCLUDES = [
+    ".git", "node_modules", ".cache", ".npm", ".cargo", ".rustup",
+    ".venv", "venv", "__pycache__", ".local/share/Trash", ".steam",
+    ".wine", ".mozilla", ".local/share/flatpak",
+]
+
+
+def die(msg, code=1):
+    print(f"gifcollage: {msg}", file=sys.stderr)
+    sys.exit(code)
+
+
+def require(cmd):
+    if shutil.which(cmd) is None:
+        die(f"required command '{cmd}' not found in PATH")
+
+
+def fd_dirs(root: Path, excludes=None):
+    """Return sorted list of directories at or under root (fd -t d)."""
+    args = ["fd", "--type", "d", "--color", "never"]
+    for pat in (excludes or []):
+        args += ["--exclude", pat]
+    args += [".", str(root)]
+    try:
+        out = subprocess.run(args, capture_output=True, text=True, check=True).stdout
+    except subprocess.CalledProcessError as e:
+        die(f"fd failed: {e.stderr.strip()}")
+    dirs = [root] + [Path(line) for line in out.splitlines() if line.strip()]
+    # de-dup while keeping order, root first
+    seen = set()
+    result = []
+    for d in dirs:
+        rp = d.resolve()
+        if rp not in seen:
+            seen.add(rp)
+            result.append(d)
+    return result
+
+
+def fzf_pick(items, prompt, multi=False):
+    """Run fzf over a list of strings, return list of selected strings."""
+    args = ["fzf", "--prompt", prompt, "--height=100%", "--reverse",
+            "--no-preview", "--print0"]
+    if multi:
+        args.append("--multi")
+    proc = subprocess.run(
+        args,
+        input="\n".join(items),
+        text=True,
+        capture_output=True,
+    )
+    # fzf exit code 130 = user cancelled (Esc/Ctrl-C), 1 = no match
+    if proc.returncode not in (0,):
+        return []
+    selected = [s for s in proc.stdout.split("\0") if s]
+    return selected
+
+
+def is_animated_webp(path: Path) -> bool:
+    try:
+        from PIL import Image
+        with Image.open(path) as im:
+            return bool(getattr(im, "is_animated", False))
+    except Exception:
+        # If we can't inspect it, don't silently drop it.
+        return True
+
+
+def collect_files(target: Path, exclude_dirs):
+    args = ["fd", "--type", "f", "--color", "never",
+            "-e", "gif", "-e", "webp", "-e", "GIF", "-e", "WEBP"]
+    for ex in exclude_dirs:
+        # fd matches --exclude patterns against the path relative to the
+        # search root when the pattern contains a '/'; an absolute path
+        # here would silently never match.
+        rel = os.path.relpath(str(ex), str(target))
+        args += ["--exclude", rel]
+    args += [".", str(target)]
+    out = subprocess.run(args, capture_output=True, text=True, check=True).stdout
+    files = [Path(line) for line in out.splitlines() if line.strip()]
+
+    result = []
+    for f in files:
+        if f.suffix.lower() == ".webp":
+            if is_animated_webp(f):
+                result.append(f)
+        else:
+            result.append(f)
+    return result
+
+
+def pick_directory(search_root: Path) -> Path:
+    all_dirs = fd_dirs(search_root, DEFAULT_EXCLUDES)
+    picked = fzf_pick([str(d) for d in all_dirs],
+                       prompt="Select directory to scan > ", multi=False)
+    if not picked:
+        die("no directory selected", code=130)
+    return Path(picked[0]).resolve()
+
+
+def pick_excludes(target: Path):
+    sub_dirs = fd_dirs(target, DEFAULT_EXCLUDES)
+    sub_dirs = [d for d in sub_dirs if d.resolve() != target]
+    if not sub_dirs:
+        return []
+    return fzf_pick(
+        [str(d) for d in sub_dirs],
+        prompt="Select subdirs to EXCLUDE (Tab=multi-select, Enter=confirm, "
+               "no selection=include all) > ",
+        multi=True,
+    )
+
+
+def run_collage(files, grid_n, interval, once, letterbox=False):
+    # Imported lazily so `--help` etc. don't require a display.
+    from PySide6.QtCore import Qt, QSize, QTimer
+    from PySide6.QtGui import QImageReader, QMovie
+    from PySide6.QtWidgets import QApplication, QGridLayout, QLabel, QMainWindow, QWidget
+
+    class CellLabel(QLabel):
+        """A QLabel whose size is dictated purely by the grid layout, never
+        by its current pixmap - otherwise a cover-scaled (deliberately
+        oversized) animation frame would inflate the layout's size hint
+        and distort the grid."""
+
+        def sizeHint(self):
+            return QSize(1, 1)
+
+        def minimumSizeHint(self):
+            return QSize(1, 1)
+
+    class Cell:
+        __slots__ = ("label", "bucket", "ptr", "movie", "native_size",
+                     "timer", "completed_once")
+
+        def __init__(self, label, bucket):
+            self.label = label
+            self.bucket = bucket
+            self.ptr = 0
+            self.movie = None
+            self.native_size = None
+            self.timer = None
+            self.completed_once = False
+
+    class CollageWindow(QMainWindow):
+        def __init__(self):
+            super().__init__()
+            self.setWindowTitle("gifcollage")
+            central = QWidget()
+            grid = QGridLayout(central)
+            grid.setSpacing(2)
+            grid.setContentsMargins(2, 2, 2, 2)
+            self.setCentralWidget(central)
+
+            buckets = [[] for _ in range(grid_n * grid_n)]
+            for i, f in enumerate(files):
+                buckets[i % len(buckets)].append(f)
+
+            self.cells = []
+            for i, bucket in enumerate(buckets):
+                if not bucket:
+                    continue
+                row, col = divmod(i, grid_n)
+                label = CellLabel()
+                label.setAlignment(Qt.AlignCenter)
+                label.setStyleSheet("background-color: black;")
+                label.setMinimumSize(40, 40)
+                grid.addWidget(label, row, col)
+                self.cells.append(Cell(label, bucket))
+            for r in range(grid_n):
+                grid.setRowStretch(r, 1)
+            for c in range(grid_n):
+                grid.setColumnStretch(c, 1)
+
+            self.resize(1200, 850)
+
+            for cell in self.cells:
+                self._show_next(cell)
+                self._schedule(cell)
+
+        def _schedule(self, cell: Cell):
+            # Each cell runs on its own randomized timer (0.5x-1.5x the
+            # requested interval) so the grid swaps a cell at a time
+            # instead of the whole wall flipping in lockstep.
+            delay = random.uniform(interval * 0.5, interval * 1.5)
+            timer = QTimer(self)
+            timer.setSingleShot(True)
+            timer.timeout.connect(lambda c=cell: self._on_timer(c))
+            timer.start(max(1, int(delay * 1000)))
+            cell.timer = timer
+
+        def _on_timer(self, cell: Cell):
+            self._show_next(cell)
+            if once and cell.completed_once:
+                # This cell has already cycled through its whole slice;
+                # freeze it on its last frame instead of rescheduling.
+                if all(c.completed_once for c in self.cells):
+                    self.close()
+                return
+            self._schedule(cell)
+
+        def _show_next(self, cell: Cell):
+            path = cell.bucket[cell.ptr]
+            cell.ptr = (cell.ptr + 1) % len(cell.bucket)
+            if cell.ptr == 0:
+                cell.completed_once = True
+            old = cell.movie
+            native = QImageReader(str(path)).size()
+            cell.native_size = native if native.isValid() else None
+            movie = QMovie(str(path))
+            cell.movie = movie
+            cell.label.setMovie(movie)
+            self._rescale(cell)
+            movie.start()
+            if old is not None:
+                old.stop()
+                old.deleteLater()
+
+        def _rescale(self, cell: Cell):
+            box: QSize = cell.label.size()
+            native = cell.native_size
+            if (cell.movie is None or native is None
+                    or box.width() <= 0 or box.height() <= 0
+                    or native.width() <= 0 or native.height() <= 0):
+                return
+            if letterbox:
+                # Scale to the smaller ratio so the whole frame fits inside
+                # the cell; the label's black background shows through as
+                # bars on whichever axis has leftover space.
+                scale = min(box.width() / native.width(), box.height() / native.height())
+            else:
+                # Scale up to the larger of the two ratios so the frame
+                # covers the whole cell with no letterboxing; the label's
+                # own paint clip crops whatever overhangs on the other
+                # axis, keeping the image's native aspect ratio intact
+                # instead of stretching it.
+                scale = max(box.width() / native.width(), box.height() / native.height())
+            scaled = QSize(max(1, round(native.width() * scale)),
+                            max(1, round(native.height() * scale)))
+            cell.movie.setScaledSize(scaled)
+
+        def resizeEvent(self, event):
+            super().resizeEvent(event)
+            for cell in self.cells:
+                self._rescale(cell)
+
+    app = QApplication(sys.argv)
+    win = CollageWindow()
+    win.show()
+
+    # Let Ctrl+C in the launching terminal close the window cleanly; Qt's
+    # event loop otherwise swallows SIGINT.
+    signal.signal(signal.SIGINT, lambda *_: app.quit())
+    keepalive = QTimer()
+    keepalive.timeout.connect(lambda: None)
+    keepalive.start(200)
+
+    sys.exit(app.exec())
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="gifcollage")
+    ap.add_argument("search_root", nargs="?", default=str(Path.home()),
+                     help="where to start the directory picker (default: $HOME)")
+    ap.add_argument("--grid", type=int, default=4,
+                     help="max grid size, N x N (default: 4)")
+    ap.add_argument("--interval", type=float, default=2.0,
+                     help="seconds between swaps (default: 2)")
+    ap.add_argument("--once", action="store_true",
+                     help="close the window after roughly one full pass "
+                          "instead of looping forever")
+    ap.add_argument("--letterbox", action="store_true",
+                     help="fit each animation entirely inside its cell "
+                          "(preserves aspect ratio, adds black bars) "
+                          "instead of cropping to fill the cell")
+    args = ap.parse_args()
+
+    for c in ("fzf", "fd"):
+        require(c)
+
+    search_root = Path(args.search_root).expanduser().resolve()
+    if not search_root.is_dir():
+        die(f"not a directory: {search_root}")
+
+    target = pick_directory(search_root)
+    excluded = pick_excludes(target)
+    files = collect_files(target, excluded)
+    if not files:
+        die(f"no .gif or animated .webp files found under {target}"
+            + (f" (excluding {len(excluded)} subdir(s))" if excluded else ""))
+
+    random.shuffle(files)
+
+    grid_n = max(1, args.grid)
+    while grid_n > 1 and grid_n * grid_n > len(files):
+        grid_n -= 1
+
+    print(f"gifcollage: {len(files)} file(s) in a {grid_n}x{grid_n} grid, "
+          f"swapping every {args.interval}s")
+
+    run_collage(files, grid_n, args.interval, args.once, letterbox=args.letterbox)
+
+
+if __name__ == "__main__":
+    main()
