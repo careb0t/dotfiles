@@ -92,7 +92,7 @@ mp4dl -p https://www.pornhub.com/view_video.php?viewkey=... output.mp4
 ```
 
 The flag works with any site — just name the cookie file after the domain as shown above.
-- `syncthingtray` (tray icon for Syncthing, shows up via waybar's tray module — see step 9)
+- `syncthingtray` (tray icon for Syncthing, shows up via the omarchy shell's bar tray widget — see step 9)
 
 ## 3. Install Font — ShureTechMono Nerd Font
 
@@ -100,7 +100,13 @@ The default font was changed from JetBrainsMono to ShureTechMono. Install via th
 
 - `ttf-sharetech-mono-nerd`
 
-Then verify ghostty/waybar/hyprlock render correctly.
+Then set it as the system font:
+
+```sh
+omarchy font set "ShureTechMono Nerd Font"
+```
+
+Ghostty no longer hardcodes a font in `~/.config/ghostty/config` — it inherits the system monospace font that `omarchy font set` manages via fontconfig, so there's nothing to verify there beyond a Ghostty restart. (hyprlock/waybar no longer exist in Omarchy 4.0 — see step 8.)
 
 ## 4. Install pnpm
 
@@ -138,49 +144,73 @@ Open nvim and let lazy.nvim auto-install plugins. The following will install aut
 - `neocodeium` (AI completions — requires Node.js, installed in step 2)
 - `nvim-tmux-navigation` (tmux/nvim pane nav)
 
-## 7b. Waybar Per-Machine Overrides (optional)
+## 8. Per-Machine Hyprland Lua Config
 
-`~/.config/waybar/host.jsonc` is not tracked in the dotfiles repo (it varies
-per machine, like `windows.conf` below). If present, it overrides
-`modules-right` from `config.jsonc`'s `include`; if absent, waybar falls back
-to the shared default in `modules-defaults.jsonc` (with battery). Only needed
-on a machine that should show a different set of right-side modules — e.g.
-the desktop drops `battery` since it has no battery hardware.
-
-## 8. Create Hyprland Window Rules
-
-`~/.config/hypr/windows.conf` is not tracked in the dotfiles repo (it varies per machine). Create it manually:
+Omarchy 4.0 configures Hyprland in Lua (`~/.config/hypr/*.lua`). The dotfiles
+repo's `hyprland.lua` `require`s `hypr.monitors`, `hypr.input`, and
+`hypr.windows` unconditionally, but those three files hold machine-specific
+settings (monitor layout, keyboard/touchpad, per-app window rules) and are
+**not tracked in the dotfiles repo** — same reasoning as the old
+`windows.conf`/`monitors.conf`/etc. Create them manually on each new machine:
 
 ```sh
-touch ~/.config/hypr/windows.conf
+touch ~/.config/hypr/monitors.lua ~/.config/hypr/input.lua ~/.config/hypr/windows.lua
 ```
 
-Add the following to make btop open as a properly sized floating window (omarchy's default floating size is too small for btop):
+(Bootstrap tip: `stow .` will still symlink the repo's `hyprland.lua` even
+before these exist, but Hyprland will error on the missing `require`s until
+all three files are present — even as empty files.)
 
+**`monitors.lua`** — monitor layout and workspace-to-monitor pins. Example
+(adjust output names/modes to `hyprctl monitors all`):
+
+```lua
+hl.env("GDK_SCALE", "1")
+
+hl.monitor({ output = "DP-1", mode = "1920x1080@144", position = "auto", scale = 1 })
+hl.monitor({ output = "HDMI-A-1", mode = "2560x1440@59", position = "auto", scale = 1 })
+
+hl.workspace_rule({ workspace = "1", monitor = "DP-1" })
+hl.workspace_rule({ workspace = "2", monitor = "HDMI-A-1" })
+-- ...repeat per workspace as needed.
 ```
-windowrule = tag -floating-window*, match:class org.omarchy.btop
 
-windowrule {
-    name = btop-floating
-    match:class = ^org.omarchy.btop$
-    float = on
-    size = 1600 900
-    center = on
-}
+**`input.lua`** — keyboard/touchpad settings, e.g.:
+
+```lua
+hl.config({
+  input = {
+    kb_layout = "us",
+    repeat_rate = 40,
+    repeat_delay = 600,
+    numlock_by_default = true,
+    touchpad = { scroll_factor = 0.4 },
+  },
+})
+
+o.window("(Alacritty|kitty|foot)", { scroll_touchpad = 1.5 })
+o.window("com.mitchellh.ghostty", { scroll_touchpad = 0.2 })
+```
+
+**`windows.lua`** — per-app window rules. Add the following to make btop open
+as a properly sized floating window (omarchy's default floating size is too
+small for btop):
+
+```lua
+o.window({ class = "^org.omarchy.btop$" }, { tag = "-floating-window" })
+o.window({ class = "^org.omarchy.btop$" }, { float = true, size = { 1600, 900 }, center = true })
 ```
 
 Also add this rule so the yazi file picker (see step 11) opens floating and centered instead of tiling like a normal window. It matches on the `--title=termfilechooser` set by `TERMCMD` in the termfilechooser config, so it only applies to yazi-as-file-picker — regular ghostty/yazi usage is unaffected:
 
+```lua
+o.window(
+  { class = "^com.mitchellh.ghostty$", initial_title = "^termfilechooser$" },
+  { float = true, size = { 1200, 800 }, center = true }
+)
 ```
-windowrule {
-    name = yazi-filepicker-floating
-    match:class = ^com.mitchellh.ghostty$
-    match:initial_title = ^termfilechooser$
-    float = on
-    size = 1200 800
-    center = on
-}
-```
+
+After editing any of these, validate with `hyprctl reload` followed by `hyprctl configerrors`.
 
 ## 9. Set Up Syncthing
 
@@ -218,12 +248,15 @@ Once both sides show the folder as "Up to Date," any file dropped into
 is only needed for this one-time setup, never for everyday file adds/removes.
 
 `syncthingtray` provides a tray icon (sync status, pause/resume, quick link to
-the web GUI) via waybar's existing tray module — autostarted through
-`exec-once = uwsm-app -- syncthingtray` in `~/.config/hypr/autostart.conf`.
+the web GUI) via the omarchy shell's bar tray widget — autostarted through
+`o.launch_on_start('bash -c "sleep 15 && syncthingtray --wait"')` in
+`~/.config/hypr/autostart.lua`.
 
 ## 10. ProtonVPN (WireGuard)
 
-The VPN menu (`Super+Shift+V`) uses `wg-quick` directly — no ProtonVPN daemon or NetworkManager required.
+The VPN picker (`~/.config/elephant/menus/vpn*.lua`) uses `wg-quick` directly — no ProtonVPN daemon or NetworkManager required.
+
+**Currently disabled pending Omarchy 4.0 conversion:** these menu scripts were written for `walker`/`elephant`, which no longer exist in Omarchy 4.0 (replaced by the omarchy-shell menu system). The `Super+Shift+V` binding is commented out in `bindings.lua` until they're converted to the new menu format. The rest of this section (sudoers, WireGuard configs) still applies — only the launcher/keybind is pending.
 
 ### Install dependencies
 
@@ -272,7 +305,7 @@ Install via the omarchy menu: `Alt+Super+Space` → Install → AUR Package → 
 
 - `~/.config/xdg-desktop-portal-termfilechooser/config` — tells the portal to use the bundled `yazi-wrapper.sh`, and sets `TERMCMD=ghostty --title=termfilechooser --font-size=14 -e` so the picker opens in ghostty at a readable size instead of the tiny default.
 - `~/.config/xdg-desktop-portal/hyprland-portals.conf` — sets `org.freedesktop.impl.portal.FileChooser=termfilechooser` as preferred, so the portal picks this over GTK for file dialogs while leaving other portal interfaces (screenshot, screen-share, etc.) on `hyprland;gtk`.
-- `~/.config/hypr/envs.conf` — sets `GTK_USE_PORTAL=1`, which is what makes GTK's native file chooser widget (used internally by GTK apps, Chromium/Electron, and Steam) delegate to the portal instead of showing its own dialog. Also sets `QT_QPA_PLATFORMTHEME=xdgdesktopportal`, enabled by default, which does the same for Qt6 apps (qBittorrent, Kdenlive, Qt Designer, etc.) via Qt's built-in portal theme plugin.
+- `~/.config/hypr/hyprland.lua` — sets `GTK_USE_PORTAL=1` via `hl.env(...)`, which is what makes GTK's native file chooser widget (used internally by GTK apps, Chromium/Electron, and Steam) delegate to the portal instead of showing its own dialog. Also sets `QT_QPA_PLATFORMTHEME=xdgdesktopportal`, enabled by default, which does the same for Qt6 apps (qBittorrent, Kdenlive, Qt Designer, etc.) via Qt's built-in portal theme plugin.
 
 **Note:** on a machine where these files already exist as plain files (not yet stow-managed), `stow .` will refuse to symlink over them — move or remove the existing real files first.
 
