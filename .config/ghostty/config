@@ -1,6 +1,9 @@
 # Dynamic theme colors
 config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
 
+# Font (kept in sync by `omarchy font set`, which sed-replaces this line)
+font-family = "VictorMono Nerd Font"
+
 # Window
 window-theme = ghostty
 window-padding-x = 14
