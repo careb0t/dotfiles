@@ -22,7 +22,7 @@ Omarchy installs `claude-code` to `/usr/bin/claude`, but on first run it will of
 claude
 ```
 
-The local install lands at `~/.local/share/claude/` and is symlinked from `~/.local/bin/claude`. Since `.zshrc` puts `~/.local/bin` earlier in `$PATH`, this version will take precedence over the system one going forward.
+The local install is `mise`-managed: `~/.local/bin/claude` is a small wrapper script (`mise use -g claude` then `mise x claude`) that resolves to a version under `~/.local/share/claude/versions/` and keeps itself current. Since `.zshrc` puts `~/.local/bin` earlier in `$PATH`, this version will take precedence over the system one going forward.
 
 ## 2. Install Remaining Packages
 
@@ -33,12 +33,12 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 - `gifski` (required for `mp4gif` — high-quality GIF encoding)
 - `nodejs` (Install → Development → JavaScript)
 - `ouch` (required for yazi to preview archive files — `.zip`, `.tar.gz`, `.rar`, etc.)
-- `syncthing` (see step 9 for setup)
-- `python-pillow` and `pyside6` (required for `gifcollage` — see step 12)
+- `syncthing` (see step 8 for setup)
+- `python-pillow` and `pyside6` (required for `gifcollage` — see step 11)
+- `python-curl_cffi` (required for yt-dlp to impersonate a browser on sites like Pornhub that block bot requests — this used to be AUR-only as `python-curl-cffi-git`, but has since been packaged officially under this name)
 
 **AUR** (Install → AUR Package):
 - `reddit-video-downloader`
-- `python-curl-cffi-git` (required for yt-dlp to impersonate a browser on sites like Pornhub that block bot requests)
 
 ### Install yt-dlp (binary, not pacman)
 
@@ -73,7 +73,7 @@ Export it from Vivaldi using a cookies.txt browser extension.
 
 Sites like Pornhub require two things beyond a standard yt-dlp call:
 
-1. **Browser impersonation** — handled by `python-curl-cffi-git` (installed above). Without it, yt-dlp gets a 403 Forbidden before it can even read the page.
+1. **Browser impersonation** — handled by `python-curl_cffi` (installed above). Without it, yt-dlp gets a 403 Forbidden before it can even read the page.
 
 2. **A cookies file** — needed to pass age verification. yt-dlp on Hyprland cannot decrypt Vivaldi's v11 cookies from the keyring, so export manually:
    - Install the **"Get cookies.txt LOCALLY"** extension in Vivaldi
@@ -92,29 +92,15 @@ mp4dl -p https://www.pornhub.com/view_video.php?viewkey=... output.mp4
 ```
 
 The flag works with any site — just name the cookie file after the domain as shown above.
-- `syncthingtray` (tray icon for Syncthing, shows up via the omarchy shell's bar tray widget — see step 9)
+- `syncthingtray` (tray icon for Syncthing, shows up via the omarchy shell's bar tray widget — see step 8)
 
-## 3. Install Font — ShureTechMono Nerd Font
-
-The default font was changed from JetBrainsMono to ShureTechMono. Install via the omarchy menu (`Alt+Super+Space` → Install → Package):
-
-- `ttf-sharetech-mono-nerd`
-
-Then set it as the system font:
-
-```sh
-omarchy font set "ShureTechMono Nerd Font"
-```
-
-Ghostty no longer hardcodes a font in `~/.config/ghostty/config` — it inherits the system monospace font that `omarchy font set` manages via fontconfig, so there's nothing to verify there beyond a Ghostty restart. (hyprlock/waybar no longer exist in Omarchy 4.0 — see step 8.)
-
-## 4. Install pnpm
+## 3. Install pnpm
 
 ```sh
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
 
-## 5. Install Tmux Plugin Manager (TPM)
+## 4. Install Tmux Plugin Manager (TPM)
 
 tmux itself is installed by omarchy-update, but TPM must be set up manually:
 
@@ -130,7 +116,7 @@ Then open tmux and press `C-Space` then `I` to install all plugins:
 
 The tmux config now lives at `~/.config/tmux/tmux.conf` and is managed via stow. It sources the omarchy base config and layers user overrides on top.
 
-## 6. Stow Dotfiles
+## 5. Stow Dotfiles
 
 From the dotfiles repo root:
 
@@ -138,13 +124,13 @@ From the dotfiles repo root:
 stow .
 ```
 
-## 7. Neovim — First Launch
+## 6. Neovim — First Launch
 
 Open nvim and let lazy.nvim auto-install plugins. The following will install automatically:
 - `neocodeium` (AI completions — requires Node.js, installed in step 2)
 - `nvim-tmux-navigation` (tmux/nvim pane nav)
 
-## 8. Per-Machine Hyprland Lua Config
+## 7. Per-Machine Hyprland Lua Config
 
 Omarchy 4.0 configures Hyprland in Lua (`~/.config/hypr/*.lua`). The dotfiles
 repo's `hyprland.lua` `require`s `hypr.monitors`, `hypr.input`, and
@@ -201,7 +187,7 @@ o.window({ class = "^org.omarchy.btop$" }, { tag = "-floating-window" })
 o.window({ class = "^org.omarchy.btop$" }, { float = true, size = { 1600, 900 }, center = true })
 ```
 
-Also add this rule so the yazi file picker (see step 11) opens floating and centered instead of tiling like a normal window. It matches on the `--title=termfilechooser` set by `TERMCMD` in the termfilechooser config, so it only applies to yazi-as-file-picker — regular ghostty/yazi usage is unaffected:
+Also add this rule so the yazi file picker (see step 10) opens floating and centered instead of tiling like a normal window. It matches on the `--title=termfilechooser` set by `TERMCMD` in the termfilechooser config, so it only applies to yazi-as-file-picker — regular ghostty/yazi usage is unaffected:
 
 ```lua
 o.window(
@@ -212,7 +198,7 @@ o.window(
 
 After editing any of these, validate with `hyprctl reload` followed by `hyprctl configerrors`.
 
-## 9. Set Up Syncthing
+## 8. Set Up Syncthing
 
 Keeps `~/Videos/Goon` synced live between machines. The folder behaves like a
 normal local directory in Thunar/Yazi — no separate GUI or command needed to
@@ -252,7 +238,7 @@ the web GUI) via the omarchy shell's bar tray widget — autostarted through
 `o.launch_on_start('bash -c "sleep 15 && syncthingtray --wait"')` in
 `~/.config/hypr/autostart.lua`.
 
-## 10. ProtonVPN (WireGuard)
+## 9. ProtonVPN (WireGuard)
 
 The VPN picker (`~/.config/elephant/menus/vpn*.lua`) uses `wg-quick` directly — no ProtonVPN daemon or NetworkManager required.
 
@@ -293,7 +279,7 @@ Replace `careb0t` with the local username if different.
 
 The menu reads the filenames and turns them into display names automatically — `CZ-33.conf` shows as **Czech Republic #33**, `US-1.conf` as **United States #1**, etc.
 
-## 11. Set Up Yazi as the System File Picker
+## 10. Set Up Yazi as the System File Picker
 
 Routes file open/save dialogs in GTK, Chromium/Electron (Vivaldi, Discord clients), Qt6, and Steam through yazi (in a ghostty window) instead of the native GTK/Thunar file chooser.
 
@@ -327,7 +313,7 @@ A ghostty window running yazi should pop up.
 
 **Known gap:** Firefox-based browsers (Floorp, Zen Browser) don't honor `GTK_USE_PORTAL` — they need `widget.use-xdg-desktop-portal.file-picker` set to `1` via `user.js` in each profile. Not yet set up.
 
-## 12. gifcollage (animated GIF/WebP collage viewer)
+## 11. gifcollage (animated GIF/WebP collage viewer)
 
 Opens a single window showing a rotating grid of animated GIFs and animated
 WebPs from a directory you pick interactively. Lives at
@@ -375,6 +361,6 @@ Flags:
 - tmux prefix is `C-Space` (secondary: `C-b`); config is at `~/.config/tmux/tmux.conf`
 - `mp4dl <url>` handles YouTube, Reddit, and X/Twitter downloads
   - X/Twitter downloads use a cookies file at `~/.config/yt-dlp/x.com_cookies.txt` — export from Vivaldi if needed
-  - `mp4dl -p <url>` for adult sites — auto-loads `~/.config/yt-dlp/<domain>_cookies.txt`; requires `python-curl-cffi-git` from AUR
+  - `mp4dl -p <url>` for adult sites — auto-loads `~/.config/yt-dlp/<domain>_cookies.txt`; requires `python-curl_cffi`
 - Hyprland binding for tmux terminal: `Super+Alt+Enter`
 - `lg` opens lazygit
