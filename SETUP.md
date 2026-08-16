@@ -34,8 +34,8 @@ These are not managed by omarchy and must be installed manually via the omarchy 
 - `nodejs` (Install → Development → JavaScript)
 - `ouch` (required for yazi to preview archive files — `.zip`, `.tar.gz`, `.rar`, etc.)
 - `syncthing` (see step 8 for setup)
-- `python-pillow` and `pyside6` (required for `gifcollage` — see step 11)
-- `python-curl_cffi` (required for yt-dlp to impersonate a browser on sites like Pornhub that block bot requests — this used to be AUR-only as `python-curl-cffi-git`, but has since been packaged officially under this name)
+- `python-pillow` and `pyside6` (required for `gifcollage` — see step 10)
+- `python-curl_cffi` (required for yt-dlp to impersonate a browser on adult sites that block bot requests — this used to be AUR-only as `python-curl-cffi-git`, but has since been packaged officially under this name)
 
 **AUR** (Install → AUR Package):
 - `reddit-video-downloader`
@@ -71,7 +71,7 @@ Export it from Vivaldi using a cookies.txt browser extension.
 
 ### Adult site downloads (`-p` flag)
 
-Sites like Pornhub require two things beyond a standard yt-dlp call:
+Adult sites typically require two things beyond a standard yt-dlp call:
 
 1. **Browser impersonation** — handled by `python-curl_cffi` (installed above). Without it, yt-dlp gets a 403 Forbidden before it can even read the page.
 
@@ -79,20 +79,19 @@ Sites like Pornhub require two things beyond a standard yt-dlp call:
    - Install the **"Get cookies.txt LOCALLY"** extension in Vivaldi
    - Navigate to the site while logged in and past age verification
    - Click the extension and export cookies for the domain
-   - Place the file at `~/.config/yt-dlp/<domain>_cookies.txt`, e.g.:
+   - Place the file at `~/.config/yt-dlp/<domain>_cookies.txt`, e.g. for a site at `example.com`:
      ```
-     ~/.config/yt-dlp/www.pornhub.com_cookies.txt
+     ~/.config/yt-dlp/www.example.com_cookies.txt
      ```
 
 Then download using the `-p` flag, which auto-detects the domain and loads the matching cookie file:
 
 ```sh
-mp4dl -p https://www.pornhub.com/view_video.php?viewkey=...
-mp4dl -p https://www.pornhub.com/view_video.php?viewkey=... output.mp4
+mp4dl -p https://www.example.com/video/...
+mp4dl -p https://www.example.com/video/... output.mp4
 ```
 
 The flag works with any site — just name the cookie file after the domain as shown above.
-- `syncthingtray` (tray icon for Syncthing, shows up via the omarchy shell's bar tray widget — see step 8)
 
 ## 3. Install pnpm
 
@@ -187,7 +186,7 @@ o.window({ class = "^org.omarchy.btop$" }, { tag = "-floating-window" })
 o.window({ class = "^org.omarchy.btop$" }, { float = true, size = { 1600, 900 }, center = true })
 ```
 
-Also add this rule so the yazi file picker (see step 10) opens floating and centered instead of tiling like a normal window. It matches on the `--title=termfilechooser` set by `TERMCMD` in the termfilechooser config, so it only applies to yazi-as-file-picker — regular ghostty/yazi usage is unaffected:
+Also add this rule so the yazi file picker (see step 9) opens floating and centered instead of tiling like a normal window. It matches on the `--title=termfilechooser` set by `TERMCMD` in the termfilechooser config, so it only applies to yazi-as-file-picker — regular ghostty/yazi usage is unaffected:
 
 ```lua
 o.window(
@@ -200,7 +199,7 @@ After editing any of these, validate with `hyprctl reload` followed by `hyprctl 
 
 ## 8. Set Up Syncthing
 
-Keeps `~/Videos/Goon` synced live between machines. The folder behaves like a
+Keeps `~/Videos/Stash` synced live between machines. The folder behaves like a
 normal local directory in Thunar/Yazi — no separate GUI or command needed to
 add, remove, or edit files once this is set up.
 
@@ -213,7 +212,7 @@ systemctl --user enable --now syncthing.service
 Create the synced folder:
 
 ```sh
-mkdir -p ~/Videos/Goon
+mkdir -p ~/Videos/Stash
 ```
 
 Open `http://127.0.0.1:8384` and go to Settings → GUI to set a username/password
@@ -225,61 +224,15 @@ device ID. On each machine, go to Remote Devices → Add Device and paste in the
 other machine.
 
 Share the folder: on one machine, go to Folders → Add Folder, set the path to
-`~/Videos/Goon`, label it (e.g. "Goon"), then under that folder's Sharing tab
+`~/Videos/Stash`, label it (e.g. "Stash"), then under that folder's Sharing tab
 enable sharing with the other device. On the other machine, accept the incoming
-folder-share prompt and set its path to `~/Videos/Goon` too.
+folder-share prompt and set its path to `~/Videos/Stash` too.
 
 Once both sides show the folder as "Up to Date," any file dropped into
-`~/Videos/Goon` on either machine syncs to the other automatically. The web GUI
+`~/Videos/Stash` on either machine syncs to the other automatically. The web GUI
 is only needed for this one-time setup, never for everyday file adds/removes.
 
-`syncthingtray` provides a tray icon (sync status, pause/resume, quick link to
-the web GUI) via the omarchy shell's bar tray widget — autostarted through
-`o.launch_on_start('bash -c "sleep 15 && syncthingtray --wait"')` in
-`~/.config/hypr/autostart.lua`.
-
-## 9. ProtonVPN (WireGuard)
-
-The VPN picker (`~/.config/elephant/menus/vpn*.lua`) uses `wg-quick` directly — no ProtonVPN daemon or NetworkManager required.
-
-**Currently disabled pending Omarchy 4.0 conversion:** these menu scripts were written for `walker`/`elephant`, which no longer exist in Omarchy 4.0 (replaced by the omarchy-shell menu system). The `Super+Shift+V` binding is commented out in `bindings.lua` until they're converted to the new menu format. The rest of this section (sudoers, WireGuard configs) still applies — only the launcher/keybind is pending.
-
-### Install dependencies
-
-```sh
-sudo pacman -S openresolv
-```
-
-`openresolv` provides the `resolvconf` command that `wg-quick` uses to apply DNS settings from the VPN config. After installing, initialize it once:
-
-```sh
-sudo resolvconf -u
-```
-
-### Allow wg-quick and resolvectl to run without a password prompt
-
-The menu launches `wg-quick` and `resolvectl` via `sudo` in the background where there's no terminal for a password prompt. Create a sudoers rule that allows both passwordlessly:
-
-```sh
-echo 'careb0t ALL=(ALL) NOPASSWD: /usr/bin/wg-quick, /usr/bin/resolvconf, /usr/bin/resolvectl' | sudo tee /etc/sudoers.d/protonvpn-wg && sudo chmod 440 /etc/sudoers.d/protonvpn-wg
-```
-
-Replace `careb0t` with the local username if different.
-
-**Why `resolvectl` is required:** on systems where `/etc/resolv.conf` is managed by `systemd-resolved` (the default here), `wg-quick`'s built-in DNS handling (which shells out to `resolvconf`) fights `systemd-resolved` for ownership of that file. Every time `systemd-resolved` regenerates its stub file, it wipes `resolvconf`'s signature, so the next connect's `resolvconf -a` call gets rejected with `resolvconf: signature mismatch: /etc/resolv.conf` and `wg-quick` tears the tunnel back down — this reliably broke every connection attempt after the first disconnect. To fix it, `vpn-connect` strips the `DNS =` line before handing the config to `wg-quick` and instead sets DNS itself via `resolvectl dns`/`resolvectl domain`, which talks to `systemd-resolved` directly over D-Bus instead of racing it over a file. `vpn-disconnect` calls `resolvectl revert` on teardown for the same reason. `resolvconf` is still in the sudoers rule as a harmless no-op fallback but is no longer load-bearing for DNS.
-
-### Download WireGuard configs
-
-1. Log in at protonvpn.com → **Dashboard → Downloads → WireGuard**
-2. Generate a config for each server you want
-3. Rename each file — the filename becomes the network interface name, so it must be **≤15 characters, no spaces**
-   - `CZ-33.conf` ✓ — Czech Republic server #33
-   - `ProtonVPN_US-AZ-1.conf` ✗ — too long (17 chars), wg-quick will fail
-4. Place the renamed files in `~/.config/protonvpn/wireguard/`
-
-The menu reads the filenames and turns them into display names automatically — `CZ-33.conf` shows as **Czech Republic #33**, `US-1.conf` as **United States #1**, etc.
-
-## 10. Set Up Yazi as the System File Picker
+## 9. Set Up Yazi as the System File Picker
 
 Routes file open/save dialogs in GTK, Chromium/Electron (Vivaldi, Discord clients), Qt6, and Steam through yazi (in a ghostty window) instead of the native GTK/Thunar file chooser.
 
@@ -313,7 +266,7 @@ A ghostty window running yazi should pop up.
 
 **Known gap:** Firefox-based browsers (Floorp, Zen Browser) don't honor `GTK_USE_PORTAL` — they need `widget.use-xdg-desktop-portal.file-picker` set to `1` via `user.js` in each profile. Not yet set up.
 
-## 11. gifcollage (animated GIF/WebP collage viewer)
+## 10. gifcollage (animated GIF/WebP collage viewer)
 
 Opens a single window showing a rotating grid of animated GIFs and animated
 WebPs from a directory you pick interactively. Lives at
