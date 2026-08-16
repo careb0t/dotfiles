@@ -26,8 +26,8 @@ esac
 # ZPlug plugin manager
 source ~/.zplug/init.zsh
 
-zplug "zsh-users/zsh-autosuggestions"
 zplug "Aloxaf/fzf-tab"
+zplug "zsh-users/zsh-autosuggestions"
 zplug "zdharma-continuum/fast-syntax-highlighting"
 zplug "MichaelAquilina/zsh-autoswitch-virtualenv"
 zplug "le0me55i/zsh-extract"
