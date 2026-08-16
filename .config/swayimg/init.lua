@@ -3,8 +3,8 @@
 -- and keep muscle memory consistent between the two.
 -- PgUp/PgDn still work too since these bindings are added, not swapped in.
 swayimg.viewer.on_key("Left", function()
-  swayimg.viewer.switch_image("prev")
+  swayimg.viewer.open("prev")
 end)
 swayimg.viewer.on_key("Right", function()
-  swayimg.viewer.switch_image("next")
+  swayimg.viewer.open("next")
 end)
