@@ -27,7 +27,7 @@ esac
 source ~/.zplug/init.zsh
 
 zplug "zsh-users/zsh-autosuggestions"
-zplug "marlonrichert/zsh-autocomplete"
+zplug "Aloxaf/fzf-tab"
 zplug "zdharma-continuum/fast-syntax-highlighting"
 zplug "MichaelAquilina/zsh-autoswitch-virtualenv"
 zplug "le0me55i/zsh-extract"
@@ -39,6 +39,16 @@ zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/command-not-found", from:oh-my-zsh
 
 zplug load
+
+# omarchy-zsh's zoptions rebinds Tab to its own widget on every precmd (for
+# `omarchy <route>` bash-style completion), which pre-empts fzf-tab right
+# after zplug binds it at startup. Reclaim Tab for fzf-tab by registering our
+# own precmd hook after zplug load, so it runs after omarchy-zsh's and wins.
+# Also disable complist's `menu select`, which conflicts with fzf-tab's popup.
+zstyle ':completion:*' menu no
+autoload -Uz add-zsh-hook
+_fzf_tab_reclaim_tab() { bindkey '^I' fzf-tab-complete }
+add-zsh-hook precmd _fzf_tab_reclaim_tab
 
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
