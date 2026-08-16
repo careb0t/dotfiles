@@ -2,7 +2,7 @@
 config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
 
 # Font (kept in sync by `omarchy font set`, which sed-replaces this line)
-font-family = "VictorMono Nerd Font"
+font-family = "EnvyCodeR Nerd Font"
 
 # Window
 window-theme = ghostty

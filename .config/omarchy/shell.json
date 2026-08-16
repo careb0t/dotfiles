@@ -20,19 +20,6 @@
         },
         {
           "id": "omarchy.system-update"
-        },
-        {
-          "id": "quickshell.spotify",
-          "deviceName": "Omarchy Spotify",
-          "idleShutdownMinutes": 15,
-          "showMiniPlayer": "On",
-          "showTrackTitle": "On",
-          "showArtistName": "Off",
-          "scrollBarText": "Off",
-          "scrollSpeed": "1",
-          "audioQuality": "320 kbps",
-          "searchHistory": "[]",
-          "sessionState": "{\"tab\":\"home\",\"searchText\":\"\",\"searchType\":\"track\",\"libraryType\":\"tracks\",\"homeType\":\"recent\",\"libraryFilter\":\"\",\"librarySort\":\"default\",\"playlistFilter\":\"\",\"playlistSort\":\"default\",\"detailFilter\":\"\",\"detailSort\":\"default\",\"homeFilter\":\"\",\"discoverFilter\":\"\",\"queueFilter\":\"\",\"artistSearchText\":\"\",\"scrollPositions\":{\"home:recent\":0},\"detailItem\":null,\"selectedPlaylistId\":\"\",\"lastRadioPlaylist\":null}"
         }
       ],
       "left": [
@@ -46,6 +33,19 @@
       "right": [
         {
           "id": "omarchy.tray"
+        },
+        {
+          "id": "quickshell.spotify",
+          "deviceName": "Omarchy Spotify",
+          "idleShutdownMinutes": 15,
+          "showMiniPlayer": "On",
+          "showTrackTitle": "On",
+          "showArtistName": "On",
+          "scrollBarText": "On",
+          "scrollSpeed": "1",
+          "audioQuality": "320 kbps",
+          "searchHistory": "[\"vader raining blood\",\"raining blood\"]",
+          "sessionState": "{\"tab\":\"playlists\",\"searchText\":\"\",\"searchType\":\"track\",\"libraryType\":\"tracks\",\"homeType\":\"recent\",\"libraryFilter\":\"\",\"librarySort\":\"default\",\"playlistFilter\":\"\",\"playlistSort\":\"default\",\"detailFilter\":\"\",\"detailSort\":\"default\",\"homeFilter\":\"\",\"discoverFilter\":\"\",\"queueFilter\":\"\",\"artistSearchText\":\"\",\"scrollPositions\":{\"home:recent\":0,\"search:track\":0,\"playlist:6m8kgnFNZLuM4mkK7Ak3g5\":204,\"library:tracks\":2880,\"playlist:6iZYy2juz6OKYR8e2TYenm\":0},\"detailItem\":null,\"selectedPlaylistId\":\"6m8kgnFNZLuM4mkK7Ak3g5\",\"lastRadioPlaylist\":null}"
         },
         {
           "id": "io.github.ilyazar.syncthing"

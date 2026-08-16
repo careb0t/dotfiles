@@ -1,4 +1,4 @@
 -- Change the default Omarchy look'n'feel.
 
--- Fix screenshot ghosting bug: skip the layer-shell animation for wayfreeze.
-hl.layer_rule({ match = { namespace = "wayfreeze" }, no_anim = true })
+-- Omarchy's default disables workspace-switch animation; re-enable it.
+hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "easeOutQuint", style = "slide" })
