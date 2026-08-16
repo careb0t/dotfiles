@@ -1,0 +1,93 @@
+{
+  "bar": {
+    "centerAnchor": "omarchy.clock",
+    "layout": {
+      "center": [
+        {
+          "id": "omarchy.keyboard-layout"
+        },
+        {
+          "id": "omarchy.indicators"
+        },
+        {
+          "id": "omarchy.clock",
+          "format": "ddd d MMM h:mm AP",
+          "formatAlt": "d MMMM 'W'ww yyyy",
+          "verticalFormat": "HH\n—\nmm"
+        },
+        {
+          "id": "omarchy.weather"
+        },
+        {
+          "id": "omarchy.system-update"
+        },
+        {
+          "id": "quickshell.spotify",
+          "deviceName": "Omarchy Spotify",
+          "idleShutdownMinutes": 15,
+          "showMiniPlayer": "On",
+          "showTrackTitle": "On",
+          "showArtistName": "Off",
+          "scrollBarText": "Off",
+          "scrollSpeed": "1",
+          "audioQuality": "320 kbps",
+          "searchHistory": "[]",
+          "sessionState": "{\"tab\":\"home\",\"searchText\":\"\",\"searchType\":\"track\",\"libraryType\":\"tracks\",\"homeType\":\"recent\",\"libraryFilter\":\"\",\"librarySort\":\"default\",\"playlistFilter\":\"\",\"playlistSort\":\"default\",\"detailFilter\":\"\",\"detailSort\":\"default\",\"homeFilter\":\"\",\"discoverFilter\":\"\",\"queueFilter\":\"\",\"artistSearchText\":\"\",\"scrollPositions\":{\"home:recent\":0},\"detailItem\":null,\"selectedPlaylistId\":\"\",\"lastRadioPlaylist\":null}"
+        }
+      ],
+      "left": [
+        {
+          "id": "omarchy.menu"
+        },
+        {
+          "id": "omarchy.workspaces"
+        }
+      ],
+      "right": [
+        {
+          "id": "omarchy.tray"
+        },
+        {
+          "id": "io.github.ilyazar.syncthing"
+        },
+        {
+          "id": "omarchy.agents"
+        },
+        {
+          "id": "omarchy.audio"
+        },
+        {
+          "id": "omarchy.bluetooth"
+        },
+        {
+          "id": "io.github.cempack.proton-pass"
+        },
+        {
+          "id": "jkoestinger.vpn",
+          "hiddenBackends": ""
+        },
+        {
+          "id": "omarchy.network"
+        },
+        {
+          "id": "stappmus.activity-monitor",
+          "openExpanded": true
+        },
+        {
+          "id": "omarchy.monitor"
+        },
+        {
+          "id": "omarchy.power"
+        }
+      ]
+    },
+    "position": "top",
+    "transparent": false
+  },
+  "idle": {
+    "lock": 300,
+    "screensaver": 150
+  },
+  "plugins": [],
+  "version": 1
+}
