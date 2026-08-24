@@ -307,6 +307,63 @@ Flags:
 - `--letterbox` — fit each animation entirely inside its cell (preserves
   aspect ratio, adds black bars) instead of the default crop-to-fill
 
+## 11. Install Omarchy Shell Plugins
+
+These bar widgets are third-party Omarchy shell plugins, cloned from git into
+`~/.config/omarchy/plugins/`. Neither that directory nor
+`~/.config/omarchy/shell.json` is stow-managed — `shell.json` carries live
+session state (Spotify auth/search history, scroll positions, etc.), so it's
+intentionally not tracked in the repo. That means the plugins themselves,
+and the bar layout that places them, don't carry over to a new machine and
+must be reinstalled:
+
+```sh
+omarchy plugin add https://github.com/mtolhuys/omarchy-theme-manager.git --enable
+omarchy plugin add https://github.com/stappmus/Omarchy-Spotify.git --enable
+omarchy plugin add https://github.com/ilyaZar/omarchy-syncthing.git --enable
+omarchy plugin add https://github.com/cempack/ProtonPassPlugin.git --enable
+omarchy plugin add https://github.com/jkoestinger/omarchy-vpn.git --enable
+omarchy plugin add https://github.com/stappmus/omarchy-activity-monitor.git --enable
+```
+
+| Plugin | id | Purpose |
+|---|---|---|
+| [Omarchy Theme Manager](https://github.com/mtolhuys/omarchy-theme-manager) | `io.github.mtolhuys.theme-manager` | Full-screen theme browser/switcher. Not a bar widget (it's an overlay) — replaces the built-in image picker, so leave `omarchy.image-picker` disabled (see below). |
+| [Omarchy Spotify](https://github.com/stappmus/Omarchy-Spotify) | `quickshell.spotify` | Spotify controls in the bar for ~60MB vs ~950MB for the official client. |
+| [Syncthing](https://github.com/ilyaZar/omarchy-syncthing) | `io.github.ilyazar.syncthing` | Sync health, folder management, and service control from the bar. Pairs with step 8. |
+| [Proton Pass](https://github.com/cempack/ProtonPassPlugin) | `io.github.cempack.proton-pass` | Search/copy Proton Pass logins from the bar. |
+| [VPN](https://github.com/jkoestinger/omarchy-vpn) | `jkoestinger.vpn` | VPN status/switching in the bar. Auto-detects Mullvad, Proton, Windscribe, or a NetworkManager VPN connection — no extra setup beyond whichever of those you actually use. |
+| [Activity Monitor](https://github.com/stappmus/omarchy-activity-monitor) | `stappmus.activity-monitor` | CPU/memory/GPU/storage/process glance. |
+
+Disable the built-in widget the theme manager replaces:
+
+```sh
+omarchy plugin disable omarchy.image-picker
+```
+
+Every plugin above defaults into the bar's right section already, except
+Spotify (its default is left). Move it, then order the right section to
+match the current layout — tray, Spotify, Syncthing, the built-in
+agents/audio/bluetooth widgets, Proton Pass, VPN, the built-in network
+widget, Activity Monitor, then the built-in monitor/power widgets:
+
+```sh
+omarchy bar move quickshell.spotify --section right
+omarchy bar put quickshell.spotify --after omarchy.tray
+omarchy bar put io.github.ilyazar.syncthing --after quickshell.spotify
+omarchy bar put io.github.cempack.proton-pass --after omarchy.bluetooth
+omarchy bar put jkoestinger.vpn --after io.github.cempack.proton-pass
+omarchy bar put stappmus.activity-monitor --after omarchy.network
+```
+
+The Spotify widget's keyboard shortcut is rebound in `bindings.lua`
+(`SUPER + SHIFT + M`, tracked in the repo) to defer to the plugin's own
+"Keyboard shortcut opens" setting instead of Omarchy's default
+`omarchy-launch-spotify` — this comes back automatically with `stow .`,
+nothing to redo here. Everything else — Spotify's shortcut-target setting,
+artist-name/scroll-text display, etc. — is a per-widget preference set from
+that widget's own settings gear on the bar; reapply to taste.
+
 ---
 
 ## Notes

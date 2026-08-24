@@ -38,8 +38,16 @@ o.bind("SUPER + SHIFT + S", "Steam Gaming Mode", "/home/careb0t/.local/share/ste
 o.bind("SUPER + SHIFT + R", "Exit Gaming Mode", "/home/careb0t/.local/share/steam-launcher/leave-gamesmode")
 -- End Gaming Mode bindings
 
--- ProtonVPN — disabled pending conversion to Omarchy 4.0's new menu system.
--- Previously: walker -m menus:vpn --maxheight 800 (walker no longer exists).
--- TODO: rewire once ~/.config/elephant/menus/vpn*.lua is converted to the
--- new omarchy-menu format.
--- o.bind("SUPER + SHIFT + V", "ProtonVPN", "walker -m menus:vpn --maxheight 800")
+-- Music: defer to the quickshell.spotify plugin's own setting-aware
+-- toggle instead of Omarchy's default omarchy-launch-spotify (which
+-- always opens the native app and knows nothing about the plugin).
+-- IpcHandler target "quickshell.spotify.player" → togglePlayer() reads
+-- the plugin's "Keyboard shortcut opens" setting (Omarchy Music app /
+-- Full player / Mini player) and dispatches accordingly — see
+-- BarWidget.qml's toggleConfiguredPlayerShortcut() in the plugin repo.
+-- Change which one this key opens from the plugin's own Settings panel,
+-- not here.
+-- Note: SUPER+SHIFT+M was previously bound to Omarchy's default Music
+-- binding. This unbinds it before rebinding.
+hl.unbind("SUPER + SHIFT + M")
+o.bind("SUPER + SHIFT + M", "Music", "omarchy shell -q quickshell.spotify.player togglePlayer")
