@@ -12,17 +12,21 @@ Run this first — it will automatically install several packages that the dotfi
 omarchy-update
 ```
 
-This handles: `tmux`, `claude-code`, `lazygit`, `brightnessctl`, and other base system packages.
+This handles: `tmux`, `lazygit`, `brightnessctl`, and other base system packages.
 
-### Install Claude Code locally (user bin)
+### Claude Code (automatic, nothing to run)
 
-Omarchy installs `claude-code` to `/usr/bin/claude`, but on first run it will offer to install a self-updating local copy to `~/.local/bin` instead. Run it once and accept the prompt:
+As of Omarchy 4.0 there's no `claude-code` package and no `/usr/bin/claude` —
+`omarchy-update` provisions `claude` (along with `gh`, `codex`, and `node`)
+automatically as `mise`-managed stubs straight into `~/.local/bin`. There's
+no prompt to accept and nothing to install; `claude` is just available after
+step 1 runs.
 
-```sh
-claude
-```
-
-The local install is `mise`-managed: `~/.local/bin/claude` is a small wrapper script (`mise use -g claude` then `mise x claude`) that resolves to a version under `~/.local/share/claude/versions/` and keeps itself current. Since `.zshrc` puts `~/.local/bin` earlier in `$PATH`, this version will take precedence over the system one going forward.
+`~/.local/bin/claude` is a small wrapper script (`mise use -g claude` then
+`mise x claude`) that resolves to a version under
+`~/.local/share/mise/installs/claude/` and keeps itself current via mise.
+Since `.zshrc` puts `~/.local/bin` earlier in `$PATH`, this takes precedence
+over anything else named `claude` going forward.
 
 ## 2. Install Remaining Packages
 
@@ -129,6 +133,34 @@ Open nvim and let lazy.nvim auto-install plugins. The following will install aut
 - `neocodeium` (AI completions — requires Node.js, installed in step 2)
 - `nvim-tmux-navigation` (tmux/nvim pane nav)
 
+### Omarchy Neovim theme template override
+
+`~/.config/omarchy/themed/neovim.lua.tpl` fixes an upstream Omarchy bug: its
+bundled `neovim.lua.tpl` (used to generate `neovim.lua` for any theme that
+doesn't ship its own hand-authored one — e.g. Last Horizon, Ethereal, Lupine,
+Miasma, Ristretto, Vantablack, White, Aether) never sets `bg_highlight` for
+the `aether.nvim` colorscheme plugin. That field drives cursor-word/LSP
+reference highlighting, Telescope selection, Flash matches, etc., so it
+silently falls back to `aether.nvim`'s hardcoded `#000000` default — on a
+dark theme, that makes highlighted word matches render as unreadable black
+boxes. `aether.nvim` also has its own bug where the "read reference" highlight
+group leaks a stale `fg` equal to the editor background from an earlier merge
+step, so the matched text itself goes near-invisible too.
+
+This override maps `bg_highlight` to the theme's `muted` color (the closest
+semantic fit, and available in every Omarchy theme's `colors.toml`) and
+resets the broken reference group via `on_highlights`. Omarchy checks
+`~/.config/omarchy/themed/` for a same-named template before falling back to
+its own bundled one, so this applies automatically to any current or future
+theme generated the templated way — no per-theme action needed.
+
+Stow-managed like the rest of `~/.config/omarchy`'s tracked files — `stow .`
+in step 5 creates the link, nothing manual needed here.
+
+If you're on a theme this already generated *before* the fix existed (check
+`~/.local/state/omarchy/current/theme/neovim.lua` for a `bg_highlight` key),
+re-apply the theme to force regeneration: `omarchy theme set "<name>"`.
+
 ## 7. Per-Machine Hyprland Lua Config
 
 Omarchy 4.0 configures Hyprland in Lua (`~/.config/hypr/*.lua`). The dotfiles
@@ -199,9 +231,12 @@ After editing any of these, validate with `hyprctl reload` followed by `hyprctl 
 
 ## 8. Set Up Syncthing
 
-Keeps `~/Videos/Stash` synced live between machines. The folder behaves like a
-normal local directory in Thunar/Yazi — no separate GUI or command needed to
-add, remove, or edit files once this is set up.
+Keeps a folder synced live between machines — pick whatever path and label
+make sense for what you're syncing (e.g. `~/Videos/<something>`). The folder
+behaves like a normal local directory in Thunar/Yazi — no separate GUI or
+command needed to add, remove, or edit files once this is set up. You can
+share more than one folder this way; just repeat the "Share the folder" step
+below per folder.
 
 Enable the service (starts now and on every login):
 
@@ -209,10 +244,10 @@ Enable the service (starts now and on every login):
 systemctl --user enable --now syncthing.service
 ```
 
-Create the synced folder:
+Create the folder you want to sync, e.g.:
 
 ```sh
-mkdir -p ~/Videos/Stash
+mkdir -p ~/Videos/<folder-name>
 ```
 
 Open `http://127.0.0.1:8384` and go to Settings → GUI to set a username/password
@@ -224,13 +259,17 @@ device ID. On each machine, go to Remote Devices → Add Device and paste in the
 other machine.
 
 Share the folder: on one machine, go to Folders → Add Folder, set the path to
-`~/Videos/Stash`, label it (e.g. "Stash"), then under that folder's Sharing tab
-enable sharing with the other device. On the other machine, accept the incoming
-folder-share prompt and set its path to `~/Videos/Stash` too.
+your folder, give it a label, then under that folder's Sharing tab enable
+sharing with the other device. On the other machine, accept the incoming
+folder-share prompt and set its path to match.
 
-Once both sides show the folder as "Up to Date," any file dropped into
-`~/Videos/Stash` on either machine syncs to the other automatically. The web GUI
-is only needed for this one-time setup, never for everyday file adds/removes.
+Once both sides show the folder as "Up to Date," any file dropped into it on
+either machine syncs to the other automatically. The web GUI is only needed
+for this one-time setup, never for everyday file adds/removes.
+
+**Note:** Syncthing's config isn't stow-managed (it's runtime state, not
+static config) — its config lives at `~/.local/state/syncthing/config.xml`,
+not `~/.config/syncthing/`, if you ever need to inspect it directly.
 
 ## 9. Set Up Yazi as the System File Picker
 
@@ -324,6 +363,7 @@ omarchy plugin add https://github.com/ilyaZar/omarchy-syncthing.git --enable
 omarchy plugin add https://github.com/cempack/ProtonPassPlugin.git --enable
 omarchy plugin add https://github.com/jkoestinger/omarchy-vpn.git --enable
 omarchy plugin add https://github.com/stappmus/omarchy-activity-monitor.git --enable
+omarchy plugin add https://github.com/mshareef-git/omavibes.git --enable
 ```
 
 | Plugin | id | Purpose |
@@ -334,6 +374,7 @@ omarchy plugin add https://github.com/stappmus/omarchy-activity-monitor.git --en
 | [Proton Pass](https://github.com/cempack/ProtonPassPlugin) | `io.github.cempack.proton-pass` | Search/copy Proton Pass logins from the bar. |
 | [VPN](https://github.com/jkoestinger/omarchy-vpn) | `jkoestinger.vpn` | VPN status/switching in the bar. Auto-detects Mullvad, Proton, Windscribe, or a NetworkManager VPN connection — no extra setup beyond whichever of those you actually use. |
 | [Activity Monitor](https://github.com/stappmus/omarchy-activity-monitor) | `stappmus.activity-monitor` | CPU/memory/GPU/storage/process glance. |
+| [OmaVibes](https://github.com/mshareef-git/omavibes) | `io.github.mshareef-git.omavibes` | Mute/unmute typing sounds (wayvibes) from the bar, without opening the panel. Paired with a `SUPER+CTRL+M` binding in `bindings.lua`. |
 
 Disable the built-in widget the theme manager replaces:
 
@@ -341,28 +382,28 @@ Disable the built-in widget the theme manager replaces:
 omarchy plugin disable omarchy.image-picker
 ```
 
-Every plugin above defaults into the bar's right section already, except
-Spotify (its default is left). Move it, then order the right section to
-match the current layout — tray, Spotify, Syncthing, the built-in
-agents/audio/bluetooth widgets, Proton Pass, VPN, the built-in network
-widget, Activity Monitor, then the built-in monitor/power widgets:
+Spotify defaults into the bar's left section and stays there. Every other
+plugin above defaults into the right section already; order it to match the
+current layout — tray, Syncthing, the built-in agents/audio/bluetooth
+widgets, Proton Pass, VPN, the built-in network widget, Activity Monitor,
+OmaVibes, then the built-in monitor/power widgets:
 
 ```sh
-omarchy bar move quickshell.spotify --section right
-omarchy bar put quickshell.spotify --after omarchy.tray
-omarchy bar put io.github.ilyazar.syncthing --after quickshell.spotify
+omarchy bar put io.github.ilyazar.syncthing --after omarchy.tray
 omarchy bar put io.github.cempack.proton-pass --after omarchy.bluetooth
 omarchy bar put jkoestinger.vpn --after io.github.cempack.proton-pass
 omarchy bar put stappmus.activity-monitor --after omarchy.network
+omarchy bar put io.github.mshareef-git.omavibes --after stappmus.activity-monitor
 ```
 
 The Spotify widget's keyboard shortcut is rebound in `bindings.lua`
 (`SUPER + SHIFT + M`, tracked in the repo) to defer to the plugin's own
 "Keyboard shortcut opens" setting instead of Omarchy's default
 `omarchy-launch-spotify` — this comes back automatically with `stow .`,
-nothing to redo here. Everything else — Spotify's shortcut-target setting,
-artist-name/scroll-text display, etc. — is a per-widget preference set from
-that widget's own settings gear on the bar; reapply to taste.
+nothing to redo here. OmaVibes' `SUPER+CTRL+M` binding is likewise already
+tracked in `bindings.lua`. Everything else — Spotify's shortcut-target
+setting, artist-name/scroll-text display, etc. — is a per-widget preference
+set from that widget's own settings gear on the bar; reapply to taste.
 
 ---
 

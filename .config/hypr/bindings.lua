@@ -27,9 +27,6 @@ o.bind(
 hl.unbind("SUPER + SHIFT + F")
 o.bind("SUPER + SHIFT + F", "File manager (yazi)", { tui = "yazi" })
 
--- Extra Activity shortcut (Omarchy's default is SUPER+CTRL+T).
-o.bind("SUPER + SHIFT + T", "Activity", { tui = "btop" })
-
 -- Gaming Mode bindings — added by installation script.
 -- Note: SUPER+SHIFT+S was previously bound to the Google Maps webapp. This
 -- unbinds it.
@@ -51,3 +48,11 @@ o.bind("SUPER + SHIFT + R", "Exit Gaming Mode", "/home/careb0t/.local/share/stea
 -- binding. This unbinds it before rebinding.
 hl.unbind("SUPER + SHIFT + M")
 o.bind("SUPER + SHIFT + M", "Music", "omarchy shell -q quickshell.spotify.player togglePlayer")
+
+-- OmaVibes: mute/unmute typing sounds without opening the panel — handy for
+-- gaming sessions where the sound effects are more distracting than useful.
+-- IpcHandler target "io.github.mshareef-git.omavibes" → toggleMute() checks
+-- whether wayvibes is actually running (not a cached flag) and kills/resumes
+-- it accordingly, remembering the active pack across the toggle — see
+-- OmaVibesState.qml's toggleMute()/muteCheckProc in the plugin repo.
+o.bind("SUPER + CTRL + M", "Toggle typing sounds", "omarchy shell -q io.github.mshareef-git.omavibes toggleMute")
