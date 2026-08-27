@@ -30,6 +30,10 @@ keybind = control+insert=copy_to_clipboard
 keybind = shift+enter=csi:13;2u
 # Legacy encoding sends Alt+Shift+Enter the same as Alt+Enter; send CSI-u so tmux can match M-S-Enter.
 keybind = alt+shift+enter=csi:13;4u
+# Terminals can't natively distinguish Ctrl+Backspace from plain Backspace, so
+# send the same byte as Ctrl+W (0x17) instead — zsh, readline, and Claude
+# Code's prompt all already treat Ctrl+W as "delete word before cursor".
+keybind = ctrl+backspace=text:\x17
 keybind = super+control+shift+alt+arrow_down=resize_split:down,100
 keybind = super+control+shift+alt+arrow_up=resize_split:up,100
 keybind = super+control+shift+alt+arrow_left=resize_split:left,100

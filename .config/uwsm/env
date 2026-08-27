@@ -1,8 +1,15 @@
 # Changes require a restart to take effect.
 
-# Ensure Omarchy bins are in the path
-export OMARCHY_PATH=$HOME/.local/share/omarchy
-export PATH=$OMARCHY_PATH/bin:$PATH
+# OMARCHY_PATH/PATH are already set correctly by
+# /usr/share/uwsm/env.d/10-omarchy (via env-bootstrap) before this file
+# runs. Do NOT override them here: ~/.local/share/omarchy is just a
+# symlink to /usr/share/omarchy (the real, currently-installed package),
+# and pointing this file at the symlink instead of the canonical path
+# makes the Quickshell bar register its IPC instance under a different
+# path string than what bash -lc (used by every bar button/menu click)
+# resolves OMARCHY_PATH to -- so clicks silently fail to reach the shell
+# while Hyprland keybinds (which bypass bash -lc) keep working. See
+# omarchy-quattro-upgrade-shell-ipc-path-mismatch memory for the full story.
 
 # Set default terminal and editor
 source ~/.config/uwsm/default
