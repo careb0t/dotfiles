@@ -27,7 +27,7 @@ rules = [
 ]
 [opener]
 edit = [
-	{ run = 'nvim "$@"', block = true },
+	{ run = 'nvim %s', block = true },
 ]
 [plugin]
 prepend_previewers = [

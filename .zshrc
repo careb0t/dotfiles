@@ -53,6 +53,7 @@ add-zsh-hook precmd _fzf_tab_reclaim_tab
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
 alias lg='lazygit'
+alias tdev='tmuxp load -y dev'
 dotsync() {
   (cd ~/dotfiles && stow . --adopt && git restore .)
 }

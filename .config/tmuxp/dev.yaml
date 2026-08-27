@@ -1,0 +1,16 @@
+# tmuxp dev session: nvim + shell + claude, all rooted at the directory
+# `tmuxp load dev` was run from. No start_directory is set anywhere here on
+# purpose — tmux/tmuxp default a new session's windows to the cwd of the
+# invoking shell when none is given, which is what gives us "wherever I ran
+# the command" instead of a hardcoded path.
+session_name: dev
+windows:
+  - window_name: nvim
+    panes:
+      - nvim
+  - window_name: shell
+    panes:
+      - null
+  - window_name: claude
+    panes:
+      - claude

@@ -103,13 +103,34 @@ The flag works with any site — just name the cookie file after the domain as s
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
 
-## 4. Install Tmux Plugin Manager (TPM)
+## 4. Stow Dotfiles
 
-tmux itself is installed by omarchy-update, but TPM must be set up manually:
+From the dotfiles repo root:
+
+```sh
+stow .
+```
+
+This puts the tmux config at `~/.config/tmux/tmux.conf`, which TPM needs in
+place *before* the next step (see below).
+
+## 5. Install Tmux Plugin Manager (TPM) & tmuxp
+
+### TPM
+
+tmux itself is installed by omarchy-update, but TPM must be set up manually.
+**Do this after stowing (step 4), not before:** TPM auto-detects an
+XDG-style config at `~/.config/tmux/tmux.conf` and, if present, redirects
+all plugin installs to `~/.config/tmux/plugins/`; if that file isn't there
+yet when TPM first runs, it silently falls back to installing into the
+legacy `~/.tmux/plugins/` instead, and plugins end up in the wrong place.
 
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
+
+(TPM itself is always cloned to this fixed path regardless of the XDG
+redirect above — only where it installs the *other* plugins moves.)
 
 Then open tmux and press `C-Space` then `I` to install all plugins:
 - tmux-continuum
@@ -117,15 +138,40 @@ Then open tmux and press `C-Space` then `I` to install all plugins:
 - tmux-smooth-scroll
 - vim-tmux-navigator
 
-The tmux config now lives at `~/.config/tmux/tmux.conf` and is managed via stow. It sources the omarchy base config and layers user overrides on top.
+The tmux config lives at `~/.config/tmux/tmux.conf` and is managed via stow. It sources the omarchy base config and layers user overrides on top.
 
-## 5. Stow Dotfiles
+### tmuxp (session templates)
 
-From the dotfiles repo root:
+`tmuxp` is a standalone session-launcher CLI (Python, built on `libtmux`), not
+a TPM plugin — it runs *before* tmux starts rather than inside an
+already-running server, so TPM's plugin model has no way to provide it.
+Install it as a normal package:
 
 ```sh
-stow .
+sudo pacman -S tmuxp
 ```
+
+Config lives at `~/.config/tmuxp/dev.yaml`, stow-managed the same way as
+`tmux.conf`. It defines a `dev` session with three windows — `nvim`,
+`shell`, `claude` — none of which set a `start_directory`, so all three open
+wherever `tmuxp load` was actually run from:
+
+```yaml
+session_name: dev
+windows:
+  - window_name: nvim
+    panes:
+      - nvim
+  - window_name: shell
+    panes:
+      - null
+  - window_name: claude
+    panes:
+      - claude
+```
+
+Launch it from any project directory with the `tdev` alias (`tmuxp load -y
+dev`, defined in `.zshrc`).
 
 ## 6. Neovim — First Launch
 
@@ -155,7 +201,7 @@ its own bundled one, so this applies automatically to any current or future
 theme generated the templated way — no per-theme action needed.
 
 Stow-managed like the rest of `~/.config/omarchy`'s tracked files — `stow .`
-in step 5 creates the link, nothing manual needed here.
+in step 4 creates the link, nothing manual needed here.
 
 If you're on a theme this already generated *before* the fix existed (check
 `~/.local/state/omarchy/current/theme/neovim.lua` for a `bg_highlight` key),
@@ -362,6 +408,7 @@ omarchy plugin add https://github.com/stappmus/Omarchy-Spotify.git --enable
 omarchy plugin add https://github.com/ilyaZar/omarchy-syncthing.git --enable
 omarchy plugin add https://github.com/cempack/ProtonPassPlugin.git --enable
 omarchy plugin add https://github.com/jkoestinger/omarchy-vpn.git --enable
+omarchy plugin add https://github.com/ssupt/omarchy-audio-control.git --enable
 omarchy plugin add https://github.com/stappmus/omarchy-activity-monitor.git --enable
 omarchy plugin add https://github.com/mshareef-git/omavibes.git --enable
 ```
@@ -373,25 +420,28 @@ omarchy plugin add https://github.com/mshareef-git/omavibes.git --enable
 | [Syncthing](https://github.com/ilyaZar/omarchy-syncthing) | `io.github.ilyazar.syncthing` | Sync health, folder management, and service control from the bar. Pairs with step 8. |
 | [Proton Pass](https://github.com/cempack/ProtonPassPlugin) | `io.github.cempack.proton-pass` | Search/copy Proton Pass logins from the bar. |
 | [VPN](https://github.com/jkoestinger/omarchy-vpn) | `jkoestinger.vpn` | VPN status/switching in the bar. Auto-detects Mullvad, Proton, Windscribe, or a NetworkManager VPN connection — no extra setup beyond whichever of those you actually use. |
+| [Advanced Audio Control](https://github.com/ssupt/omarchy-audio-control) | `ssupt.audio-control` | Expanded PipeWire/WirePlumber mixer — per-app output routing, Bluetooth codecs, mic privacy/testing, audio scenes. Replaces the built-in Audio widget (see below). |
 | [Activity Monitor](https://github.com/stappmus/omarchy-activity-monitor) | `stappmus.activity-monitor` | CPU/memory/GPU/storage/process glance. |
 | [OmaVibes](https://github.com/mshareef-git/omavibes) | `io.github.mshareef-git.omavibes` | Mute/unmute typing sounds (wayvibes) from the bar, without opening the panel. Paired with a `SUPER+CTRL+M` binding in `bindings.lua`. |
 
-Disable the built-in widget the theme manager replaces:
+Disable the built-in widgets these plugins replace:
 
 ```sh
 omarchy plugin disable omarchy.image-picker
+omarchy plugin disable omarchy.audio
 ```
 
 Spotify defaults into the bar's left section and stays there. Every other
 plugin above defaults into the right section already; order it to match the
-current layout — tray, Syncthing, the built-in agents/audio/bluetooth
-widgets, Proton Pass, VPN, the built-in network widget, Activity Monitor,
-OmaVibes, then the built-in monitor/power widgets:
+current layout — tray, Syncthing, the built-in agents/bluetooth widgets,
+Proton Pass, VPN, Advanced Audio Control, the built-in network widget,
+Activity Monitor, OmaVibes, then the built-in monitor/power widgets:
 
 ```sh
 omarchy bar put io.github.ilyazar.syncthing --after omarchy.tray
 omarchy bar put io.github.cempack.proton-pass --after omarchy.bluetooth
 omarchy bar put jkoestinger.vpn --after io.github.cempack.proton-pass
+omarchy bar put ssupt.audio-control --after jkoestinger.vpn
 omarchy bar put stappmus.activity-monitor --after omarchy.network
 omarchy bar put io.github.mshareef-git.omavibes --after stappmus.activity-monitor
 ```
@@ -410,6 +460,7 @@ set from that widget's own settings gear on the bar; reapply to taste.
 ## Notes
 
 - tmux prefix is `C-Space` (secondary: `C-b`); config is at `~/.config/tmux/tmux.conf`
+- `tdev` opens the tmuxp `dev` session (nvim/shell/claude windows) rooted at the current directory
 - `mp4dl <url>` handles YouTube, Reddit, and X/Twitter downloads
   - X/Twitter downloads use a cookies file at `~/.config/yt-dlp/x.com_cookies.txt` — export from Vivaldi if needed
   - `mp4dl -p <url>` for adult sites — auto-loads `~/.config/yt-dlp/<domain>_cookies.txt`; requires `python-curl_cffi`
