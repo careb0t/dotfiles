@@ -53,7 +53,17 @@ add-zsh-hook precmd _fzf_tab_reclaim_tab
 # Aliases
 alias ls='eza -lh -a --group-directories-first --icons=auto'
 alias lg='lazygit'
-alias tdev='tmuxp load -y dev'
+tdev() {
+  # tmuxp's dev.yaml always declares session_name: dev, so a second `tdev`
+  # run from a different directory just reattaches to the existing "dev"
+  # tmux session (with its windows still rooted wherever they were first
+  # created) instead of opening a fresh one here. Give each directory its
+  # own session so windows always end up rooted in the cwd tdev was run from.
+  local base
+  base=$(basename "$PWD")
+  local session="dev-$(printf '%s' "$base" | tr -c 'A-Za-z0-9_-' '-')"
+  tmuxp load -y -s "$session" dev
+}
 dotsync() {
   (cd ~/dotfiles && stow . --adopt && git restore .)
 }
