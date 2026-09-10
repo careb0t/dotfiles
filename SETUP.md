@@ -455,6 +455,106 @@ tracked in `bindings.lua`. Everything else — Spotify's shortcut-target
 setting, artist-name/scroll-text display, etc. — is a per-widget preference
 set from that widget's own settings gear on the bar; reapply to taste.
 
+## 12. Vivaldi Keyring Unlock Fix
+
+Fixes "Vivaldi could not unlock your secure key store" on launch, with no
+password prompt offered (just quit / continue-with-data-loss). First seen
+2026-09-09 after an `omarchy update` bumped Vivaldi 8.1 → 8.2. Two separate
+bugs stacked here; both needed fixing.
+
+**Bug 1 — the portal interface didn't exist under Hyprland.** Vivaldi 8.2's
+new `OSCryptAsync` encryption-key subsystem talks to the xdg-desktop-portal
+Secret interface (`org.freedesktop.portal.Secret`) instead of going straight
+to `org.freedesktop.secrets` (gnome-keyring) like older Vivaldi did — and it
+**ignores `--password-store` entirely**; that flag only affects a legacy code
+path this build no longer uses for provider *selection* (confirmed by testing
+every value directly against the `vivaldi-bin` binary — none changed which
+backend got used, see Bug 2's flag for the one that actually works).
+`gnome-keyring` *does* ship a portal backend for Secret
+(`/usr/share/xdg-desktop-portal/portals/gnome-keyring.portal`), but that file
+is scoped `UseIn=gnome`, so xdg-desktop-portal never auto-selects it under
+Hyprland — `org.freedesktop.portal.Desktop` didn't expose the Secret
+interface at all (`gdbus introspect` on it showed no such interface). Fixed
+by adding `org.freedesktop.impl.portal.Secret=gnome-keyring` to
+`~/.config/xdg-desktop-portal/hyprland-portals.conf`'s `[preferred]` section
+— same mechanism step 9 already uses for `FileChooser=termfilechooser`.
+
+**Bug 2 — fixing Bug 1 uncovered a key mismatch.** Once the portal interface
+existed, Vivaldi's portal-based key retrieval started *succeeding*
+(`Local State`'s `os_crypt.portal.prev_init_success` went `true`) — but it
+turned out to retrieve a **different secret** than the one that actually
+encrypted this profile's existing logins/cookies (the pre-existing
+`Chrome Safe Storage` item in gnome-keyring, schema
+`chrome_libsecret_os_crypt_password_v2`, confirmed still present and
+untouched via `gdbus` the whole time). Vivaldi's own
+`vivaldi_keystore_checker.cc` correctly detects this and refuses to proceed
+silently, logging `KeystoreChecker: ... Encrypted keystore changed or is now
+unavailable` and showing the same "could not unlock" dialog — just for a
+different underlying reason than Bug 1. **Never click "Continue with Data
+Loss" on this dialog** — it discards the mismatched profile data; "quit" or
+"switch profile" are safe (confirmed: the original keyring item was
+unaffected after choosing either).
+
+Fixed by disabling the portal key provider outright via
+`~/.config/vivaldi-stable.conf` (see below), forcing `OSCryptAsync` back onto
+the classic `FreedesktopSecretKeyProvider`, which talks directly to
+`org.freedesktop.secrets` and reuses the original, matching key.
+
+### Config (already stowed)
+
+- `~/.config/xdg-desktop-portal/hyprland-portals.conf` — adds
+  `org.freedesktop.impl.portal.Secret=gnome-keyring` to `[preferred]` (Bug 1).
+- `~/.config/vivaldi-stable.conf` — Vivaldi's wrapper script
+  (`/opt/vivaldi/vivaldi`) sources `~/.config/vivaldi-$CHROME_VERSION_EXTRA.conf`
+  (`$CHROME_VERSION_EXTRA` is `"stable"`) and passes its contents as extra
+  flags to the real binary. Sets
+  `--disable-features=SecretPortalKeyProviderUseForEncryption` (Bug 2),
+  applying regardless of how Vivaldi gets launched (app launcher, taskbar,
+  terminal, keybinding).
+
+### Apply changes
+
+```sh
+systemctl --user restart xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+```
+
+Then fully quit Vivaldi (check `pgrep -f vivaldi-bin` — it's multi-process,
+closing the last window doesn't always kill all of them) and relaunch it.
+
+### Verify
+
+```sh
+# Bug 1 — portal interface exists:
+gdbus introspect --session --dest org.freedesktop.portal.Desktop \
+  --object-path /org/freedesktop/portal/desktop | grep -A2 'interface org.freedesktop.portal.Secret'
+
+# Bug 2 — the flag is actually being passed:
+pgrep -af vivaldi-bin | grep -o -- '--disable-features=[A-Za-z,]*'
+```
+
+First should show the `RetrieveSecret` method; second should print the flag.
+Both fixes were verified end-to-end against real data without touching the
+live profile: copy `Local State` + `Default/{Cookies,Login Data,Web Data}`
+from the real (Chill) profile into a scratch `--user-data-dir`, launch
+`vivaldi-bin --user-data-dir=<scratch>` against it, and check for the
+`KeystoreChecker: ... Encrypted keystore changed` line in stderr — present
+and reproducible without the `--disable-features` flag, silent (no error,
+which is how this checker reports success) with it.
+
+**Known gap:** this machine's SDDM autologin skips the PAM auth step
+entirely (`gkr-pam: no password is available for user` in `journalctl -b`),
+so the login keyring still starts locked every boot and `pam_gnome_keyring.so`
+never gets a password to auto-unlock it with. In practice something else
+unlocks it within seconds of boot before Vivaldi's launch normally completes,
+so this hasn't reproduced as a hard failure since Bug 2 was fixed — but if
+Vivaldi ever fails to unlock again on a *fresh boot* specifically, that race
+is the likely culprit, and the fallback is blanking the login keyring's
+password (via Seahorse: Passwords and Keys → Login → Change Password → leave
+the new password blank) so it auto-unlocks unconditionally — not done here,
+since it also auto-unlocks Signal, Telegram, Proton Pass, and
+NetworkManager's saved Wi-Fi passwords, not just Vivaldi, so it's a wider
+tradeoff left as a deliberate choice to make separately.
+
 ---
 
 ## Notes
