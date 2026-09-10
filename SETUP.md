@@ -541,19 +541,72 @@ from the real (Chill) profile into a scratch `--user-data-dir`, launch
 and reproducible without the `--disable-features` flag, silent (no error,
 which is how this checker reports success) with it.
 
-**Known gap:** this machine's SDDM autologin skips the PAM auth step
-entirely (`gkr-pam: no password is available for user` in `journalctl -b`),
-so the login keyring still starts locked every boot and `pam_gnome_keyring.so`
-never gets a password to auto-unlock it with. In practice something else
-unlocks it within seconds of boot before Vivaldi's launch normally completes,
-so this hasn't reproduced as a hard failure since Bug 2 was fixed — but if
-Vivaldi ever fails to unlock again on a *fresh boot* specifically, that race
-is the likely culprit, and the fallback is blanking the login keyring's
-password (via Seahorse: Passwords and Keys → Login → Change Password → leave
-the new password blank) so it auto-unlocks unconditionally — not done here,
-since it also auto-unlocks Signal, Telegram, Proton Pass, and
-NetworkManager's saved Wi-Fi passwords, not just Vivaldi, so it's a wider
-tradeoff left as a deliberate choice to make separately.
+**Update 2026-09-09:** after fixing Bugs 1 and 2 above, the exact same
+keystore-mismatch error kept recurring anyway. The actual cause turned out to
+be a **third, unrelated bug** — this machine had two separate keyrings, and
+the wrong one was set as the system default. See step 13; that's almost
+certainly what a future "could not unlock" report on this or the laptop
+means, even after Bugs 1 and 2's fixes are already in place. This machine's
+SDDM autologin skipping the PAM auth step (`gkr-pam: no password is
+available for user` in `journalctl -b`) is still real and worth knowing
+about, but turned out to be a red herring for this particular recurring
+failure, not its cause.
+
+---
+
+## 13. Quattro Upgrade: Orphaned Duplicate Keyring
+
+Some Omarchy Quattro migration (2026-08-15, see the Omarchy Quattro upgrade
+memory) left this machine with **two separate keyring files** instead of
+one, and the wrong one set as the system default:
+
+```
+~/.local/share/keyrings/Default_Keyring.keyring   <- the REAL one (capital K)
+~/.local/share/keyrings/Default_keyring.keyring   <- an orphaned duplicate (lowercase k)
+~/.local/share/keyrings/default                   <- was pointing at the lowercase one
+```
+
+The real keyring accumulated months of actual secrets — GitHub, Proton SSO,
+pass-cli, the Omarchy Spotify plugin's refresh token, and (critically) the
+correct browser encryption key. The lowercase one is sparse — just a handful
+of items various apps freshly (re-)created after the migration silently
+orphaned the real one. Whatever app any of your secrets belong to, if it
+looks emptied out / like it forgot everything after a Quattro upgrade, check
+here before assuming the app or its config is broken — this can masquerade
+as almost any "app can't find my saved password/keyring" symptom, not just
+Vivaldi's.
+
+### Diagnose
+
+```sh
+# Which one is currently set as default:
+cat ~/.local/share/keyrings/default
+
+# Compare how much each one actually holds -- the real one has many more
+# items with recognizable labels (GitHub, Proton, etc); an orphaned one
+# freshly created post-migration will look sparse:
+busctl --user tree org.freedesktop.secrets | grep collection
+```
+
+If there are two `Default_*Keyring` (or similarly near-duplicate-named)
+collections and the one with your actual accounts in it isn't what
+`~/.local/share/keyrings/default` names, this is the bug.
+
+### Fix
+
+```sh
+echo -n "Default_Keyring" > ~/.local/share/keyrings/default   # match whichever is the REAL one
+systemctl --user restart gnome-keyring-daemon.service
+```
+
+Then unlock it when prompted (a real password prompt should appear the next
+time any app requests a secret — this is expected, not a new problem).
+
+**Known gap:** a handful of items got written to the *wrong* (orphaned)
+keyring during the split (confirmed: at least one duplicate Proton SSO
+entry existed in both, with possibly-differing values) — anything you set up
+fresh during that window won't automatically follow this fix and may need to
+be re-entered once you notice it's missing. Not fully audited/reconciled.
 
 ---
 
