@@ -592,21 +592,313 @@ If there are two `Default_*Keyring` (or similarly near-duplicate-named)
 collections and the one with your actual accounts in it isn't what
 `~/.local/share/keyrings/default` names, this is the bug.
 
+### Real mechanism (confirmed 2026-09-26)
+
+This machine's SDDM autologin never gives `pam_gnome_keyring` a real password
+(`pam_permit.so` satisfies auth first) — the real keyring can never be
+auto-unlocked via PAM. Whenever `gnome-keyring-daemon` (re)starts and finds
+the aliased default collection locked, it silently creates a fresh blank
+collection and rebinds the `default` alias to it
+(`CreateCollection(label="Default keyring", alias="default")` always rebinds
+per the Secret Service D-Bus spec). This is the daemon's own startup
+behavior, not anything app-specific — confirmed by restarting the daemon
+alone (no other app running) and watching the orphan reappear every time.
+
+### Permanent fix: blank the real keyring's password
+
+Given this disk is LUKS-encrypted (`nvme0n1p2`) and autologin already grants
+full session access with zero password barrier, a separately
+password-protected keyring adds no real protection in either state (off =
+LUKS covers it; on = autologin already grants full access) — so the durable
+fix is GNOME's own supported "auto-unlock" mechanism: blank the real
+keyring's password via Seahorse (Passwords tab → right-click the real
+"Default keyring" → Change Password → enter current password → leave new
+password blank → confirm the "stored unencrypted" warning). This removes the
+daemon's reason to ever fall back to a fresh collection, since it can always
+load and auto-unlock the real one instantly with zero PAM dependency.
+
+This was a **deliberate choice** given this machine's specific LUKS+autologin
+posture — re-evaluate if either changes (e.g. autologin gets disabled, or
+this gets replicated on a machine without full-disk encryption). The
+alternative (disable autologin so PAM can legitimately capture a password) is
+more defense-in-depth but costs a password prompt every boot.
+
+### Bug hit applying that fix: Seahorse corrupts PEM-containing items
+
+Seahorse's "Change Password" → blank rewrites the file into GNOME's plaintext
+GKeyFile format (`[keyring]` / `display-name=...`, expected and correct for a
+blank-password keyring) — but it has a real bug: any item whose secret
+contains embedded literal `\n` sequences (e.g. a JSON blob holding PEM
+`-----BEGIN/END...-----` blocks) gets written with **raw newlines instead of
+escaped `\n`**, breaking the GKeyFile line format. Symptom:
+`gnome-keyring-daemon` logs `keyring was in an invalid or unrecognized
+format: .../Default_Keyring.keyring` on load and falls into the exact same
+orphan-creation behavior above — except now permanently, since the file
+itself is broken, not just locked.
+
+**Diagnose** — validate with GLib's own parser (the same one the daemon
+uses), not just `file`:
+
+```python
+import gi; gi.require_version('GLib', '2.0')
+from gi.repository import GLib
+kf = GLib.KeyFile.new()
+kf.load_from_file('/home/careb0t/.local/share/keyrings/Default_Keyring.keyring', GLib.KeyFileFlags.NONE)
+```
+
+A `g-key-file-error-quark` naming a line that looks like the middle of a PEM
+block confirms this bug.
+
+**Repair** (never print the file's raw contents — it holds live secrets):
+read the file; for every line that isn't a section header (`^\[.*\]$`), a
+`key=value` line, a comment, or blank, treat it as a broken continuation of
+the *previous* line and rejoin with a literal `\n` (two characters) instead
+of a real newline:
+
+```python
+import re, shutil, gi
+gi.require_version('GLib', '2.0')
+from gi.repository import GLib
+
+src = '/home/careb0t/.local/share/keyrings/Default_Keyring.keyring'
+backup = '/path/to/scratch/Default_Keyring.keyring.corrupt.bak'
+repaired = '/path/to/scratch/Default_Keyring.keyring.repaired'
+shutil.copy2(src, backup)
+
+with open(src, 'r', encoding='utf-8', errors='surrogateescape') as f:
+    lines = f.read().split('\n')
+
+section_re = re.compile(r'^\[.*\]$')
+key_re = re.compile(r'^[A-Za-z0-9_.\-]+(\[[^\]]+\])?\s*=')
+
+out_lines = []
+for line in lines:
+    if section_re.match(line) or key_re.match(line) or line.strip() == '' or line.startswith('#'):
+        out_lines.append(line)
+    else:
+        out_lines[-1] = out_lines[-1] + '\\n' + line  # rejoin broken continuation
+
+with open(repaired, 'w', encoding='utf-8', errors='surrogateescape') as f:
+    f.write('\n'.join(out_lines))
+
+kf = GLib.KeyFile.new()
+kf.load_from_file(repaired, GLib.KeyFileFlags.NONE)  # raises if still invalid
+print('groups:', len(kf.get_groups()[0]))
+```
+
+Re-validate with `GLib.KeyFile.load_from_file` before touching the live file
+— a successful parse recovering the expected item count (compare against
+`busctl --user tree org.freedesktop.secrets | grep collection` from before
+the corruption) confirms the repair is sound. Sanity-check by listing each
+item group's `display-name` only (never `secret=` values) to confirm labels
+look sane (e.g. `kf.get_string(group, 'display-name')` per group).
+
+### Apply and verify
+
+```sh
+systemctl --user stop gnome-keyring-daemon.service
+cp -p <repaired file> ~/.local/share/keyrings/Default_Keyring.keyring
+chmod 600 ~/.local/share/keyrings/Default_Keyring.keyring
+echo -n "Default_Keyring" > ~/.local/share/keyrings/default
+rm -f ~/.local/share/keyrings/Default_keyring.keyring
+systemctl --user start gnome-keyring-daemon.service
+journalctl --user -u gnome-keyring-daemon --since "10 sec ago" --no-pager  # should show no "invalid format" line
+```
+
+**Verify durability with a *second* restart** — a real blank-password fix
+shows `Locked: false` (an explicit `Unlock` call should succeed instantly
+with an empty prompt path if it doesn't auto-unlock immediately) on every
+restart, with the orphan file never reappearing. One clean restart isn't
+proof; the bug specifically only showed up across a restart.
+
+**Known gap:** a handful of items got written to the *wrong* (orphaned)
+keyring during the original split (confirmed: at least one duplicate Proton
+SSO entry existed in both, with possibly-differing values) — anything set up
+fresh during that window may need re-entering once noticed missing. Not
+fully audited/reconciled.
+
+### The actual permanent fix (2026-09-26): proactively unlock at boot
+
+The blank-password fix above is necessary but **not sufficient on its own**.
+The real collection starts every daemon startup in a nominal `Locked: true`
+state (even though unlocking it is trivial/instant with no prompt, since it
+has no password) — and whichever app happens to ask for "the default
+collection" *first*, before anything explicitly calls `Unlock`, can still
+trip the same "locked → fabricate a blank replacement, steal the alias"
+fallback. This isn't tied to any one app: `proton-vpn-cli`'s Python keyring
+backend triggered it while installed; removing `pam_gnome_keyring.so` from
+`sddm-autologin`'s PAM stack (its `gkr-pam: couldn't unlock the login
+keyring` failure was *a* trigger, confirmed via `journalctl -b`) reduced but
+did **not** eliminate it — it recurred again on a clean reboot with both of
+those removed. Chasing every possible racing app individually is whack-a-mole
+by nature; the actual fix is to close the race itself.
+
+**Fix:** a user-level systemd unit that proactively calls `Unlock` on the
+real collection the instant `gnome-keyring-daemon` is up, before any other
+app gets a chance to ask. No sudo needed — pure `~/.config` and `~/.local`.
+
+- `~/.local/bin/unlock-default-keyring.sh` — polls (up to ~10s) until the
+  `Unlock` D-Bus call against
+  `/org/freedesktop/secrets/collection/Default_5fKeyring` succeeds, then
+  exits. The polling loop is needed because `gnome-keyring-daemon.service`
+  is `Type=simple`, so systemd doesn't wait for it to finish loading
+  collections from disk before considering it "started."
+- `~/.config/systemd/user/unlock-default-keyring.service` — `oneshot`,
+  `After=`/`Requires=gnome-keyring-daemon.service`, `WantedBy=default.target`.
+  Enable with `systemctl --user enable --now unlock-default-keyring.service`.
+
+**Both files are intentionally excluded from `stow .`** via
+`.stow-local-ignore` — they're only needed on a machine that actually hits
+this bug (autologin + a keyring that's had its password blanked). They're
+git-tracked so they're available after a pull on any machine (e.g. the
+laptop, if it ends up on autologin too), but won't get auto-symlinked and
+silently activated somewhere that doesn't need them. To actually deploy on
+another machine: copy (not stow) the two files to their listed paths, then:
+
+```sh
+chmod +x ~/.local/bin/unlock-default-keyring.sh
+systemctl --user daemon-reload
+systemctl --user enable --now unlock-default-keyring.service
+```
+
+Verified 2026-09-26: survived a real reboot cleanly (not just a mid-session
+`systemctl --user restart`, which had previously given false confidence more
+than once during this investigation) — real keyring unlocked, correctly
+aliased, no orphan file created, Vivaldi opened without the "could not
+unlock" error.
+
+### Recurrence 2026-10-02: auto-repair the PEM corruption before every daemon start
+
+The PEM raw-newline corruption above came back with no Seahorse involved:
+some app saved an item at 08:33, gnome-keyring's own plaintext writer
+re-broke the file, and nothing noticed until the daemon crashed (SIGABRT)
+that night and its restart fell back to a fresh empty keyring + "new
+keyring password" prompt. So the bug is in the daemon's blank-password
+serializer: **any secret write can re-corrupt the file**, and it only bites
+on the next daemon start. The boot-unlock unit can't help with that.
+
+**Fix:** a guard that runs before *every* daemon start (boot, crash
+restarts, manual restarts), validates the file with GLib's own parser, and
+if it's broken applies the same rejoin repair as above, re-validates, saves
+the corrupt copy to `~/.local/state/keyring-repair/`, swaps the file in
+atomically, and sends a desktop notification. If repair fails it leaves the
+file untouched and sends a critical notification. It never blocks the daemon
+from starting and never prints secret values. Encrypted (password-protected)
+keyring files are skipped.
+
+- `~/.local/bin/check-default-keyring.py`
+- `~/.config/systemd/user/gnome-keyring-daemon.service.d/check-keyring.conf`
+  (`ExecStartPre=-` drop-in on the stock unit)
+
+Also excluded from `stow .`. To deploy: copy both to their paths, then
+`chmod +x ~/.local/bin/check-default-keyring.py && systemctl --user daemon-reload`.
+
+Verified 2026-10-02 by putting the real corrupt file in place and starting
+the daemon: repaired before load, 15 items, unlocked, no orphan keyring.
+
+### Recurrence 2026-11-01: the unlock script's success check was a lie
+
+The orphan came back on a boot where the file was valid. Two bugs in
+`unlock-default-keyring.sh` as originally written:
+
+- `Unlock` on a collection path that doesn't exist (yet) still returns
+  success with an empty unlocked list, so the script could "succeed" before
+  the real collection had loaded and leave it locked — race reopened.
+- Its first call ran before the daemon owned `org.freedesktop.secrets`, so
+  dbus-broker auto-started a *second* daemon (`discover_other_daemon: 1` in
+  the journal) and that call's success meant nothing either.
+
+Also, once the alias had been stolen, nothing ever put it back: the guard
+repaired the file on the next boot but `default` kept pointing at the orphan.
+And the standalone unit only ran at boot, not on crash restarts.
+
+**Fix:** the script now calls with `--auto-start=no`, counts success only
+when the `Locked` property reads `false`, then checks `ReadAlias default` and
+`SetAlias`es it back to `Default_5fKeyring` (with a notification) if needed.
+It runs as `ExecStartPost=-` in the same `check-keyring.conf` drop-in, so it
+covers boot and every restart. `unlock-default-keyring.service` was removed
+(`systemctl --user disable` it on any machine that had it). Deploy is now
+just the two scripts + the drop-in, then `systemctl --user daemon-reload`.
+
+Also confirmed live: a single item write (`set_secret` on any item) re-corrupts
+the file instantly. The running daemon keeps the collection in memory and
+carries on, so the corruption only matters at the next start, where
+`ExecStartPre` repairs it.
+
+### Recurrence 2026-11-01 (again, after reboot): daemon wasn't started at boot, and a heal watcher
+
+Removing `unlock-default-keyring.service` also removed the only thing that
+started `gnome-keyring-daemon.service` at boot (its `Requires=`); the stock
+unit is not enabled. So the daemon was first started by an autostart app's
+D-Bus call, and the stock D-Bus service file has no `SystemdService=`, so
+dbus-broker spawned a bare daemon outside the unit: no `ExecStartPre`/`Post`
+guards, racing app requests → orphan again.
+
+**Fix, three layers:**
+
+1. `systemctl --user enable gnome-keyring-daemon.service`, so it starts at
+   boot via `default.target`, before the graphical session's apps.
+2. `~/.local/share/dbus-1/services/org.freedesktop.secrets.service`: a
+   user override (wins over `/usr/share`, journal shows "Ignoring duplicate
+   name") adding `SystemdService=gnome-keyring-daemon.service`, so any D-Bus
+   activation goes through the unit and its drop-in.
+3. `~/.local/bin/heal-default-keyring.py`, run at the end of
+   `unlock-default-keyring.sh` (every daemon start) and by
+   `heal-default-keyring.path` on any change in `~/.local/share/keyrings/`:
+   resets the `default` alias to `Default_5fKeyring` (raw D-Bus — libsecret
+   fails on a dangling alias), then for every collection labelled
+   "Default keyring"/"Default"/"Login" other than the real one: backs up
+   stray files to `~/.local/state/keyring-repair/*.stray`, moves its items into
+   the real keyring (matching attributes → newer value wins, except encryption
+   keys like "Safe Storage"/portal keys, where the real one always wins), and
+   deletes it. Notifies when it did something. So whatever creates a stray in
+   future, it's undone within a second without touching Seahorse.
+
+Deploy: copy the three scripts, the drop-in, `heal-default-keyring.{path,service}`
+and the D-Bus file, then `systemctl --user daemon-reload && systemctl --user enable
+gnome-keyring-daemon.service heal-default-keyring.path`, and reload D-Bus
+(`busctl --user call org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus ReloadConfig`).
+
+Verified (not yet across a reboot): a planted stray keyring holding a fake
+duplicate Chrome Safe Storage key + a new item, plus a dangling alias, got
+healed on daemon restart (real Chrome key hash unchanged, new item moved, stray
+deleted); D-Bus activation with the unit stopped now starts it through
+systemd (one daemon, guards ran).
+
+---
+
+## 14. ProtonVPN CLI: Stuck Process Holds Lock, Looks Like Every Command Is Broken
+
+`proton-vpn-cli` (`protonvpn`) and the `jkoestinger.vpn` Omarchy bar plugin
+(step 11) serialize CLI invocations via exclusive flock files at
+`/run/user/1000/omarchy-vpn-protonvpn.lock` and
+`/run/user/1000/Proton/proton-sso.lock`. If one invocation gets stuck (first
+seen 2026-09-26: it ran while the real keyring was locked/broken — see step
+13 — and blocked forever in `do_epoll_wait` waiting on a secret-service
+response that never arrived), it holds that lock **indefinitely**, and every
+subsequent `protonvpn` command — yours, and the bar plugin's background
+polling — queues up behind it and also appears to hang, even though each new
+invocation is otherwise perfectly healthy. Looks exactly like "everything is
+broken" when it's really one zombie process from hours earlier.
+
+### Diagnose
+
+```sh
+ps -eo pid,ppid,etimes,stat,cmd | grep -i protonvpn | grep -v grep   # etimes = seconds alive
+lslocks | grep -i proton                                             # exclusive FLOCK WRITE holder
+cat /proc/<pid>/wchan                                                 # do_epoll_wait = blocked on I/O that'll never come
+```
+
 ### Fix
 
 ```sh
-echo -n "Default_Keyring" > ~/.local/share/keyrings/default   # match whichever is the REAL one
-systemctl --user restart gnome-keyring-daemon.service
+kill -9 <pid>
 ```
 
-Then unlock it when prompted (a real password prompt should appear the next
-time any app requests a secret — this is expected, not a new problem).
-
-**Known gap:** a handful of items got written to the *wrong* (orphaned)
-keyring during the split (confirmed: at least one duplicate Proton SSO
-entry existed in both, with possibly-differing values) — anything you set up
-fresh during that window won't automatically follow this fix and may need to
-be re-entered once you notice it's missing. Not fully audited/reconciled.
+flock releases immediately on process exit — the next `protonvpn` command
+runs normally right away. No reboot or daemon restart needed. Check this
+*first* for any future "protonvpn hangs" report (10-second check) before
+digging into keyring/daemon state again.
 
 ---
 

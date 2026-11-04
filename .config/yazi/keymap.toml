@@ -6,4 +6,5 @@ prepend_keymap = [
 	{ on = ["g", "v"], run = "cd ~/Videos",       desc = "Go to ~/Videos" },
 	{ on = ["g", "d"], run = "cd ~/dotfiles",     desc = "Go to ~/dotfiles" },
 	{ on = ["g", "p"], run = "cd ~/Pictures",     desc = "Go to ~/Pictures" },
+	{ on = ["g", "T"], run = "cd ~/Downloads/twitter_media_harvest", desc = "Go to ~/Downloads/twitter_media_harvest" },
 ]

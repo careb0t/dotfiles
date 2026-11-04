@@ -1,0 +1,7 @@
+[Unit]
+Description=Restore the real default gnome-keyring and remove stray ones
+After=gnome-keyring-daemon.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/heal-default-keyring.py

@@ -35,19 +35,8 @@ o.bind("SUPER + SHIFT + S", "Steam Gaming Mode", "/home/careb0t/.local/share/ste
 o.bind("SUPER + SHIFT + R", "Exit Gaming Mode", "/home/careb0t/.local/share/steam-launcher/leave-gamesmode")
 -- End Gaming Mode bindings
 
--- Music: defer to the quickshell.spotify plugin's own setting-aware
--- toggle instead of Omarchy's default omarchy-launch-spotify (which
--- always opens the native app and knows nothing about the plugin).
--- IpcHandler target "quickshell.spotify.player" → togglePlayer() reads
--- the plugin's "Keyboard shortcut opens" setting (Omarchy Music app /
--- Full player / Mini player) and dispatches accordingly — see
--- BarWidget.qml's toggleConfiguredPlayerShortcut() in the plugin repo.
--- Change which one this key opens from the plugin's own Settings panel,
--- not here.
--- Note: SUPER+SHIFT+M was previously bound to Omarchy's default Music
--- binding. This unbinds it before rebinding.
-hl.unbind("SUPER + SHIFT + M")
-o.bind("SUPER + SHIFT + M", "Music", "omarchy shell -q quickshell.spotify.player togglePlayer")
+hl.unbind("SUPER + SHIFT + M") -- previously: Music
+o.bind("SUPER + SHIFT + M", "OmaSpotify", "omarchy shell -q io.github.jeremylanger.omaspotify.player togglePlayer")
 
 -- OmaVibes: mute/unmute typing sounds without opening the panel — handy for
 -- gaming sessions where the sound effects are more distracting than useful.

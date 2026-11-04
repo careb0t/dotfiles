@@ -21,3 +21,14 @@ _darcs
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
+
+# Machine-specific opt-in fixes: tracked in git so they're available on any
+# machine after a pull, but never auto-applied by a plain `stow .` — only
+# needed if that machine hits the same bug. See SETUP.md for what each does
+# and how to actually enable it.
+^/\.local/bin/unlock-default-keyring\.sh$
+^/\.local/bin/check-default-keyring\.py$
+^/\.config/systemd/user/gnome-keyring-daemon\.service\.d$
+^/\.local/bin/heal-default-keyring\.py$
+^/\.config/systemd/user/heal-default-keyring\.(path|service)$
+^/\.local/share/dbus-1/services/org\.freedesktop\.secrets\.service$

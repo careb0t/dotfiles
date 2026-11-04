@@ -1,0 +1,11 @@
+# Whenever anything changes in the keyrings directory (a stray keyring file
+# appears, the "default" alias file is rewritten), run the heal script.
+# See SETUP.md step 13.
+[Unit]
+Description=Watch gnome-keyring files for a stolen default keyring
+
+[Path]
+PathChanged=%h/.local/share/keyrings/
+
+[Install]
+WantedBy=default.target

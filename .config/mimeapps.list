@@ -24,7 +24,7 @@ image/bmp=swayimg.desktop
 image/tiff=swayimg.desktop
 application/pdf=org.gnome.Evince.desktop
 text/html=vivaldi-stable.desktop
-x-scheme-handler/http=vivaldi-stable.desktop
+x-scheme-handler/http=omarchy-browser.desktop
 x-scheme-handler/https=vivaldi-stable.desktop
 x-scheme-handler/about=vivaldi-stable.desktop
 x-scheme-handler/unknown=vivaldi-stable.desktop
@@ -59,6 +59,9 @@ x-scheme-handler/discord-1296840202995896363=discord-1296840202995896363.desktop
 x-scheme-handler/nxm=umo.desktop
 x-scheme-handler/momw=umo.desktop
 application/x-zerosize=obsidian.desktop
+x-scheme-handler/discord-409416265891971072=discord-409416265891971072.desktop
+x-scheme-handler/rshub=jagex-launcher.desktop
+x-scheme-handler/discord-742222376518811669=discord-742222376518811669.desktop
 
 [Added Associations]
 x-scheme-handler/http=userapp-Floorp-U35QJ3.desktop;
