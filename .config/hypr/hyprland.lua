@@ -15,6 +15,7 @@ require("hypr.bindings")
 require("hypr.looknfeel")
 require("hypr.autostart")
 require("hypr.windows")
+require("hypr.workspaces") -- global workspaces (undo Omarchy 4.5 per-monitor blocks)
 
 -- Toggle config flags dynamically.
 require("default.hypr.toggles")
