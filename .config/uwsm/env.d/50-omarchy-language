@@ -1,0 +1,2 @@
+# The session language, set by omarchy-language (Setup > Language).
+export LANG=en_US.UTF-8

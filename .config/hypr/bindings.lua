@@ -36,7 +36,8 @@ o.bind("SUPER + SHIFT + R", "Exit Gaming Mode", "/home/careb0t/.local/share/stea
 -- End Gaming Mode bindings
 
 hl.unbind("SUPER + SHIFT + M") -- previously: Music
-o.bind("SUPER + SHIFT + M", "OmaSpotify", "omarchy shell -q io.github.jeremylanger.omaspotify.player togglePlayer")
+o.bind("SUPER + SHIFT + M", "Omarchy Spotify",
+  "omarchy shell -q quickshell.spotify.player togglePlayer")
 
 -- OmaVibes: mute/unmute typing sounds without opening the panel — handy for
 -- gaming sessions where the sound effects are more distracting than useful.

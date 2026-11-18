@@ -62,6 +62,7 @@ application/x-zerosize=obsidian.desktop
 x-scheme-handler/discord-409416265891971072=discord-409416265891971072.desktop
 x-scheme-handler/rshub=jagex-launcher.desktop
 x-scheme-handler/discord-742222376518811669=discord-742222376518811669.desktop
+x-scheme-handler/superwhisper=superwhisper-url.desktop
 
 [Added Associations]
 x-scheme-handler/http=userapp-Floorp-U35QJ3.desktop;
